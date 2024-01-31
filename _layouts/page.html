@@ -1,0 +1,57 @@
+---
+layout: default
+---
+
+<body data-spy="scroll" data-target="#linksMenu">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gray">
+        <div class="container d-flex justify-content-between">
+            <a class="my-1 title text-white" href="https://docs.microsoft.com/training/" title="Microsoft Learn">
+                <img src="https://github.com/MicrosoftLearning/Jekyll-Theme/raw/master/assets/microsoft-gray.png" alt="Microsoft logo" style="width:100px;height:21px;"/>
+            </a>
+            <span class="my-1 title text-black">Microsoft Learn</span>
+            <span class="ml-2">
+                <a href="{{ site.github.url }}" title="Exercise list">&#8801;</a>
+                 <div class="w3-dropdown-hover">
+                    <button class="w3-button w3-white" title="Language">&#127760;</button>
+                    <div class="w3-dropdown-content w3-bar-block w3-border">
+                        {% for language in site.data.languages  %}<a href="{{ site.url }}/{{ language.repo }}{{ page.url }}" class="w3-bar-item w3-button"> {{ language.lang }}</a>{% endfor %}
+                    </div>
+              </div>
+                <a href="{{ site.github.repository_url }}/issues/new" target="_blank" class="ml-2" title="Report an issue">
+                    &#128489;
+                </a>
+            </span>
+        </div>
+    </nav>
+    <hr color="gray"/>
+    <div class="container">
+        <main class="row extra-padding">
+            <aside class="col-sm-2">       
+                <nav id="linksMenu" class="toc sticky-top">
+                    <ul class="nav navbar-nav flex-column">
+                    </ul>
+                </nav>         
+            </aside>
+            <hr class="" />
+            <article class="col-sm-10 mb-5">
+                {{ content }}
+            </article>
+        </main>
+    </div>
+    <footer class="fixed-bottom d-print-none">
+        <nav class="navbar navbar-light bg-light d-flex justify-content-around">
+            <span class="navbar-text">
+                <i class="fa fa-github" aria-hidden="true"></i>
+                <a href="{{ site.github.repository_url }}" target="_blank" class="ml-2">
+                    {{ site.github.repository_nwo }}
+                </a>
+            </span>
+        </nav>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="{{ "/assets/js/script.js?v=" | append: site.github.build_revision | relative_url }}"></script>
+</body>
