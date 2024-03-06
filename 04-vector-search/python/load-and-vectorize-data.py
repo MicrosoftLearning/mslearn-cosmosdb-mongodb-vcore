@@ -1,7 +1,8 @@
 import os
 import os.path
-import http.client, base64, json, urllib
-from urllib import request, parse, error
+import json, urllib
+
+from dataclasses import dataclass
 
 import json
 import datetime
@@ -14,9 +15,42 @@ from azure.storage.blob import BlobServiceClient
 import pymongo
 from pymongo import UpdateOne
 
-#import openai
+import openai
 from dotenv import load_dotenv
-#from tenacity import retry, wait_random_exponential, stop_after_attempt
+from tenacity import retry, wait_random_exponential, stop_after_attempt
+
+@dataclass
+class Product:
+    categoryName: str
+    sku: str
+    name: str
+    description: str
+    price: float
+    tags: str
+
+@dataclass
+class Customer:
+    type: str = ""
+    title: str = ""
+    name: str = ""
+    emailAddress: str = ""
+    phoneNumber: str = ""
+    addresses: str = ""
+    #salesOrderCount: int = 0
+    typeVector: float = 0.0
+    titleVector: float = 0.0
+    nameVector: float = 0.0
+    emailAddressVector: float = 0.0
+    phoneNumberVector: float = 0.0
+    addressesVector: float = 0.0
+    #salesOrderCountVector: float = 0.0
+
+
+@dataclass
+class SalesOrder:
+    type: str
+    details: str
+
 
 def main():
     # Variables
@@ -39,6 +73,14 @@ def main():
 
         ai_endpoint = os.getenv('openai_api_endpoint')
         ai_key = os.getenv('openai_api_key')
+
+        openai.api_type = os.getenv('openai_api_type')
+        openai.api_key = os.getenv('openai_api_key')
+        openai.api_base = os.getenv('openai_api_endpoint')
+        openai.api_version = os.getenv('openai_api_version')
+
+        embeddings_deployment = os.getenv('openai_embeddings_deployment')
+        completions_deployment = os.getenv('openai_completions_deployment')
 
         cosmosdb_connection_string = cosmosdb_connection_string.replace("<user>", urllib.parse.quote_plus(cosmos_mongo_user))
         cosmosdb_connection_string = cosmosdb_connection_string.replace("<password>", urllib.parse.quote_plus(cosmos_mongo_pwd))
@@ -99,9 +141,9 @@ def Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongod
     for blob_file in local_blobs_files:
         batch_number = 1
 
-        print(blob_file)
-
         if blob_file.find(".json") >= 0:
+            print(blob_file)
+
             with open(data_folder+blob_file, 'r') as file:
                 file_content = file.read()
                 json_data = json.loads(file_content)
@@ -117,6 +159,20 @@ def Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongod
 
                 for doc in json_data:
                     number_of_docs = number_of_docs + 1
+
+                    if collection_name == "customers":
+                        customer_doc = Customer(
+                            type=doc["type"]
+                            , title=doc["title"]
+                            , name=doc["firstName"]+" "+doc["lastName"]
+                            , emailAddress=doc["emailAddress"]
+                            , phoneNumber=doc["phoneNumber"]
+                            , addresses=get_doc_addresses(doc["addresses"])
+                            #, salesOrderCount=doc["salesOrderCount"]
+                        )
+
+                        customer_doc = generate_customer_embeding(customer_doc)
+
                     operations.append(UpdateOne({"_id": doc["_id"]},{"$set": doc}, upsert=True))
 
                     if (len(operations) == batch_size):
@@ -124,13 +180,57 @@ def Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongod
                         collection.bulk_write(operations,ordered=False)
                         operations = []
                         batch_number = batch_number + 1
-
+                    
                 if (len(operations) > 0):
                     print(f"Writing collection {collection_name}, batch size {batch_size}, batch {batch_number}, number of documents processed so far {number_of_docs}.")
                     collection.bulk_write(operations,ordered=False)
 
                 print(f"Collection {collection_name}, total number of documents processed {number_of_docs}.\n")
 
+
+def get_doc_addresses(addresses):
+    addresses_string = ""
+
+    for idx, address in enumerate(addresses):
+        addresses_string= addresses_string + ("; " if idx > 0  else "")  \
+                        + (address["addressLine1"] if address["addressLine1"]  else "")  \
+                        + (" " + address["addressLine2"] if address["addressLine2"]  else "") \
+                        + (" " + address["city"] if address["city"] else "") \
+                        + (" " + address["state"] if address["state"] else "") \
+                        + (" " + address["country"] if address["country"] else "") \
+                        + (" " + address["zipCode"] if address["zipCode"] else "") \
+                        + (" " + address["location"] if address["location"] else "")  
+        
+    return addresses_string
+
+def generate_customer_embeding(customer):
+    if customer["type"]:
+        customer["typeVector"] = generate_embeddings (customer["type"])
+    if customer["title"]:
+        customer["titleVector"] = generate_embeddings (customer["title"])
+    if customer["name"]:
+        customer["nameVector"] = generate_embeddings (customer["name"])
+    if customer["emailAddress"]:
+        customer["emailAddressVector"] = generate_embeddings (customer["emailAddress"])
+    if customer["phoneNumber"]:
+        customer["phoneNumberVector"] = generate_embeddings (customer["phoneNumber"])
+    if customer["addresses"]:
+        customer["addressesVector"] = generate_embeddings (customer["addresses"])
+    return customer
+
+
+
+@retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(10))
+def generate_embeddings(text):
+    '''
+    Generate embeddings from string of text.
+    This will be used to vectorize data and user input for interactions with Azure OpenAI.
+    '''
+    response = openai.Embedding.create(
+        input=text, engine="text-embedding-ada-002")
+    embeddings = response['data'][0]['embedding']
+    #time.sleep(0.5) # rest period to avoid rate limiting on AOAI for free tier
+    return embeddings
 
 if __name__ == "__main__":
     main()
