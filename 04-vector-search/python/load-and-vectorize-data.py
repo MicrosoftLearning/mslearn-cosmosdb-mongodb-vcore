@@ -15,7 +15,8 @@ from azure.storage.blob import BlobServiceClient
 import pymongo
 from pymongo import UpdateOne
 
-import openai
+from openai import AzureOpenAI 
+
 from dotenv import load_dotenv
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 
@@ -73,25 +74,45 @@ def main():
 
         ai_endpoint = os.getenv('openai_api_endpoint')
         ai_key = os.getenv('openai_api_key')
-
-        openai.api_type = os.getenv('openai_api_type')
-        openai.api_key = os.getenv('openai_api_key')
-        openai.api_base = os.getenv('openai_api_endpoint')
-        openai.api_version = os.getenv('openai_api_version')
+        ai_version = os.getenv('openai_api_version')
+        ai_deployment = os.getenv('openai_completions_deployment')
 
         embeddings_deployment = os.getenv('openai_embeddings_deployment')
-        completions_deployment = os.getenv('openai_completions_deployment')
+
+        AzureOpenAIClient = AzureOpenAI(
+            azure_endpoint = ai_endpoint
+            , api_key = ai_key
+            , api_version = ai_version
+            , azure_deployment = ai_deployment
+        )
+
+        start_phrase = 'Write a tagline for an ice cream shop. '
+        response2 = AzureOpenAIClient.completions.create(model=embeddings_deployment, prompt=start_phrase, max_tokens=10)
+        print(start_phrase+response2.choices[0].text)
+
+        response = AzureOpenAIClient.embeddings.create(
+            input = "Your text string goes here",
+            model= embeddings_deployment
+        )
+
+        print(response.model_dump_json(indent=2))
+
 
         cosmosdb_connection_string = cosmosdb_connection_string.replace("<user>", urllib.parse.quote_plus(cosmos_mongo_user))
         cosmosdb_connection_string = cosmosdb_connection_string.replace("<password>", urllib.parse.quote_plus(cosmos_mongo_pwd))
 
+        print("")
         print(f"cosmosdb_connection_string={cosmosdb_connection_string}")
         print(f"cosmos_db_mongodb_database = {cosmos_db_mongodb_database}")
         print(f"cosmos_mongo_server = {cosmos_mongo_server}")
         print(f"cosmos_mongo_usr = {cosmos_mongo_user}")
         print(f"cosmos_mongo_pwd = {cosmos_mongo_pwd}")
+        print("")
         print(f"ai_endpoint = {ai_endpoint}")
         print(f"ai_key = {ai_key}")
+        print(f"ai_version = {ai_version}")
+        print(f"ai_deployment = {ai_deployment}")
+        print("")
 
         # Download files from Azure Blob storage if not found in the data directory
         if load_data_from_azure_blob:
@@ -101,7 +122,7 @@ def main():
         client = pymongo.MongoClient(cosmosdb_connection_string)
 
         # Load local copy of blob data to the MongoDB Cluster
-        Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongodb_database,batch_size)
+        Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongodb_database,batch_size,embeddings_deployment, AzureOpenAIClient)
         
         # Get Server databases list
         dbnames = client.list_database_names()
@@ -113,8 +134,6 @@ def main():
         print(ex)
 
 def Download_files_from_blob_if_they_dont_exist(account_url, container_name, data_folder):
-    global collection_names
-
     blob_service_client = BlobServiceClient(account_url=account_url)
     container_client = blob_service_client.get_container_client(container_name)
 
@@ -132,7 +151,7 @@ def Download_files_from_blob_if_they_dont_exist(account_url, container_name, dat
                 local_file.write(file_stream.readall())
 
 
-def Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongodb_database,batch_size):
+def Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongodb_database,batch_size,embeddings_deployment,AzureOpenAIClient):
     # Read JSON documents
 
 
@@ -161,18 +180,9 @@ def Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongod
                     number_of_docs = number_of_docs + 1
 
                     if collection_name == "customers":
-                        customer_doc = Customer(
-                            type=doc["type"]
-                            , title=doc["title"]
-                            , name=doc["firstName"]+" "+doc["lastName"]
-                            , emailAddress=doc["emailAddress"]
-                            , phoneNumber=doc["phoneNumber"]
-                            , addresses=get_doc_addresses(doc["addresses"])
-                            #, salesOrderCount=doc["salesOrderCount"]
-                        )
-
-                        customer_doc = generate_customer_embeding(customer_doc)
-
+                        doc = generate_customer_embeding(doc,embeddings_deployment,AzureOpenAIClient)
+                        print (doc)
+                        break
                     operations.append(UpdateOne({"_id": doc["_id"]},{"$set": doc}, upsert=True))
 
                     if (len(operations) == batch_size):
@@ -203,32 +213,40 @@ def get_doc_addresses(addresses):
         
     return addresses_string
 
-def generate_customer_embeding(customer):
+def generate_customer_embeding(customer,embeddings_deployment,AzureOpenAIClient):
     if customer["type"]:
-        customer["typeVector"] = generate_embeddings (customer["type"])
+        customer["typeVector"] = generate_embeddings (customer["type"],embeddings_deployment,AzureOpenAIClient)
+
     if customer["title"]:
-        customer["titleVector"] = generate_embeddings (customer["title"])
+        customer["titleVector"] = generate_embeddings (customer["title"],embeddings_deployment,AzureOpenAIClient)
+
     if customer["name"]:
-        customer["nameVector"] = generate_embeddings (customer["name"])
+        customer["nameVector"] = generate_embeddings (customer["name"],embeddings_deployment,AzureOpenAIClient)
+
     if customer["emailAddress"]:
-        customer["emailAddressVector"] = generate_embeddings (customer["emailAddress"])
+        customer["emailAddressVector"] = generate_embeddings (customer["emailAddress"],embeddings_deployment,AzureOpenAIClient)
+
     if customer["phoneNumber"]:
-        customer["phoneNumberVector"] = generate_embeddings (customer["phoneNumber"])
+        customer["phoneNumberVector"] = generate_embeddings (customer["phoneNumber"],embeddings_deployment,AzureOpenAIClient)
+
     if customer["addresses"]:
-        customer["addressesVector"] = generate_embeddings (customer["addresses"])
+        customer["addressesVector"] = generate_embeddings (customer["addresses"],embeddings_deployment,AzureOpenAIClient)
+
     return customer
 
 
 
-@retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(10))
-def generate_embeddings(text):
+#@retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(10))
+def generate_embeddings(text,embeddings_deployment,AzureOpenAIClient):
     '''
     Generate embeddings from string of text.
     This will be used to vectorize data and user input for interactions with Azure OpenAI.
     '''
-    response = openai.Embedding.create(
-        input=text, engine="text-embedding-ada-002")
-    embeddings = response['data'][0]['embedding']
+    response = AzureOpenAIClient.embeddings.create(
+        input=text
+        , model=embeddings_deployment)
+    
+    embeddings = response.model_dump_json(indent=2)
     #time.sleep(0.5) # rest period to avoid rate limiting on AOAI for free tier
     return embeddings
 
