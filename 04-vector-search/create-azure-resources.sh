@@ -1,7 +1,12 @@
-az login
+## :::NOTE::: Your default Azure login tenant might restrict which objects you can create or regions you can use,
+## :::NOTE::: if that is the case login to the azure portal, under your login name (by default on the upper right hand corner),
+## :::NOTE::: select to 'Switch Directory'.  This should give you a list of tenants (directories) you can access.
+## :::NOTE::: Copy the Directory ID for a directory you are allowed to create resources on. 
+## :::NOTE::: Replace 00000000-0000-0000-0000-000000000000 below for the Directory ID, and uncomment the --tenant parameter 
+az login #--tenant 00000000-0000-0000-0000-000000000000
 
-# :::NOTE:::: If your subscription is different from the default, uncomment the next two lines and 
-# :::NOTE:::: replace "your-subscription-name" with your subscription name. To list subscriptions, use the following command: az account list --output table.
+# :::NOTE:::: If your subscription is different from the default, or from a subscription where you can create object, 
+# :::NOTE:::: uncomment the next two lines and # :::NOTE:::: replace "your-subscription-name" with your subscription name. To list subscriptions, use the following command: az account list --output table.
 #subscriptionName="your-subscription-name"
 #az account set --subscription $subscriptionName
 
@@ -45,12 +50,18 @@ az deployment group create --resource-group $resourceGroup --template-file 'crea
 # Variable block
 ## :::NOTE:::: If you already have an Azure OpenAI account, replace "msdocs-account-openai-$randomIdentifier" with the name of your account.
 ## :::NOTE:::: DO NOT USE A PRODUCTION ACCOUNT.
-OpenAIAccount="msdocs-account-openai2-$randomIdentifier" #needs to be lower case
+OpenAIAccount="msdocs-account-openai-$randomIdentifier" #needs to be lower case
+OpenAIDeploymentName="msdocs-account-openai-deployment-$randomIdentifier"
+OpenAIDeploymentModel="gpt-35-turbo"
+OpenAIDeploymentModelVersion="0301"
 
 # Create an Azure OpenAI account
 echo "Creating OpenAI account $OpenAIAccount in $location..."
-az cognitiveservices account create --name $OpenAIAccount --resource-group $resourceGroup --location $location --kind OpenAI --sku s0
+az cognitiveservices account create --name $OpenAIAccount --resource-group $resourceGroup --location $location --kind OpenAI --sku s0 --custom-domain $OpenAIAccount
 
+# Create a new deployment for the Azure OpenAI account
+echo "Creating OpenAI account $OpenAIAccount in $location..."
+az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAIDeploymentName --model-name $OpenAIDeploymentModel --model-version $OpenAIDeploymentModelVersion --model-format OpenAI --sku-capacity 1 --sku-name "Standard" 
 
 # Return all resource names
 subscriptionName=Az account show --query name -o tsv
