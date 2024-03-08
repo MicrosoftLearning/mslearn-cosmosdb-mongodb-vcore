@@ -94,6 +94,8 @@ def main():
                 vector_column = "salesOrderDetailVector" # input("Enter the vector column name: ")
                 collection_name = "salesOrders" # input("Enter the collection name: ")
                 Run_vector_search(query, vector_column, collection_name, embeddings_deployment, AzureOpenAIClient,client, cosmos_db_mongodb_database)
+                print("\nPress Enter to continue...")
+                input()
             
     except Exception as ex:
         print(ex)
