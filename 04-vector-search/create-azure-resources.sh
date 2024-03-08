@@ -61,7 +61,7 @@ az cognitiveservices account create --name $OpenAIAccount --resource-group $reso
 
 # Create a new deployment for the Azure OpenAI account
 echo "Creating OpenAI account $OpenAIAccount in $location..."
-az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAIDeploymentName --model-name $OpenAIDeploymentModel --model-version $OpenAIDeploymentModelVersion --model-format OpenAI --sku-capacity 1 --sku-name "Standard" 
+az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAIDeploymentName --model-name $OpenAIDeploymentModel --model-version $OpenAIDeploymentModelVersion --model-format OpenAI --sku-capacity 100 --sku-name "Standard" 
 
 # Return all resource names
 subscriptionName=Az account show --query name -o tsv

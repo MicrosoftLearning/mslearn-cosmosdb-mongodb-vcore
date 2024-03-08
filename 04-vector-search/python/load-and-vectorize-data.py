@@ -69,16 +69,24 @@ def main():
         print("")
 
         # Download files from Azure Blob storage if not found in the data directory
-        if load_data_from_azure_blob:
-            Download_files_from_blob_if_they_dont_exist(azure_blob_account, blob_container, data_folder)
+        #if load_data_from_azure_blob:
+        #    Download_files_from_blob_if_they_dont_exist(azure_blob_account, blob_container, data_folder)
 
         # Connect to MongoDB server
         client = pymongo.MongoClient(cosmosdb_connection_string)
 
         # Load local copy of blob data to the MongoDB Cluster and generate vectors
-        Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongodb_database,batch_size,embeddings_deployment, AzureOpenAIClient, process_customers_vector, process_products_vector, process_sales_orders_vector)
+        #Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongodb_database,batch_size,embeddings_deployment, AzureOpenAIClient, process_customers_vector, process_products_vector, process_sales_orders_vector)
         
+        query = "How many people bought a Touring-1000 Yellow bike?"
+        vector_column = "salesOrderDetailVector"
+        db = client[cosmos_db_mongodb_database]
+        collection = db["salesOrder"]
 
+
+        results = vector_search(query, vector_column, collection, embeddings_deployment ,AzureOpenAIClient)
+        for result in results: 
+             print(result)
 
     except Exception as ex:
         print(ex)
@@ -133,15 +141,15 @@ def Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongod
                 for doc in json_data:
                     current_doc_idx = current_doc_idx + 1
 
-                    if collection_name == "customers" and process_customers_vector:
-                        doc = generate_customer_embeding(doc,embeddings_deployment,AzureOpenAIClient)
+                    '''if collection_name == "customers" and process_customers_vector:
+                        doc = generate_customer_embedding(doc,embeddings_deployment,AzureOpenAIClient)
 
                     elif collection_name == "products" and process_products_vector:
-                        doc = generate_product_embeding(doc,embeddings_deployment,AzureOpenAIClient)
+                        doc = generate_product_embedding(doc,embeddings_deployment,AzureOpenAIClient)
 
                     elif collection_name == "salesOrders" and process_sales_orders_vector:
-                        doc = generate_sales_order_embeding(doc,embeddings_deployment,AzureOpenAIClient)
-
+                        doc = generate_sales_order_embedding(doc,embeddings_deployment,AzureOpenAIClient)
+                    '''
                     if current_doc_idx % 100 == 0 and ((process_customers_vector and collection_name == "customers") or (process_products_vector and collection_name == "products") or (process_sales_orders_vector and collection_name == "salesOrders")):
                         print(f"\t{current_doc_idx} out of {total_number_of_documents} docs vectorized.")
 
@@ -149,7 +157,7 @@ def Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongod
 
                     if (len(operations) == batch_size):
                         print(f"\tWriting collection {collection_name}, batch size {batch_size}, batch {batch_number}, number of documents processed so far {current_doc_idx}.")
-                        collection.bulk_write(operations,ordered=False)
+                    #    collection.bulk_write(operations,ordered=False)
                         operations = []
                         batch_number = batch_number + 1
                     
@@ -158,7 +166,7 @@ def Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongod
 
                 if (len(operations) > 0):
                     print(f"\tWriting collection {collection_name}, batch size {batch_size}, batch {batch_number}, number of documents processed so far {current_doc_idx}.")
-                    collection.bulk_write(operations,ordered=False)
+                #    collection.bulk_write(operations,ordered=False)
                 
                 print(f"(" + str(datetime.datetime.now()) + ")  " + f"Collection {collection_name}, total number of documents processed {current_doc_idx} .\n")
 
@@ -172,39 +180,67 @@ def Load_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongod
                                     , ("customerPhoneNumberVectorSearchIndex", "customerPhoneNumberVector")
                                     , ("customerAddressesVectorSearchIndex", "customerAddressesVector")
                                 ]
-                    create_indexes(collection, index_list)
+                    create_indexes(collection, index_list, db)
 
                 elif (process_products_vector and collection_name == "products"):
                     index_list = [
                                     ("productCategoryNameVectorSearchIndex", "productCategoryNameVector")
                                     , ("productNameVectorSearchIndex", "productNameVector")
                                 ]
-                    create_indexes(collection, index_list)
+                    create_indexes(collection, index_list, db)
 
                 elif (process_sales_orders_vector and collection_name == "salesOrders"):
                     index_list = [
                                     ("salesOrderDetailVectorSearchIndex", "salesOrderDetailVector")
                                 ]
-                    create_indexes(collection, index_list)
+                    create_indexes(collection, index_list, db, collection_name)
 
-def create_indexes(collection, index_list):
+def create_indexes(collection, index_list, db, collection_name):
 
-    cosmos_search_options = {
-        "kind": "vector-ivf",   # Vector index type
-        "numLists": 1,          # Number of lists (optional)
-        "similarity": "COS",    # Similarity measure (e.g., cosine similarity)
-        "dimensions": 1536      # Number of dimensions in the vector data
-    }
+    collection_indexes = collection.index_information()    
 
     for indexname, vectorColumn in index_list:
-        collection.drop_index(indexname)
-        collection.create_index(
-            [(vectorColumn, "cosmosSearch")],  # Specify the field to index
-            name=indexname,             # Name of the index
-            default_language='english',           # Specify the language for text search (optional)
-            **cosmos_search_options               # Additional options for vector search
-        )
+        for index in collection_indexes:
+            if index == indexname:
+                collection.drop_index(indexname)
+                break
+        
+        db.command({
+            'createIndexes': collection_name,
+            'indexes': [
+                {
+                'name': indexname,
+                'key': {
+                    f"{vectorColumn}": "cosmosSearch"
+                },
+                'cosmosSearchOptions': {
+                    'kind': 'vector-ivf',
+                    'numLists': 1,
+                    'similarity': 'COS',
+                    'dimensions': 1536
+                }
+                }
+            ]
+            })
 
+
+# Simple function to assist with vector search
+def vector_search(query, vector_column, collection, embeddings_deployment, AzureOpenAIClient ,num_results=3):
+    query_embedding = generate_embeddings(query,embeddings_deployment,AzureOpenAIClient)
+    embeddings_list = []
+    pipeline = [
+        {
+            '$search': {
+                "cosmosSearch": {
+                    "vector": query_embedding,
+                    "path": vector_column,
+                    "k": num_results #, "efsearch": 40 # optional for HNSW only 
+                },
+                "returnStoredSource": True }},
+        {'$project': { 'similarityScore': { '$meta': 'searchScore' }, 'document' : '$$ROOT' } }
+    ]
+    results = collection.aggregate(pipeline)
+    return results
 
 def get_customer_addresses(addresses):
     addresses_string = ""
@@ -233,7 +269,7 @@ def get_sales_order_details(details):
         
     return details_string
 
-def generate_customer_embeding(customer,embeddings_deployment,AzureOpenAIClient):
+def generate_customer_embedding(customer,embeddings_deployment,AzureOpenAIClient):
     if customer["type"]:
         customer["customerTypeVector"] = generate_embeddings (customer["type"],embeddings_deployment,AzureOpenAIClient)
 
@@ -257,7 +293,7 @@ def generate_customer_embeding(customer,embeddings_deployment,AzureOpenAIClient)
 
 
 
-def generate_product_embeding(product,embeddings_deployment,AzureOpenAIClient):
+def generate_product_embedding(product,embeddings_deployment,AzureOpenAIClient):
     if product["categoryName"]:
         product["productCategoryNameVector"] = generate_embeddings (product["categoryName"],embeddings_deployment,AzureOpenAIClient)
 
@@ -267,7 +303,7 @@ def generate_product_embeding(product,embeddings_deployment,AzureOpenAIClient):
     return product
 
 
-def generate_sales_order_embeding(salesOrder,embeddings_deployment,AzureOpenAIClient):
+def generate_sales_order_embedding(salesOrder,embeddings_deployment,AzureOpenAIClient):
     detail=get_sales_order_details(salesOrder["details"])
     if len(detail):
         salesOrder["salesOrderDetailVector"] = generate_embeddings (detail,embeddings_deployment,AzureOpenAIClient)
