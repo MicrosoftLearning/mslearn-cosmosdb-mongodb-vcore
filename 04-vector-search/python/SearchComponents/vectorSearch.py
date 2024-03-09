@@ -1,5 +1,7 @@
+import SearchComponents.embeddings as Embeddings
+
 def vector_search(query, vector_column, collection, embeddings_deployment, AzureOpenAIClient ,num_results=3):
-    query_embedding = generate_embeddings(query,embeddings_deployment,AzureOpenAIClient)
+    query_embedding = Embeddings.generate_embeddings(query,embeddings_deployment,AzureOpenAIClient)
 
     pipeline = [
                 {

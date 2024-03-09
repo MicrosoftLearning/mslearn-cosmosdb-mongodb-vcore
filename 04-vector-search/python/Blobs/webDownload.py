@@ -1,3 +1,6 @@
+from azure.storage.blob import BlobServiceClient
+import os.path
+
 def Download_files_from_blob_if_they_dont_exist(account_url, container_name, data_folder):
     blob_service_client = BlobServiceClient(account_url=account_url)
     container_client = blob_service_client.get_container_client(container_name)

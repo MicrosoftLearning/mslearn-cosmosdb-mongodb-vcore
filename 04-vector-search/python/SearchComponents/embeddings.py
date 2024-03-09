@@ -1,3 +1,7 @@
+from tenacity import retry, wait_random_exponential, stop_after_attempt
+import time
+import json
+
 @retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(10))
 def generate_embeddings(text,embeddings_deployment,AzureOpenAIClient):
     '''

@@ -1,3 +1,5 @@
+import SearchComponents.embeddings as Embeddings
+
 def generate_product_embedding(product,embeddings_deployment,AzureOpenAIClient):
     if product["categoryName"]:
         product["productCategoryNameVector"] = Embeddings.generate_embeddings (product["categoryName"],embeddings_deployment,AzureOpenAIClient)

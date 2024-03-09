@@ -1,3 +1,5 @@
+import SearchComponents.embeddings as Embeddings
+
 def get_customer_addresses(addresses):
     addresses_string = ""
 

@@ -1,3 +1,14 @@
+import os
+import json
+import datetime
+from pymongo import UpdateOne
+import Models.customers as Customers
+import Models.products as Products
+import Models.salesOrders as SalesOrders
+import SearchComponents.indexes as Indexes
+
+
+
 def Load_and_vectorize_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongodb_database,batch_size,embeddings_deployment,AzureOpenAIClient, process_customers_vector, process_products_vector, process_sales_orders_vector):
     # Read JSON documents
 
@@ -69,18 +80,18 @@ def Load_and_vectorize_local_blob_data_to_MongoDB_Cluster(client, data_folder,co
                                     , ("customerPhoneNumberVectorSearchIndex", "customerPhoneNumberVector")
                                     , ("customerAddressesVectorSearchIndex", "customerAddressesVector")
                                 ]
-                    Indexes.create_indexes(collection, index_list, db)
+                    Indexes.create_vector_indexes(collection, index_list, db, collection_name)
 
                 elif (process_products_vector and collection_name == "products"):
                     index_list = [
                                     ("productCategoryNameVectorSearchIndex", "productCategoryNameVector")
                                     , ("productNameVectorSearchIndex", "productNameVector")
                                 ]
-                    Indexes.create_indexes(collection, index_list, db)
+                    Indexes.create_vector_indexes(collection, index_list, db, collection_name)
 
                 elif (process_sales_orders_vector and collection_name == "salesOrders"):
                     index_list = [
                                     ("salesOrderDetailVectorSearchIndex", "salesOrderDetailVector")
                                 ]
-                    Indexes.create_indexes(collection, index_list, db, collection_name)
+                    Indexes.create_vector_indexes(collection, index_list, db, collection_name)
 
