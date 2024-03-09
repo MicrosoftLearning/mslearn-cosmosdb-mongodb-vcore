@@ -52,8 +52,11 @@ az deployment group create --resource-group $resourceGroup --template-file 'crea
 ## :::NOTE:::: DO NOT USE A PRODUCTION ACCOUNT.
 OpenAIAccount="msdocs-account-openai-$randomIdentifier" #needs to be lower case
 OpenAIDeploymentName="msdocs-account-openai-deployment-$randomIdentifier"
-OpenAIDeploymentModel="gpt-35-turbo"
-OpenAIDeploymentModelVersion="0301"
+OpenAICompletionDeploymentName="msdocs-account-openai-completion-$randomIdentifier"
+OpenAIDeploymentModel="text-embedding-ada-002"
+OpenAIDeploymentModelVersion="2"
+OpenAICompletionDeploymentModel="gpt-35-turbo"
+OpenAICompletionDeploymentModelVersion="0301"
 
 # Create an Azure OpenAI account
 echo "Creating OpenAI account $OpenAIAccount in $location..."
@@ -62,6 +65,10 @@ az cognitiveservices account create --name $OpenAIAccount --resource-group $reso
 # Create a new deployment for the Azure OpenAI account
 echo "Creating OpenAI account $OpenAIAccount in $location..."
 az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAIDeploymentName --model-name $OpenAIDeploymentModel --model-version $OpenAIDeploymentModelVersion --model-format OpenAI --sku-capacity 100 --sku-name "Standard" 
+
+# Create a new completion deployment for the Azure OpenAI account
+echo "Creating OpenAI account $OpenAIAccount in $location..."
+az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAICompletionDeploymentName --model-name $OpenAICompletionDeploymentModel --model-version $OpenAICompletionDeploymentModelVersion --model-format OpenAI --sku-capacity 100 --sku-name "Standard" 
 
 # Return all resource names
 subscriptionName=Az account show --query name -o tsv

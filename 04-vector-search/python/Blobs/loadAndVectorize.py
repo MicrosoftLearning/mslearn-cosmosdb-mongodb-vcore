@@ -84,8 +84,7 @@ def Load_and_vectorize_local_blob_data_to_MongoDB_Cluster(client, data_folder,co
 
                 elif (process_products_vector and collection_name == "products"):
                     index_list = [
-                                    ("productCategoryNameVectorSearchIndex", "productCategoryNameVector")
-                                    , ("productNameVectorSearchIndex", "productNameVector")
+                                    ("productVectorSearchIndex", "productVector")
                                 ]
                     Indexes.create_vector_indexes(collection, index_list, db, collection_name)
 

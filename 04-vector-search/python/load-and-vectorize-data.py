@@ -1,5 +1,5 @@
 # Load functions from the Models, Search and Blob folders
-import SearchComponents.vectorSearch as VectorSearch
+import SearchComponents.searches as Searches
 import Blobs.webDownload as WebDownload
 import Blobs.loadAndVectorize as LoadAndVectorize
 
@@ -21,8 +21,8 @@ def main():
     data_folder = "../../data/cosmicworks/"
     batch_size = 1000
     process_customers_vector = False
-    process_products_vector = False
-    process_sales_orders_vector = True
+    process_products_vector = True
+    process_sales_orders_vector = False
 
     try:
         # Get Configuration Settings
@@ -39,14 +39,24 @@ def main():
         ai_key = os.getenv('openai_api_key')
         ai_version = os.getenv('openai_api_version')
         ai_deployment = os.getenv('openai_deployment_name')
+        ai_completion = os.getenv('openai_completion_name')
 
         embeddings_deployment = os.getenv('openai_embeddings_deployment')
+        completion_deployment = os.getenv('openai_completion_deployment')
+        
 
         AzureOpenAIClient = AzureOpenAI(
             azure_endpoint = ai_endpoint
             , api_key = ai_key
             , api_version = ai_version
             , azure_deployment = ai_deployment
+        )
+
+        AzureOpenAICompletionClient = AzureOpenAI(
+            azure_endpoint = ai_endpoint
+            , api_key = ai_key
+            , api_version = ai_version
+            , azure_deployment = ai_completion
         )
 
         cosmosdb_connection_string = cosmosdb_connection_string.replace("<user>", urllib.parse.quote_plus(cosmos_mongo_user))
@@ -62,12 +72,13 @@ def main():
             print("\t1. Download data locally, load it into MongoDB and create vector index.")
             print("\t2. Load local data into MongoDB and create vector index.")
             print("\t3. Run a vector search")
+            print("\t4. Run a GPT search")
             print("\t0. End")
             user_input = input("Option: ")
 
             if user_input == "0":
                 break
-            elif user_input not in ["1", "2", "3"]:
+            elif user_input not in ["1", "2", "3", "4"]:
                 print("Invalid option. Please try again.")
                 continue
 
@@ -79,32 +90,16 @@ def main():
                 LoadAndVectorize.Load_and_vectorize_local_blob_data_to_MongoDB_Cluster(client, data_folder,cosmos_db_mongodb_database,batch_size,embeddings_deployment, AzureOpenAIClient, process_customers_vector, process_products_vector, process_sales_orders_vector)
 
             if user_input == "3":
-                Run_vector_search(embeddings_deployment, AzureOpenAIClient,client, cosmos_db_mongodb_database)
+                Searches.Run_vector_search(embeddings_deployment, AzureOpenAIClient,client, cosmos_db_mongodb_database)
             
+            if user_input == "4":
+                Searches.Run_GPT_search(embeddings_deployment, AzureOpenAIClient, completion_deployment, AzureOpenAICompletionClient, client, cosmos_db_mongodb_database)
+
             print("\nPress Enter to continue...")
             input()
             
     except Exception as ex:
         print(ex)
-
-def Run_vector_search(embeddings_deployment, AzureOpenAIClient, client, cosmos_db_mongodb_database):
-    query = input("Enter a query: ")
-    maxResults = input("Maximum number of results returned (or select Enter for 10):") or 10
-    vector_column = "salesOrderDetailVector" # input("Enter the vector column name: ")
-    collection_name = "salesOrders" # input("Enter the collection name: ")
-
-
-    db = client[cosmos_db_mongodb_database]
-    collection = db[collection_name]
-    results = VectorSearch.vector_search(query, vector_column, collection, embeddings_deployment, AzureOpenAIClient, maxResults)
-    for result in results: 
-        print(f"Similarity Score: {result['similarityScore']}")
-        print(f"customerId: {result['document']['customerId']}")  
-        print(f"orderDate: {result['document']['orderDate']}")  
-        print(f"shipDate: {result['document']['shipDate']}\n")
-        print(f"details: {result['document']['details']}\n")
-
-
 
 if __name__ == "__main__":
     main()
