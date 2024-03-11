@@ -13,5 +13,5 @@ def generate_embeddings(text,embeddings_deployment,AzureOpenAIClient):
         , model=embeddings_deployment)
     
     embeddings = json.loads(response.model_dump_json(indent=2))
-    time.sleep(0.01) # rest period to avoid rate limiting on AOAI for free tier
+    time.sleep(0.01) # rest period to avoid rate limiting, on AOAI for free tier try increasing this to 0.5
     return embeddings["data"][0]["embedding"]

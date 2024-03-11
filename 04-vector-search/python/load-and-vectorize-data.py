@@ -27,22 +27,21 @@ def main():
     try:
         # Get Configuration Settings
         load_dotenv()
-        cosmosdb_connection_string = os.getenv('cosmosdb_connection_string')
+        cosmosdb_connection_string = os.getenv('cosmosDbEndpoint')
 
-        cosmos_db_mongodb_database = os.getenv('cosmosdb_database')
+        cosmos_db_mongodb_database = os.getenv('cosmosdbDatabase')
 
-        cosmos_mongo_server = os.getenv('cosmos_mongo_server')
-        cosmos_mongo_user = os.getenv('cosmos_mongo_user')
-        cosmos_mongo_pwd = os.getenv('cosmos_mongo_pwd')
+        cosmos_mongo_user = os.getenv('cosmosClusterAdmin')
+        cosmos_mongo_pwd = os.getenv('cosmosClusterPassword')
 
-        ai_endpoint = os.getenv('openai_api_endpoint')
-        ai_key = os.getenv('openai_api_key')
-        ai_version = os.getenv('openai_api_version')
-        ai_deployment = os.getenv('openai_deployment_name')
-        ai_completion = os.getenv('openai_completion_name')
+        ai_endpoint = os.getenv('OpenAIEndpoint')
+        ai_key = os.getenv('OpenAIKey1')
+        ai_version = os.getenv('OpenAIVersion')
+        ai_deployment = os.getenv('OpenAIDeploymentName')
+        ai_completion = os.getenv('OpenAICompletionDeploymentName')
 
-        embeddings_deployment = os.getenv('openai_embeddings_deployment')
-        completion_deployment = os.getenv('openai_completion_deployment')
+        embeddings_deployment = os.getenv('OpenAIDeploymentModel')
+        completion_deployment = os.getenv('OpenAICompletionDeploymentModel')
         
 
         AzureOpenAIClient = AzureOpenAI(

@@ -7,8 +7,8 @@ az login #--tenant 00000000-0000-0000-0000-000000000000
 
 # :::NOTE:::: If your subscription is different from the default, or from a subscription where you can create object, 
 # :::NOTE:::: uncomment the next two lines and # :::NOTE:::: replace "your-subscription-name" with your subscription name. To list subscriptions, use the following command: az account list --output table.
-#subscriptionName="your-subscription-name"
-#az account set --subscription $subscriptionName
+subscriptionName="your-subscription-name"
+az account set --subscription $subscriptionName
 
 # Variable block
 let "randomIdentifier=$RANDOM*$RANDOM"
@@ -86,5 +86,4 @@ echo
 echo "OpenAI account: $OpenAIAccount"
 echo
 echo "*************** Resources ***************"
-
 

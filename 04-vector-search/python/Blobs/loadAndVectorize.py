@@ -2,9 +2,9 @@ import os
 import json
 import datetime
 from pymongo import UpdateOne
-import Models.customers as Customers
-import Models.products as Products
-import Models.salesOrders as SalesOrders
+import Collections.customers as Customers
+import Collections.products as Products
+import Collections.salesOrders as SalesOrders
 import SearchComponents.indexes as Indexes
 
 
