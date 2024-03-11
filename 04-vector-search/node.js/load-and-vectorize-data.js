@@ -12,6 +12,8 @@ const AzureOpenAI = require('openai'); // Assuming 'openai' is the correct modul
 
 dotenv.config();
 
+let client;
+
 async function main() {
     // Variables
     const load_data_from_azure_blob = true;
@@ -31,24 +33,12 @@ async function main() {
         const cosmos_mongo_pwd = process.env.cosmosClusterPassword;
         const ai_endpoint = process.env.OpenAIEndpoint;
         const ai_key = process.env.OpenAIKey1;
-        const ai_version = process.env.OpenAIVersion;
-        const ai_deployment = process.env.OpenAIDeploymentName;
-        const ai_completion = process.env.OpenAICompletionDeploymentName;
         const embeddings_deployment = process.env.OpenAIDeploymentModel;
         const completion_deployment = process.env.OpenAICompletionDeploymentModel;
 
         const AzureOpenAIClient = new AzureOpenAI(
             ai_endpoint,
-            ai_key,
-            ai_version,
-            ai_deployment
-        );
-
-        const AzureOpenAICompletionClient = new AzureOpenAI(
-            ai_endpoint,
-            ai_key,
-            ai_version,
-            ai_completion
+            new AzureKeyCredential(ai_key)
         );
 
         cosmosdb_connection_string = cosmosdb_connection_string.replace("<user>", encodeURIComponent(cosmos_mongo_user));
@@ -91,7 +81,7 @@ async function main() {
             }
 
             if (userInput === "4") {
-                await Searches.runGPTSearch(embeddings_deployment, AzureOpenAIClient, completion_deployment, AzureOpenAICompletionClient, client, cosmos_db_mongodb_database);
+                await Searches.runGPTSearch(embeddings_deployment, AzureOpenAIClient, completion_deployment, client, cosmos_db_mongodb_database);
             }
 
             console.log("\nPress Enter to continue...");
@@ -101,7 +91,9 @@ async function main() {
         console.error(ex);
     } finally {
         rl.close();
-        await client.close();
+        if (client) {
+            await client.close();
+        }
     }
 }
 

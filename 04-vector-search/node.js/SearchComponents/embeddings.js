@@ -8,7 +8,7 @@ async function generateEmbeddings(text, embeddingsDeployment, AzureOpenAIClient)
     */
     return await retry(async bail => {
         try {
-            const response = await axios.post(AzureOpenAIClient.embeddings.create, {
+            const response = await axios.post(AzureOpenAIClient.getEmbeddings, {
                 input: text,
                 model: embeddingsDeployment
             });

@@ -9,6 +9,12 @@ param location string = '' //= resourceGroup().location
 @description('Username for admin user')
 param adminUsername string = ''
 
+@description('Public IP address to allow access to the cluster')
+param publicIp string = ''
+
+@description('Public IP address rule name for local access to the cluster')
+param publicIpRuleName string = ''
+
 @secure()
 @description('Password for admin user')
 //@minLength(8)
@@ -41,5 +47,14 @@ resource firewallRules 'Microsoft.DocumentDB/mongoClusters/firewallRules@2023-03
   properties: {
     startIpAddress: '0.0.0.0'
     endIpAddress: '0.0.0.0'
+  }
+}
+
+resource firewallRules_local_access 'Microsoft.DocumentDB/mongoClusters/firewallRules@2023-03-01-preview' = {
+  parent: cluster
+  name: publicIpRuleName
+  properties: {
+    startIpAddress: publicIp
+    endIpAddress: publicIp
   }
 }

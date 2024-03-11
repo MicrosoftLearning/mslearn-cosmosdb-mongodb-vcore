@@ -23,6 +23,9 @@ param (
     [bool]$skipCreatingCosmosDBCluster = $false,
 
     [Parameter(Mandatory=$false)]
+    [bool]$skipCreatingCosmosDBPublicIPFirewallRule = $false,
+
+    [Parameter(Mandatory=$false)]
     [bool]$skipCreatingAzureOpenAIAccount = $false,
 
     [Parameter(Mandatory=$false)]
@@ -110,6 +113,10 @@ $cosmosCluster = if ($cosmosCluster) {$cosmosCluster} elseif ($useEnvFile -and $
 $cosmosClusterAdmin = if ($cosmosClusterAdmin) {$cosmosClusterAdmin} elseif ($useEnvFile -and $envVars['cosmosClusterAdmin']) { $envVars['cosmosClusterAdmin'] } else { "clusteradmin$randomIdentifier" }
 $cosmosClusterPassword = if ($cosmosClusterPassword) {$cosmosClusterPassword} elseif ($useEnvFile -and $envVars['cosmosClusterPassword']) { $envVars['cosmosClusterPassword'] } else { -join ((48..57) + (65..90) + (97..122) + (33..47) + (58..64) + (91..96) + (123..126) | Get-Random -Count 16 | % {[char]$_}) }
 
+# Get the public IP address
+$publicIp = Invoke-RestMethod -Uri 'http://ipinfo.io/ip' -Method Get
+$publicIpRuleName = "msdocs-cosmosdb-fw_rule-$randomIdentifier"
+
 # Create a Cosmos DB for MongoDB vCore cluster
 if (! $skipCreatingCosmosDBCluster) {
     Write-Host "Creating $cosmosCluster cluster, this could take 10+ minutes to create..."
@@ -118,9 +125,14 @@ if (! $skipCreatingCosmosDBCluster) {
         "adminUsername" = $cosmosClusterAdmin
         "adminPassword" = $cosmosClusterPassword
         "location" = $location
+        "publicIpRuleName" = $publicIpRuleName
+        "publicIp" = $publicIp
     }
     az deployment group create --resource-group $resourceGroup --template-file 'create-mongodb-vcore-cluster.bicep' --parameters $deploymentParameters
 }
+
+# Create a firewall rule for the Cosmos DB account
+az cosmosdb network-rule add --account-name $cosmosCluster --subnet $publicIp --resource-group $resourceGroup
 
 # Get the endpoint for the Cosmos DB account
 $cosmosDbEndpoint = if ($useEnvFile -and $envVars['cosmosDbEndpoint']) { $envVars['cosmosDbEndpoint'] } else { az cosmosdb show --name $cosmosCluster --resource-group $resourceGroup --query "documentEndpoint" -o tsv }

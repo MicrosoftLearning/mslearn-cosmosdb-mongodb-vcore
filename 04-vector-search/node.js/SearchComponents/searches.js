@@ -22,7 +22,7 @@ async function runVectorSearch(embeddingsDeployment, AzureOpenAIClient, client, 
     }
 }
 
-async function runGPTSearch(embeddingsDeployment, AzureOpenAIClient, completionDeployment, AzureOpenAICompletionClient, client, cosmosDbMongodbDatabase) {
+async function runGPTSearch(embeddingsDeployment, AzureOpenAIClient, completionDeployment, client, cosmosDbMongodbDatabase) {
     const maxResults = 20;
     const vectorColumn = "productVector";
     const collectionName = "products";
@@ -37,7 +37,7 @@ async function runGPTSearch(embeddingsDeployment, AzureOpenAIClient, completionD
     while (userInput.toLowerCase() !== "end") {
         const resultsForPrompt = await VectorSearch.vectorSearch(userInput, vectorColumn, collection, embeddingsDeployment, AzureOpenAIClient, maxResults);
 
-        const completionsResults = await Completion.generateCompletion(resultsForPrompt, completionDeployment, AzureOpenAICompletionClient, userInput);
+        const completionsResults = await Completion.generateCompletion(resultsForPrompt, completionDeployment, AzureOpenAIClient, userInput);
         console.log("\n" + completionsResults.choices[0].message.content);
 
         console.log("\nWhat would you like to ask about our bike shop's inventory? Type 'end' to end the session. ");
