@@ -1,4 +1,4 @@
-const Embeddings = require('./SearchComponents/embeddings');
+const Embeddings = require('../SearchComponents/embeddings');
 
 async function generateProductEmbedding(product, embeddingsDeployment, AzureOpenAIClient) {
     const productName = "Category - " + product["categoryName"] + ", Name -" + product["name"];
@@ -8,3 +8,5 @@ async function generateProductEmbedding(product, embeddingsDeployment, AzureOpen
 
     return product;
 }
+
+module.exports.generateProductEmbedding = generateProductEmbedding;

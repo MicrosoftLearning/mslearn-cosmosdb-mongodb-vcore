@@ -28,3 +28,5 @@ async function createVectorIndexes(collection, indexList, db, collectionName) {
         });
     }
 }
+
+module.exports.createVectorIndexes = createVectorIndexes;

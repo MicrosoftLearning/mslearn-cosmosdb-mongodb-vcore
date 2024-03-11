@@ -8,7 +8,7 @@ const rl = readline.createInterface({
 });
 const dotenv = require('dotenv');
 const MongoClient = require('mongodb').MongoClient;
-const AzureOpenAI = require('openai'); // Assuming 'openai' is the correct module for AzureOpenAI
+const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
 
 dotenv.config();
 
@@ -36,7 +36,7 @@ async function main() {
         const embeddings_deployment = process.env.OpenAIDeploymentModel;
         const completion_deployment = process.env.OpenAICompletionDeploymentModel;
 
-        const AzureOpenAIClient = new AzureOpenAI(
+        const AzureOpenAIClient = new OpenAIClient(
             ai_endpoint,
             new AzureKeyCredential(ai_key)
         );
@@ -45,7 +45,7 @@ async function main() {
         cosmosdb_connection_string = cosmosdb_connection_string.replace("<password>", encodeURIComponent(cosmos_mongo_pwd));
 
         // Connect to MongoDB server
-        const client = new MongoClient(cosmosdb_connection_string, { useNewUrlParser: true, useUnifiedTopology: true });
+        const client = new MongoClient(cosmosdb_connection_string);
         await client.connect();
 
         let userInput = "";

@@ -4,10 +4,10 @@ const mongodb = require('mongodb');
 const { MongoClient, UpdateOne } = require('mongodb');
 
 // Assuming Customers, Products, SalesOrders, and Indexes are modules you have
-const Customers = require('./Collections/customers');
-const Products = require('./Collections/products');
-const SalesOrders = require('./Collections/salesOrders');
-const Indexes = require('./SearchComponents/indexes');
+const Customers = require('../Collections/customers');
+const Products = require('../Collections/products');
+const SalesOrders = require('../Collections/salesOrders');
+const Indexes = require('../SearchComponents/indexes');
 
 async function loadAndVectorizeLocalBlobDataToMongoDBCluster(client, dataFolder, cosmosDbMongoDbDatabase, batchSize, embeddingsDeployment, AzureOpenAIClient, processCustomersVector, processProductsVector, processSalesOrdersVector) {
     // Read JSON documents
@@ -97,3 +97,5 @@ async function loadAndVectorizeLocalBlobDataToMongoDBCluster(client, dataFolder,
         }
     }
 }
+
+module.exports.loadAndVectorizeLocalBlobDataToMongoDBCluster = loadAndVectorizeLocalBlobDataToMongoDBCluster;

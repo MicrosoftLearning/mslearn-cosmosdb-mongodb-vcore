@@ -1,4 +1,4 @@
-const Embeddings = require('./SearchComponents/embeddings');
+const Embeddings = require('../SearchComponents/embeddings');
 
 async function vectorSearch(query, vectorColumn, collection, embeddingsDeployment, AzureOpenAIClient, numResults = 3) {
     const queryEmbedding = await Embeddings.generateEmbeddings(query, embeddingsDeployment, AzureOpenAIClient);
@@ -20,3 +20,5 @@ async function vectorSearch(query, vectorColumn, collection, embeddingsDeploymen
     const results = await collection.aggregate(pipeline).toArray();
     return results;
 }
+
+module.exports.vectorSearch = vectorSearch;

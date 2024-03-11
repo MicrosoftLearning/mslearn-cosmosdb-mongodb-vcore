@@ -44,3 +44,6 @@ async function runGPTSearch(embeddingsDeployment, AzureOpenAIClient, completionD
         userInput = await new Promise(resolve => rl.question("Prompt: ", resolve));
     }
 }
+
+module.exports.runVectorSearch = runVectorSearch;
+module.exports.runGPTSearch = runGPTSearch;

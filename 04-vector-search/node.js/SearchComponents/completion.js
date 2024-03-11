@@ -26,3 +26,5 @@ const generateCompletion = async (prompt, completionDeployment, AzureOpenAICompl
 
     return completions;
 }
+
+module.exports.generateCompletion = generateCompletion;

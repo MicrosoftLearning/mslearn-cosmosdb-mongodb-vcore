@@ -30,3 +30,5 @@ async function generateEmbeddings(text, embeddingsDeployment, AzureOpenAIClient)
         maxTimeout: 20000 // 20 seconds
     });
 }
+
+module.exports.generateEmbeddings = generateEmbeddings;

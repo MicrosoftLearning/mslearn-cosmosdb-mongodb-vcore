@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 async function downloadFilesFromBlobIfTheyDontExist(accountUrl, containerName, dataFolder) {
-    const blobServiceClient = BlobServiceClient.fromConnectionString(accountUrl);
+    const blobServiceClient = new BlobServiceClient(accountUrl);
     const containerClient = blobServiceClient.getContainerClient(containerName);
 
     // List blobs in the container
@@ -21,3 +21,5 @@ async function downloadFilesFromBlobIfTheyDontExist(accountUrl, containerName, d
         }
     }
 }
+
+module.exports.downloadFilesFromBlobIfTheyDontExist = downloadFilesFromBlobIfTheyDontExist;

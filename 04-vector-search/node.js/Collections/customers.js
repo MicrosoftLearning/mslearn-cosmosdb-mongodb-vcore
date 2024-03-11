@@ -1,4 +1,4 @@
-const Embeddings = require('./SearchComponents/embeddings');
+const Embeddings = require('../SearchComponents/embeddings');
 
 function getCustomerAddresses(addresses) {
     let addressesString = "";
@@ -46,3 +46,5 @@ async function generateCustomerEmbedding(customer, embeddingsDeployment, AzureOp
 
     return customer;
 }
+
+module.exports.generateCustomerEmbedding = generateCustomerEmbedding;

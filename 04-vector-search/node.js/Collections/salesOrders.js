@@ -1,4 +1,4 @@
-const Embeddings = require('./SearchComponents/embeddings');
+const Embeddings = require('../SearchComponents/embeddings');
 
 function getSalesOrderDetails(details) {
     let detailsString = "";
@@ -21,3 +21,5 @@ async function generateSalesOrderEmbedding(salesOrder, embeddingsDeployment, Azu
 
     return salesOrder;
 }
+
+module.exports.generateSalesOrderEmbedding = generateSalesOrderEmbedding;
