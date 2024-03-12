@@ -159,7 +159,7 @@ $OpenAIDeploymentModelVersion = if ($OpenAIDeploymentModelVersion) {$OpenAIDeplo
 
 # Create a new deployment for the Azure OpenAI account
 if (! $skipCreatingAzureOpenAIDeployment) {
-    Write-Host "Creating OpenAI account $OpenAIAccount in $location..."
+    Write-Host "Creating OpenAI deployment $OpenAIDeploymentName in $location..."
     az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAIDeploymentName --model-name $OpenAIDeploymentModel --model-version $OpenAIDeploymentModelVersion --model-format OpenAI --sku-capacity 100 --sku-name "Standard" 
 }
 
@@ -169,7 +169,7 @@ $OpenAICompletionDeploymentModelVersion = if ($OpenAICompletionDeploymentModelVe
 
 # Create a new completion deployment for the Azure OpenAI account
 if (! $skipCreatingAzureOpenAICompletionDeployment) {
-    Write-Host "Creating OpenAI account $OpenAIAccount in $location..."
+    Write-Host "Creating OpenAI completetion deployment $OpenAICompletionDeploymentName in $location..."
     az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAICompletionDeploymentName --model-name $OpenAICompletionDeploymentModel --model-version $OpenAICompletionDeploymentModelVersion --model-format OpenAI --sku-capacity 100 --sku-name "Standard" 
 }
 

@@ -1,12 +1,8 @@
-const VectorSearch = require('./SearchComponents/vectorSearch');
-const Completion = require('./SearchComponents/completion');
+const VectorSearch = require('../SearchComponents/vectorSearch');
+const Completion = require('../SearchComponents/completion');
 const readline = require('readline');
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
 
-async function runVectorSearch(embeddingsDeployment, AzureOpenAIClient, client, cosmosDbMongodbDatabase) {
+async function runVectorSearch(embeddingsDeployment, AzureOpenAIClient, client, cosmosDbMongodbDatabase, rl) {
     console.clear();
     console.log("What would you like to know about our bike shop's inventory?");
     const userInput = await new Promise(resolve => rl.question("Prompt: ", resolve));
@@ -22,7 +18,7 @@ async function runVectorSearch(embeddingsDeployment, AzureOpenAIClient, client, 
     }
 }
 
-async function runGPTSearch(embeddingsDeployment, AzureOpenAIClient, completionDeployment, client, cosmosDbMongodbDatabase) {
+async function runGPTSearch(embeddingsDeployment, AzureOpenAIClient, completionDeployment, client, cosmosDbMongodbDatabase, rl) {
     const maxResults = 20;
     const vectorColumn = "productVector";
     const collectionName = "products";

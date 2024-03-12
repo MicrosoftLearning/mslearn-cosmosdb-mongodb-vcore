@@ -17,14 +17,9 @@ const generateCompletion = async (prompt, completionDeployment, AzureOpenAICompl
         messages.push({role: "system", content: `${item.document.categoryName} ${item.document.name}`});
     }
 
-    const response = await AzureOpenAICompletionClient.getCompletions({
-        model: completionDeployment, 
-        messages: messages
-    });
-
-    const completions = JSON.parse(response.model_dump_json(indent=2));
-
-    return completions;
+    const response = await AzureOpenAICompletionClient.getChatCompletions(completionDeployment,messages);
+    
+    return response;
 }
 
 module.exports.generateCompletion = generateCompletion;

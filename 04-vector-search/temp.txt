@@ -36,7 +36,7 @@ pip install -v "tenacity==8.2.3"
 
 https://github.com/MicrosoftLearning/mslearn-cosmosdb-mongodb-vcore.git
 
-
+Invoke-RestMethod -Uri 'http://ipinfo.io/ip' -Method Get
 
 pip install -v "pymongo==4.6.2"
 pip install -v "openai==1.13.3"

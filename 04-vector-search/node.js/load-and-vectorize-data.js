@@ -33,8 +33,8 @@ async function main() {
         const cosmos_mongo_pwd = process.env.cosmosClusterPassword;
         const ai_endpoint = process.env.OpenAIEndpoint;
         const ai_key = process.env.OpenAIKey1;
-        const embeddings_deployment = process.env.OpenAIDeploymentModel;
-        const completion_deployment = process.env.OpenAICompletionDeploymentModel;
+        const embeddings_deployment = process.env.OpenAIDeploymentName;
+        const completion_deployment = process.env.OpenAICompletionDeploymentName;
 
         const AzureOpenAIClient = new OpenAIClient(
             ai_endpoint,
@@ -60,7 +60,7 @@ async function main() {
             userInput = await new Promise(resolve => rl.question("Option: ", resolve));
 
             if (userInput === "0") {
-                break;
+                process.exit(0);
             } else if (!["1", "2", "3", "4"].includes(userInput)) {
                 console.log("Invalid option. Please try again.");
                 continue;
@@ -77,11 +77,11 @@ async function main() {
             }
 
             if (userInput === "3") {
-                await Searches.runVectorSearch(embeddings_deployment, AzureOpenAIClient, client, cosmos_db_mongodb_database);
+                await Searches.runVectorSearch(embeddings_deployment, AzureOpenAIClient, client, cosmos_db_mongodb_database, rl);
             }
 
             if (userInput === "4") {
-                await Searches.runGPTSearch(embeddings_deployment, AzureOpenAIClient, completion_deployment, client, cosmos_db_mongodb_database);
+                await Searches.runGPTSearch(embeddings_deployment, AzureOpenAIClient, completion_deployment, client, cosmos_db_mongodb_database, rl);
             }
 
             console.log("\nPress Enter to continue...");

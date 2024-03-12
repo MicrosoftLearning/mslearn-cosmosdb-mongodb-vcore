@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const mongodb = require('mongodb');
-const { MongoClient, UpdateOne } = require('mongodb');
+const { MongoClient, updateOne } = require('mongodb');
 
 // Assuming Customers, Products, SalesOrders, and Indexes are modules you have
 const Customers = require('../Collections/customers');
@@ -31,11 +31,11 @@ async function loadAndVectorizeLocalBlobDataToMongoDBCluster(client, dataFolder,
                 const collection = db.collection(collectionName);
                 let currentDocIdx = 0;
 
-                const operations = [];
+                let operations = [];
 
-                const indexList = [];
+                let indexList = [];
 
-                for (const doc of jsonData) {
+                for (let doc of jsonData) {
                     currentDocIdx++;
 
                     if (collectionName === "customers" && processCustomersVector) {
@@ -50,7 +50,13 @@ async function loadAndVectorizeLocalBlobDataToMongoDBCluster(client, dataFolder,
                         console.log(`\t${currentDocIdx} out of ${totalNumberOfDocuments} docs vectorized.`);
                     }
 
-                    operations.push(UpdateOne({ "_id": doc["_id"] }, { "$set": doc }, { upsert: true }));
+                    operations.push({
+                        updateOne: {
+                            filter: { "_id": doc["_id"] },
+                            update: { "$set": doc },
+                            upsert: true
+                        }
+                    });
 
                     if (operations.length === batchSize) {
                         console.log(`\tWriting collection ${collectionName}, batch size ${batchSize}, batch ${batchNumber}, number of documents processed so far ${currentDocIdx}.`);

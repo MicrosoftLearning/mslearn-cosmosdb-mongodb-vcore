@@ -13,9 +13,9 @@ async function generateEmbeddings(text, embeddingsDeployment, AzureOpenAIClient)
                 model: embeddingsDeployment
             });
 
-            const embeddings = JSON.parse(response.data);
-            await new Promise(resolve => setTimeout(resolve, 10)); // rest period to avoid rate limiting on AOAI for free tier
-            return embeddings["data"][0]["embedding"];
+            const embeddings = response.data[0].embedding;
+            await new Promise(resolve => setTimeout(resolve, 10)); // rest period to avoid rate limiting, change to 500 on AOAI for free tier
+            return embeddings;
         } catch (err) {
             if (err.response && err.response.status === 429) {
                 throw err;
