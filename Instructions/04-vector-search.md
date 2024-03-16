@@ -57,7 +57,8 @@ To learn more about the PowerShell script and its parameters, reviewing the [***
 To create the necessary Azure resources for this lab, run the following command in the integrated terminal. If you aren't creating all resources, don't forget to use the *skip creating* parameters for the resources you don't want to create.
 
 ```powershell
-ps create-azure-resources.ps1
+az login
+./create-azure-resources.ps1
 ```
 
 Copy and save the environment variables returned by the script in case you need them later. You can verify the resources created in the Azure portal. Finally, ensure that the **.env** file is populated with the resource information.
