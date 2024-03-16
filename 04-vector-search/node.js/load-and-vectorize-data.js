@@ -7,12 +7,12 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-const dotenv = require('dotenv').path({ path: '../.env' });
+const dotenv = require('dotenv');
 const MongoClient = require('mongodb').MongoClient;
 const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
 
 // Load environment variables
-dotenv.config();
+dotenv.config({ path: '../.env' });
 
 let client;
 

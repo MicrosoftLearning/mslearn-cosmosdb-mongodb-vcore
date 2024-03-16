@@ -10,10 +10,10 @@ param location string = '' //= resourceGroup().location
 param adminUsername string = ''
 
 @description('Public IP address to allow access to the cluster')
-param publicIp string = ''
+param publicIp string = '0.0.0.0'
 
 @description('Public IP address rule name for local access to the cluster')
-param publicIpRuleName string = ''
+param publicIpRuleName string = 'labMachineIPAccessRule'
 
 @secure()
 @description('Password for admin user')

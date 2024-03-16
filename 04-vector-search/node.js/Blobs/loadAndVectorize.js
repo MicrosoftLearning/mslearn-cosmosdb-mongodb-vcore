@@ -92,28 +92,8 @@ async function loadAndVectorizeLocalBlobDataToMongoDBCluster(client, dataFolder,
 
                 console.log(`(${new Date().toISOString()})  Collection ${collectionName}, total number of documents processed ${currentDocIdx} .\n`);
 
-                // Create the vector indexes for the collection
-                if (processCustomersVector && collectionName === "customers") {
-                    indexList = [
-                        ["customerTypeVectorSearchIndex", "customerTypeVector"],
-                        ["customerTitleVectorSearchIndex", "customerTitleVector"],
-                        ["customerNameVectorSearchIndex", "customerNameVector"],
-                        ["customerEmailAddressVectorSearchIndex", "customerEmailAddressVector"],
-                        ["customerPhoneNumberVectorSearchIndex", "customerPhoneNumberVector"],
-                        ["customerAddressesVectorSearchIndex", "customerAddressesVector"]
-                    ];
-                    await Indexes.createVectorIndexes(collection, indexList, db, collectionName);
-                } else if (processProductsVector && collectionName === "products") {
-                    indexList = [
-                        ["productVectorSearchIndex", "productVector"]
-                    ];
-                    await Indexes.createVectorIndexes(collection, indexList, db, collectionName);
-                } else if (processSalesOrdersVector && collectionName === "salesOrders") {
-                    indexList = [
-                        ["salesOrderDetailVectorSearchIndex", "salesOrderDetailVector"]
-                    ];
-                    await Indexes.createVectorIndexes(collection, indexList, db, collectionName);
-                }
+                // Replace this line with the lab's code
+                
             }
         }
     }

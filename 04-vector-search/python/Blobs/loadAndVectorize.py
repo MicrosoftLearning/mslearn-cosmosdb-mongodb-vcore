@@ -81,26 +81,4 @@ def loadAndVectorizeLocalBlobDataToMongoDBCluster(client, data_folder,cosmos_db_
                 
                 print(f"(" + str(datetime.datetime.now()) + ")  " + f"Collection {collection_name}, total number of documents processed {current_doc_idx} .\n")
 
-                # Create the vector indexes for the collection
-                if (process_customers_vector and collection_name == "customers"):
-                    index_list = [
-                                    ("customerTypeVectorSearchIndex", "customerTypeVector")
-                                    , ("customerTitleVectorSearchIndex", "customerTitleVector")
-                                    , ("customerNameVectorSearchIndex", "customerNameVector")
-                                    , ("customerEmailAddressVectorSearchIndex", "customerEmailAddressVector")
-                                    , ("customerPhoneNumberVectorSearchIndex", "customerPhoneNumberVector")
-                                    , ("customerAddressesVectorSearchIndex", "customerAddressesVector")
-                                ]
-                    Indexes.createVectorIndexes(collection, index_list, db, collection_name)
-
-                elif (process_products_vector and collection_name == "products"):
-                    index_list = [
-                                    ("productVectorSearchIndex", "productVector")
-                                ]
-                    Indexes.createVectorIndexes(collection, index_list, db, collection_name)
-
-                elif (process_sales_orders_vector and collection_name == "salesOrders"):
-                    index_list = [
-                                    ("salesOrderDetailVectorSearchIndex", "salesOrderDetailVector")
-                                ]
-                    Indexes.createVectorIndexes(collection, index_list, db, collection_name)
+                pass  # Replace this line with the lab's code

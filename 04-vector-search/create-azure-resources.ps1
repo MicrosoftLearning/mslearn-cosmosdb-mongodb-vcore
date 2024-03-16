@@ -1,10 +1,10 @@
 # Add parameters for the language, use of .env file, creation flags, location and subscription
 param (
     [Parameter(Mandatory=$false)]
-    [bool]$updateEnvFile = $true,
+    [bool]$useEnvFile = $true,
 
     [Parameter(Mandatory=$false)]
-    [bool]$useEnvFile = $false,
+    [bool]$updateEnvFile = $true,
 
     [Parameter(Mandatory=$false)]
     [string]$location,
@@ -71,7 +71,7 @@ param (
 )
 
 # Determine the .env file path based on the language
-$envFilePath = "../../.env"
+$envFilePath = "./.env"
 
 # Read the .env file
 $envFileContent = Get-Content -Path $envFilePath
@@ -194,7 +194,7 @@ if ($updateEnvFile) {
 
     $envVars.GetEnumerator() | ForEach-Object {
         "$($_.Key)=$($_.Value)"
-    } | Out-File -FilePath .env -Encoding utf8
+    } | Out-File -FilePath $envFilePath -Encoding utf8
 }
 
 # Output the resources
