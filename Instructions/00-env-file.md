@@ -13,11 +13,14 @@ The **.env** file contains key-value pairs, each defining a specific configurati
 | **subscriptionName** | The name of the cloud subscription under which resources are deployed. | **YourSubscriptionName** |
 | **resourceGroup** | The name of the resource group containing all related resources. | **example-rg** |
 | **cosmosCluster** | The name of the Cosmos DB cluster. | **example-cosmos-cluster** |
+| **cosmosClusterLocation** | The location for the Cosmos DB cluster. | **eastus** |
 | **cosmosDbEndpoint** | The endpoint URL for the Cosmos DB cluster. | **https://example.documents.azure.com:443/** |
 | **cosmosClusterAdmin** | The admin username for the Cosmos DB cluster. | **adminUser** |
 | **cosmosClusterPassword** | The password for the Cosmos DB cluster. | **SecurePassword!** |
 | **cosmosdbDatabase** | The name of the Cosmos DB database. Defaults to **cosmicworks**. | **cosmicworks** |
 | **OpenAIAccount** | The name of the Azure OpenAI account. | **example-openai-account** |
+| **OpenAIAccountLocation** | The location for the Azure OpenAI account. | **eastus** |
+| **OpenAIAccountSKU** | The SKU for the Azure OpenAI account. Defaults to **"s0"** | **"s0"** |
 | **OpenAIEndpoint** | The endpoint URL for the Azure OpenAI account. | **https://example.openai.azure.com/** |
 | **OpenAIKey1** | The first key for accessing the Azure OpenAI service. | **YourKeyHere** |
 | **OpenAIVersion** | The version of the Azure OpenAI API to use. Defaults to **"2023-05-15"**. | **"2023-05-15"** |
@@ -27,6 +30,10 @@ The **.env** file contains key-value pairs, each defining a specific configurati
 | **OpenAICompletionDeploymentModel** | The model name for the Azure OpenAI completion deployment. | **gpt-3.5-turbo** |
 | **OpenAIDeploymentName** | The name of the Azure OpenAI deployment. | **example-deployment** |
 | **OpenAICompletionDeploymentName** | The name of the Azure OpenAI completion deployment. | **example-completion-deployment** |
+| **OpenAIDeploymentSKU** | The SKU for the Azure OpenAI deployment. Defaults to **"Standard"**. | **"Standard"** |
+| **OpenAIDeploymentSKUCapacity** | The SKU capacity for the Azure OpenAI deployment. Defaults to **100** | **100** |
+| **OpenAICompletionDeploymentSKU** | The SKU for the Azure OpenAI completion deployment. Defaults to **"Standard"**. | **"Standard"** |
+| **OpenAICompletionDeploymentSKUCapacity** | The SKU capacity for the Azure OpenAI completion deployment. Defaults to **100** | **100** |
 
 ## How to Use
 
