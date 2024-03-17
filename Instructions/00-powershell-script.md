@@ -10,6 +10,7 @@ The script accepts several parameters to customize the deployment process. The f
 |----------------|-----------|-----------|---------------|-------------|
 | **useEnvFile** | bool | No | *true* | If true, determines whether to use a **.env** file for configuration values. |
 | **updateEnvFile** | bool | No | *true* | If true, updates the **.env** file with new or changed values. |
+| **randomIdentifier** | Int32 | No | Get-Random | A random identifier to make the resource names unique. |
 | **location** | string | No | "eastus" | The location for the deployment. Defaults to "eastus" if not specified. |
 | **subscriptionName** | string | No | Output of **(az account show --query name -o tsv)** | The name of the Azure subscription for the deployment. Defaults to the current Azure subscription name. |
 | **resourceGroup** | string | No | "msdocs-cosmosdb-rg-$randomIdentifier" | The name of the resource group. Generated using a random identifier if not specified. |
@@ -21,16 +22,23 @@ The script accepts several parameters to customize the deployment process. The f
 | **skipCreatingAzureOpenAICompletionDeployment** | bool | No | *false* | If true, skips creating an Azure OpenAI completion deployment. |
 | **changeSubscription** | bool | No | *false* | If true, allows changing the Azure subscription. |
 | **cosmosCluster** | string | No | "msdocs-account-cosmos-cluster-$randomIdentifier" | The name of the Cosmos DB cluster. Generated using a random identifier if not specified. |
+| **cosmosClusterLocation** | string | No | **location** | The location for the Cosmos DB cluster. |
 | **cosmosClusterAdmin** | string | No | "clusteradmin$randomIdentifier" | The admin username for the Cosmos DB cluster. Generated using a random identifier if not specified. |
 | **cosmosClusterPassword** | SecureString | No | Randomly generated 16-character password | The password for the Cosmos DB cluster. Generated if not specified. |
 | **cosmosDatabase** | string | No | "cosmicworks" | The name of the Cosmos DB database. Generated using a random identifier if not specified. |
 | **OpenAIAccount** | string | No | "msdocs-account-openai-$randomIdentifier" | The name of the Azure OpenAI account. Generated using a random identifier if not specified. |
+| **OpenAIAccountLocation** | string | No | **location** | The location for the Azure OpenAI account. |
+| **OpenAIAccountSKU** | string | No | "s0" | The SKU for the Azure OpenAI account. |
 | **OpenAIDeploymentName** | string | No | "msdocs-account-openai-deployment-$randomIdentifier" | The name of the Azure OpenAI deployment. Generated using a random identifier if not specified. |
 | **OpenAIDeploymentModel** | string | No | "text-embedding-ada-002" | The model name for the Azure OpenAI deployment. Defaults to "text-embedding-ada-002" if not specified. |
 | **OpenAIDeploymentModelVersion** | string | No | "2" | The model version for the Azure OpenAI deployment. Defaults to "2" if not specified. |
+| **OpenAIDeploymentSKU** | String | No | "Standard" | The SKU for the Azure OpenAI deployment. |
+| **OpenAIDeploymentSKUCapacity** | Int32 | No | 100 | The SKU capacity for the Azure OpenAI deployment. |
 | **OpenAICompletionDeploymentName** | string | No | "msdocs-account-openai-completion-$randomIdentifier" | The name of the Azure OpenAI completion deployment. Generated using a random identifier if not specified. |
 | **OpenAICompletionDeploymentModel** | string | No | "gpt-3.5-turbo" | The model name for the Azure OpenAI completion deployment. Defaults to "gpt-3.5-turbo" if not specified. |
 | **OpenAICompletionDeploymentModelVersion** | string | No | "0301" | The model version for the Azure OpenAI completion deployment. Defaults to "0301" if not specified. |
+| **OpenAICompletionDeploymentSKU** | String | No | "Standard" | The SKU for the Azure OpenAI completion deployment. |
+| **OpenAICompletionDeploymentSKUCapacity** | Int32 | No | 100 | The SKU capacity for the Azure OpenAI completion deployment. |
 
 ## Determinate variable value precedence
 

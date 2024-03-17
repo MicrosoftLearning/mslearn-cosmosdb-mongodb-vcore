@@ -61,6 +61,9 @@ az login
 ./create-azure-resources.ps1
 ```
 
+> [!NOTE]
+> Make sure the tenant, location and subscription you use allows for the creation of the necessary resources. Not all locations and subscriptions might allow or support the creation of all the required resources needed for this lab. If you encounter any issues, please reach out to your Azure Administrator.
+
 Copy and save the environment variables returned by the script in case you need them later. You can verify the resources created in the Azure portal. Finally, ensure that the **.env** file is populated with the resource information.
 
 > [!NOTE]
