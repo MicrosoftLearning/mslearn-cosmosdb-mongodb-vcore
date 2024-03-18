@@ -47,13 +47,13 @@ Let's go ahead and learn how easy is to create your v-Core-based Azure Cosmos DB
         | Confirm password | ***Enter the same password***. Copy that password somewhere safe, we need it later. |
 
         > [!NOTE]
-> When you select **Free tier** under the **Cluster tier** section, you'll notice that *Free tier* checkbox is now also selected under the *Basics* tab. While you could have selected that checkbox on the *Basics* tab, we wanted you to familiarize yourself with the *cluster tier* options. 
+        > When you select **Free tier** under the **Cluster tier** section, you'll notice that *Free tier* checkbox is now also selected under the *Basics* tab. While you could have selected that checkbox on the *Basics* tab, we wanted you to familiarize yourself with the *cluster tier* options. 
 
         > [!NOTE]
-> Also note that you can only have one *Free tier* cluster per Azure account. If you already used your free account, just select the **M25 tier, 2 (Burstable) vCores** cluster tier to reduce cost since we don't need anything stronger for this lab.
+        > Also note that you can only have one *Free tier* cluster per Azure account. If you already used your free account, just select the **M25 tier, 2 (Burstable) vCores** cluster tier to reduce cost since we don't need anything stronger for this lab.
 
         > [!NOTE]
-> Another option you'll notice on the **Cluster tier** is the **High Availability** checkbox. On a production environment, while this option will incur additional cost, you should strongly consider if preventing possible downtime is worth that cost.
+        > Another option you'll notice on the **Cluster tier** is the **High Availability** checkbox. On a production environment, while this option will incur additional cost, you should strongly consider if preventing possible downtime is worth that cost.
 
     1. Networking tab:
 
