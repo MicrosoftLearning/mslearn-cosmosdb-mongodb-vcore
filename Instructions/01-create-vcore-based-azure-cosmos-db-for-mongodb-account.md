@@ -45,13 +45,10 @@ Let's go ahead and learn how easy is to create your v-Core-based Azure Cosmos DB
         | Admin username | **cosmosClusterAdmin** |
         | Password | ***Enter a strong password***. |
         | Confirm password | ***Enter the same password***. Copy that password somewhere safe, we need it later. |
-
         > [!NOTE]
         > When you select **Free tier** under the **Cluster tier** section, you'll notice that *Free tier* checkbox is now also selected under the *Basics* tab. While you could have selected that checkbox on the *Basics* tab, we wanted you to familiarize yourself with the *cluster tier* options.
-
         > [!NOTE]
         > Also note that you can only have one *Free tier* cluster per Azure account. If you already used your free account, just select the **M25 tier, 2 (Burstable) vCores** cluster tier to reduce cost since we don't need anything stronger for this lab.
-
         > [!NOTE]
         > Another option you'll notice on the **Cluster tier** is the **High Availability** checkbox. On a production environment, while this option will incur additional cost, you should strongly consider if preventing possible downtime is worth that cost.
 
@@ -62,12 +59,10 @@ Let's go ahead and learn how easy is to create your v-Core-based Azure Cosmos DB
         | Connectivity method | **Public access (allowed IP addresses)** |
         | Firewall rules | Select the **Allow public access from Azure services and resources within Azure to this cluster** checkbox. This will allow you to use the Azure portal Mongo Shell.  |
         | Firewall rules | Manually add all the IP ranges that you would like to grant access to your Cosmos DB account by selecting a *Rule Name*, a *Start IP address* and an *End IP address.* |
-
-> [!NOTE]
-> On a production environment, you would likely select **Private Access** for your *conectivity method* and use a *virtual network* and a *subnet* provided by your Azure network administrator. You will also most likely set private endpoints for access to the v-Core-based Azure Cosmos DB for MongoDB account.
-
         > [!NOTE]
-> Under the **Firewall rules** section is where you can add specific IP addresses that are allowed to access the Cosmos DB account. This is useful for restricting access to only specific IP addresses, such as your organization's IP addresses. You will notice there are two options: **+ Add current client IP address (your current public IP address)** and **+ Add 0.0.0.0 - 255.255.255.255**. The first option will add your current IP address to the list of allowed IP addresses, which could be benign if your public IP from your client never changes. The second option will allow you to add the range of ***ALL*** IP addresses in the internet. Be very careful of ever selecting that second option, since it opens your cluster to the whole internet.
+        > On a production environment, you would likely select **Private Access** for your *conectivity method* and use a *virtual network* and a *subnet* provided by your Azure network administrator. You will also most likely set private endpoints for access to the v-Core-based Azure Cosmos DB for MongoDB account.
+        > [!NOTE]
+        > Under the **Firewall rules** section is where you can add specific IP addresses that are allowed to access the Cosmos DB account. This is useful for restricting access to only specific IP addresses, such as your organization's IP addresses. You will notice there are two options: **+ Add current client IP address (your current public IP address)** and **+ Add 0.0.0.0 - 255.255.255.255**. The first option will add your current IP address to the list of allowed IP addresses, which could be benign if your public IP from your client never changes. The second option will allow you to add the range of ***ALL*** IP addresses in the internet. Be very careful of ever selecting that second option, since it opens your cluster to the whole internet.
 
 1. Select on the **Review + create** button at the bottom.
 
