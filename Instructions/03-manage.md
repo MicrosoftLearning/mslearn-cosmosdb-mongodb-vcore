@@ -66,9 +66,11 @@ Copy and save the environment variables returned by the script in case you need 
 
 Once the resources are created and your **.env** file is populated with the resource information, you can proceed to the next step.
 
-## Migrate to a v-Core-based Azure Cosmos DB for MongoDB account using MongoDB native tools
+## Scale a v-Core-based Azure Cosmos DB for MongoDB account
 
-## Migrate to a v-Core-based Azure Cosmos DB for MongoDB account using Azure Data Studio
+## Backup and restore a v-Core-based Azure Cosmos DB for MongoDB account
+
+## Monitor a v-Core-based Azure Cosmos DB for MongoDB account
 
 ## Clean Up
 
