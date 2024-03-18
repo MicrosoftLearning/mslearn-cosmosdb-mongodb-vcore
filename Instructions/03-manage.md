@@ -1,4 +1,4 @@
-# Lab: Migrate a MongoDB database to a v-Core-based Azure Cosmos DB for MongoDB account
+# Lab: Manage a v-Core-based Azure Cosmos DB for MongoDB account
 
 ## Introduction
 
