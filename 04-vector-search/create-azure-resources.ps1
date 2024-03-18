@@ -7,8 +7,8 @@ param (
     [string]$location, # The location for the resources
     [string]$subscriptionName, # The subscription name to use
     [string]$resourceGroup, # The resource group to use
-
     [bool]$changeSubscription = $false, # Change the subscription to the one specified
+
     [bool]$skipCreatingResourceGroup = $false, # Skip creating the resource group
     [bool]$skipCreatingCosmosDBCluster = $false, # Skip creating the Cosmos DB cluster
     [bool]$skipCreatingCosmosDBPublicIPFirewallRule = $false, # Skip creating the Cosmos DB public IP firewall rule
@@ -18,23 +18,25 @@ param (
 
     [string]$cosmosCluster, # The name of the Cosmos DB cluster
     [string]$cosmosClusterLocation, # The location for the Cosmos DB cluster
-    [string]$OpenAIAccountSKU, # The SKU for the Azure OpenAI account
     [string]$cosmosClusterAdmin, # The admin username for the Cosmos DB cluster
     [String]$cosmosClusterPassword, # The admin password for the Cosmos DB cluster
     [string]$cosmosDatabase, # The name of the Cosmos DB database
 
     [string]$OpenAIAccount, # The name of the Azure OpenAI account
     [string]$OpenAIAccountLocation, # The location for the Azure OpenAI account
+    [string]$OpenAIAccountSKU, # The SKU for the Azure OpenAI account
+
     [string]$OpenAIDeploymentName, # The name of the Azure OpenAI deployment
-    [string]$OpenAIDeploymentSKU, # The SKU for the Azure OpenAI deployment
-    [Int32]$OpenAIDeploymentSKUCapacity, # The SKU capacity for the Azure OpenAI deployment
     [string]$OpenAIDeploymentModel, # The model for the Azure OpenAI deployment
     [string]$OpenAIDeploymentModelVersion, # The model version for the Azure OpenAI deployment
+    [string]$OpenAIDeploymentSKU, # The SKU for the Azure OpenAI deployment
+    [Int32]$OpenAIDeploymentSKUCapacity, # The SKU capacity for the Azure OpenAI deployment
+
     [string]$OpenAICompletionDeploymentName, # The name of the Azure OpenAI completion deployment
-    [string]$OpenAICompletionDeploymentSKU, # The SKU for the Azure OpenAI completion deployment
-    [Int32]$OpenAICompletionDeploymentSKUCapacity, # The SKU capacity for the Azure OpenAI completion deployment
     [string]$OpenAICompletionDeploymentModel, # The model for the Azure OpenAI completion deployment
-    [string]$OpenAICompletionDeploymentModelVersion # The model version for the Azure OpenAI completion deployment
+    [string]$OpenAICompletionDeploymentModelVersion, # The model version for the Azure OpenAI completion deployment
+    [string]$OpenAICompletionDeploymentSKU, # The SKU for the Azure OpenAI completion deployment
+    [Int32]$OpenAICompletionDeploymentSKUCapacity # The SKU capacity for the Azure OpenAI completion deployment
 )
 
 # Determine the .env file path based on the language
@@ -98,6 +100,7 @@ $cosmosDbEndpoint = if ($useEnvFile -and $envVars['cosmosDbEndpoint']) { $envVar
 
 
 # Create an Azure OpenAI resource
+$cognitiveServicesKind = if ($useEnvFile -and $envVars['cognitiveServicesKind']) { $envVars['cognitiveServicesKind'] } else { "OpenAI" }
 $OpenAIAccount = if ($OpenAIAccount) {$OpenAIAccount} elseif ($useEnvFile -and $envVars['OpenAIAccount']) { $envVars['OpenAIAccount'] } else { "msdocs-account-openai-$randomIdentifier" } #needs to be lower case
 $OpenAIAccountLocation = if ($OpenAIAccountLocation) {$OpenAIAccountLocation} elseif ($useEnvFile -and $envVars['OpenAIAccountLocation']) { $envVars['OpenAIAccountLocation'] } else { $location } 
 $OpenAIAccountSKU = if ($OpenAIAccountSKU) {$OpenAIAccountSKU} elseif ($useEnvFile -and $envVars['OpenAIAccountSKU']) { $envVars['OpenAIAccountSKU'] } else { "s0" }
@@ -108,11 +111,12 @@ if (! $skipCreatingAzureOpenAIAccount) {
     Write-Host "Creating OpenAI account $OpenAIAccount in $OpenAIAccountLocation..."
     Write-Host
 
-    az cognitiveservices account create --name $OpenAIAccount --resource-group $resourceGroup --location $OpenAIAccountLocation --kind OpenAI --sku $OpenAIAccountSKU --custom-domain $OpenAIAccount --only-show-errors
+    az cognitiveservices account create --name $OpenAIAccount --resource-group $resourceGroup --location $OpenAIAccountLocation --kind $cognitiveServicesKind --sku $OpenAIAccountSKU --custom-domain $OpenAIAccount --only-show-errors
 }
 
 $OpenAIDeploymentName = if ($OpenAIDeploymentName) {$OpenAIDeploymentName} elseif ($useEnvFile -and $envVars['OpenAIDeploymentName']) { $envVars['OpenAIDeploymentName'] } else { "msdocs-account-openai-deployment-$randomIdentifier" }
 $OpenAIDeploymentModel = if ($OpenAIDeploymentModel) {$OpenAIDeploymentModel} elseif ($useEnvFile -and $envVars['OpenAIDeploymentModel']) { $envVars['OpenAIDeploymentModel'] } else { "text-embedding-ada-002" }
+$OpenAIDeploymentModelFormat = if ($useEnvFile -and $envVars['OpenAIDeploymentModelFormat']) { $envVars['OpenAIDeploymentModelFormat'] } else { "OpenAI" }
 $OpenAIDeploymentModelVersion = if ($OpenAIDeploymentModelVersion) {$OpenAIDeploymentModelVersion} elseif ($useEnvFile -and $envVars['OpenAIDeploymentModelVersion']) { $envVars['OpenAIDeploymentModelVersion'] } else { "2" }
 $OpenAIDeploymentSKU = if ($OpenAIDeploymentSKU) {$OpenAIDeploymentSKU} elseif ($useEnvFile -and $envVars['OpenAIDeploymentSKU']) { $envVars['OpenAIDeploymentSKU'] } else { "Standard" }
 $OpenAIDeploymentSKUCapacity = if ($OpenAIDeploymentSKUCapacity) {$OpenAIDeploymentSKUCapacity} elseif ($useEnvFile -and $envVars['OpenAIDeploymentSKUCapacity']) { $envVars['OpenAIDeploymentSKUCapacity'] } else { 100 }
@@ -123,11 +127,12 @@ if (! $skipCreatingAzureOpenAIDeployment) {
     Write-Host "Creating OpenAI deployment $OpenAIDeploymentName in $OpenAIAccountLocation..."
     Write-Host
 
-    az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAIDeploymentName --model-name $OpenAIDeploymentModel --model-version $OpenAIDeploymentModelVersion --model-format OpenAI --sku-capacity $OpenAIDeploymentSKUCapacity --sku-name $OpenAIDeploymentSKU --only-show-errors 
+    az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAIDeploymentName --model-name $OpenAIDeploymentModel --model-version $OpenAIDeploymentModelVersion --model-format $OpenAIDeploymentModelFormat --sku-capacity $OpenAIDeploymentSKUCapacity --sku-name $OpenAIDeploymentSKU --only-show-errors 
 }
 
 $OpenAICompletionDeploymentName = if ($OpenAICompletionDeploymentName) {$OpenAICompletionDeploymentName} elseif ($useEnvFile -and $envVars['OpenAICompletionDeploymentName']) { $envVars['OpenAICompletionDeploymentName'] } else { "msdocs-account-openai-completion-$randomIdentifier" }
 $OpenAICompletionDeploymentModel = if ($OpenAICompletionDeploymentModel) {$OpenAICompletionDeploymentModel} elseif ($useEnvFile -and $envVars['OpenAICompletionDeploymentModel']) { $envVars['OpenAICompletionDeploymentModel'] } else { "gpt-35-turbo" }
+$OpenAICompletionDeploymentModelFormat = if ($useEnvFile -and $envVars['OpenAICompletionDeploymentModelFormat']) { $envVars['OpenAICompletionDeploymentModelFormat'] } else { "OpenAI" }
 $OpenAICompletionDeploymentModelVersion = if ($OpenAICompletionDeploymentModelVersion) {$OpenAICompletionDeploymentModelVersion} elseif ($useEnvFile -and $envVars['OpenAICompletionDeploymentModelVersion']) { $envVars['OpenAICompletionDeploymentModelVersion'] } else { "0301" }
 $OpenAICompletionDeploymentSKU = if ($OpenAICompletionDeploymentSKU) {$OpenAICompletionDeploymentSKU} elseif ($useEnvFile -and $envVars['OpenAICompletionDeploymentSKU']) { $envVars['OpenAICompletionDeploymentSKU'] } else { "Standard" }
 $OpenAICompletionDeploymentSKUCapacity = if ($OpenAICompletionDeploymentSKUCapacity) {$OpenAICompletionDeploymentSKUCapacity} elseif ($useEnvFile -and $envVars['OpenAICompletionDeploymentSKUCapacity']) { $envVars['OpenAICompletionDeploymentSKUCapacity'] } else { 100 }
@@ -138,7 +143,7 @@ if (! $skipCreatingAzureOpenAICompletionDeployment) {
     Write-Host "Creating OpenAI completetion deployment $OpenAICompletionDeploymentName in $OpenAIAccountLocation..."
     Write-Host
 
-    az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAICompletionDeploymentName --model-name $OpenAICompletionDeploymentModel --model-version $OpenAICompletionDeploymentModelVersion --model-format OpenAI --sku-capacity $OpenAICompletionDeploymentSKUCapacity --sku-name $OpenAICompletionDeploymentSKU --only-show-errors 
+    az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAICompletionDeploymentName --model-name $OpenAICompletionDeploymentModel --model-version $OpenAICompletionDeploymentModelVersion --model-format $OpenAICompletionDeploymentModelFormat --sku-capacity $OpenAICompletionDeploymentSKUCapacity --sku-name $OpenAICompletionDeploymentSKU --only-show-errors 
 }
 
 # Get the keys and endpoint for the OpenAI accountIn case there's a delay in the deployment creation. 
@@ -179,38 +184,61 @@ $OpenAIKeys2 = $key2
 
 # Write the .env file
 if ($updateEnvFile) {
-    $envVars = @{
+    $envVars = [ordered]@{
         "randomIdentifier" = if ($randomIdentifier) { "$randomIdentifier" } else { "" }
         "location" = if ($location) { "`"$location`"" } else { "" }
         "subscriptionName" = if ($subscriptionName) { "`"$subscriptionName`"" } else { "" }
         "resourceGroup" = if ($resourceGroup) { "`"$resourceGroup`"" } else { "" }
+
         "cosmosCluster" = if ($cosmosCluster) { "`"$cosmosCluster`"" } else { "" }
         "cosmosClusterLocation" = if ($cosmosClusterLocation) { "`"$cosmosClusterLocation`"" } else { "" }
         "cosmosDbEndpoint" = if ($cosmosDbEndpoint) { "`"$cosmosDbEndpoint`"" } else { "" }
         "cosmosClusterAdmin" = if ($cosmosClusterAdmin) { "`"$cosmosClusterAdmin`"" } else { "" }
         "cosmosClusterPassword" = if ($cosmosClusterPassword) { "`"$cosmosClusterPassword`"" } else { "" }
         "cosmosDatabase" = if ($cosmosDatabase) { "`"$cosmosDatabase`"" } else { "`"cosmicworks`"" }
+
+        "cognitiveServicesKind" = if ($cognitiveServicesKind) { "`"$cognitiveServicesKind`"" } else { "OpenAI" }
         "OpenAIAccount" = if ($OpenAIAccount) { "`"$OpenAIAccount`"" } else { "" }
         "OpenAIAccountLocation" = if ($OpenAIAccountLocation) { "`"$OpenAIAccountLocation`"" } else { "" }
         "OpenAIAccountSKU" = if ($OpenAIAccountSKU) { "`"$OpenAIAccountSKU`"" } else { "`"s0`"" }
         "OpenAIEndpoint" = if ($OpenAIEndpoint) { "`"$OpenAIEndpoint`"" } else { "" }
         "OpenAIKey1" = if ($OpenAIKeys1) { "`"$OpenAIKeys1`"" } else { "" }
         "OpenAIVersion" = if ($OpenAIVersion) { "`"$OpenAIVersion`"" } else { "`"2023-05-15`"" }
-        "OpenAIDeploymentModelVersion" = if ($OpenAIDeploymentModelVersion) { "`"$OpenAIDeploymentModelVersion`"" } else { "" }
-        "OpenAICompletionDeploymentModelVersion" = if ($OpenAICompletionDeploymentModelVersion) { "`"$OpenAICompletionDeploymentModelVersion`"" } else { "" }
-        "OpenAIDeploymentModel" = if ($OpenAIDeploymentModel) { "`"$OpenAIDeploymentModel`"" } else { "" }
-        "OpenAICompletionDeploymentModel" = if ($OpenAICompletionDeploymentModel) { "`"$OpenAICompletionDeploymentModel`"" } else { "" }
+
         "OpenAIDeploymentName" = if ($OpenAIDeploymentName) { "`"$OpenAIDeploymentName`"" } else { "" }
-        "OpenAICompletionDeploymentName" = if ($OpenAICompletionDeploymentName) { "`"$OpenAICompletionDeploymentName`"" } else { "" }
+        "OpenAIDeploymentModel" = if ($OpenAIDeploymentModel) { "`"$OpenAIDeploymentModel`"" } else { "" }
+        "OpenAIDeploymentModelFormat" = if ($OpenAIDeploymentModelFormat) { "`"$OpenAIDeploymentModelFormat`"" } else { "OpenAI" }
+        "OpenAIDeploymentModelVersion" = if ($OpenAIDeploymentModelVersion) { "`"$OpenAIDeploymentModelVersion`"" } else { "" }
         "OpenAIDeploymentSKU" = if ($OpenAIDeploymentSKU) { "`"$OpenAIDeploymentSKU`"" } else { "`"Standard`"" }
         "OpenAIDeploymentSKUCapacity" = if ($OpenAIDeploymentSKUCapacity) { "$OpenAIDeploymentSKUCapacity" } else { "100" }
+
+        "OpenAICompletionDeploymentName" = if ($OpenAICompletionDeploymentName) { "`"$OpenAICompletionDeploymentName`"" } else { "" }
+        "OpenAICompletionDeploymentModel" = if ($OpenAICompletionDeploymentModel) { "`"$OpenAICompletionDeploymentModel`"" } else { "" }
+        "OpenAICompletionDeploymentModelFormat" = if ($OpenAICompletionDeploymentModelFormat) { "`"$OpenAICompletionDeploymentModelFormat`"" } else { "OpenAI" }
+        "OpenAICompletionDeploymentModelVersion" = if ($OpenAICompletionDeploymentModelVersion) { "`"$OpenAICompletionDeploymentModelVersion`"" } else { "" }
         "OpenAICompletionDeploymentSKU" = if ($OpenAICompletionDeploymentSKU) { "`"$OpenAICompletionDeploymentSKU`"" } else { "`"Standard`"" }
         "OpenAICompletionDeploymentSKUCapacity" = if ($OpenAICompletionDeploymentSKUCapacity) { "$OpenAICompletionDeploymentSKUCapacity" } else { "100" }
     }
 
-    $envVars.GetEnumerator() | ForEach-Object {
-        "$($_.Key)=$($_.Value)"
-    } | Out-File -FilePath $envFilePath -Encoding utf8
+    # We group the environment variables to improve readability and organization.
+    # Each group represents a different service or component of your application.
+    # This makes it easier to manage and update the variables related to each component.
+
+    $group1 = $envVars.Keys[0..3]  # Variables related to Azure subscription and resource group
+    $group2 = $envVars.Keys[4..8]  # Variables related to Cosmos DB
+    $group3 = $envVars.Keys[9..15]  # Variables related to OpenAI account and endpoint
+    $group4 = $envVars.Keys[16..19]  # Variables related to OpenAI deployment
+    $group5 = $envVars.Keys[20..25]  # Variables related to OpenAI completion deployment
+
+    $groups = @($group1, $group2, $group3, $group4)
+
+    $groups | ForEach-Object {
+        $group = $_
+        $group | ForEach-Object {
+            "$($_)=$($envVars[$_])"
+        } | Out-File -FilePath $envFilePath -Append -Encoding utf8
+        "" | Out-File -FilePath $envFilePath -Append -Encoding utf8  # Add a blank line for the component group separation
+    }
 }
 
 # Output the resources
@@ -230,6 +258,7 @@ Write-Host "Cosmos Cluster Admin Password: $cosmosClusterPassword"
 Write-Host "Cosmos DB Endpoint: $cosmosDbEndpoint"
 Write-Host "Cosmos Database: $cosmosDatabase"
 Write-Host
+Write-Host "Cognitive Services Kind: $cognitiveServicesKind"
 Write-Host "OpenAI account: $OpenAIAccount"
 Write-Host "OpenAI account Location: $OpenAIAccountLocation"
 Write-Host "OpenAI account SKU: $OpenAIAccountSKU"
@@ -239,12 +268,14 @@ Write-Host "OpenAI Key2: $OpenAIKeys2"
 write-host 
 Write-Host "OpenAI deployment name: $OpenAIDeploymentName"
 write-host "OpenAI deployment model: $OpenAIDeploymentModel"
+Write-host "OpenAI deployment model format: $OpenAIDeploymentModelFormat"
 write-host "OpenAI deployment model version: $OpenAIDeploymentModelVersion"
 Write-Host "OpenAI deployment SKU: $OpenAIDeploymentSKU"
 Write-Host "OpenAI deployment SKU Capacity: $OpenAIDeploymentSKUCapacity"
 write-host
 Write-Host "OpenAI completion deployment name: $OpenAICompletionDeploymentName"
 write-host "OpenAI completion deployment model: $OpenAICompletionDeploymentModel"
+write-host "OpenAI completion deployment model format: $OpenAICompletionDeploymentModelFormat"
 write-host "OpenAI completion deployment model version: $OpenAICompletionDeploymentModelVersion"
 Write-Host "OpenAI completion deployment SKU: $OpenAICompletionDeploymentSKU"
 Write-Host "OpenAI completion deployment SKU Capacity: $OpenAICompletionDeploymentSKUCapacity"
