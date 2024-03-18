@@ -31,8 +31,8 @@ If you need to build your own lab environment, you need the following components
 
 You need access to the following Azure resources for this lab:
 
-- v-Core-based Azure Cosmos DB for MongoDB.
-- Azure OpenAI account, including deployments.
+- v-Core-based Azure Cosmos DB for MongoDB account
+- Azure OpenAI account, including deployments for embeddings and completions
 
 You can create these resources via the *Azure portal* or use the ***create-azure-resources.ps1*** PowerShell script with the ***.env** file. Don't use existing production resources for this lab or any lab.
 
@@ -42,7 +42,7 @@ You can create these resources via the *Azure portal* or use the ***create-azure
 
 This file is both used to retrieve and store the necessary environment variables for both the PowerShell script and the vector search application APIs. It's the easiest way to prepopulate your resource information. The file is used to store the environment variables for your Azure Cosmos DB and Azure OpenAI account.
 
-If you already have a Resource Group, an Azure Cosmos DB Account, or an Azure OpenAI account that you would like to use, just fill in those values in the .env file. By default, the *create-azure-resources.ps1* script uses this file to retrieve the necessary environment variables.  
+If you already have a Resource Group, a v-Core-based Azure Cosmos DB for MongoDB account, or an Azure OpenAI account that you would like to use, just fill in those values in the .env file. By default, the *create-azure-resources.ps1* script uses this file to retrieve the necessary environment variables.  
 
 To learn more about the ***.env*** file and its parameters, review the [***.env*** file documentation](./00-env-file.md).
 
@@ -764,3 +764,7 @@ After completing the lab exercises, it's important to clean up any resources you
 1. **Review Billing**: Check your Azure billing section to ensure no unexpected charges are incurred, verifying that all unwanted resources were successfully deleted.
 
 This cleanup process helps maintain your Azure account organized and free from unnecessary charges, ensuring you only pay for resources you actively use.
+
+# Conclusion
+
+In this lab, you learned how to implement a vector search in a v-Core-based Azure Cosmos DB for MongoDB. You used Azure OpenAI for generating document embeddings. You also enhanced vector search results with GPT-3.5 for more detailed insights. You now have a better understanding of how to implement vector searches and integrate them with Azure OpenAI to provide more human-readable insights from the search results.
