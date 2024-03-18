@@ -39,7 +39,7 @@ param (
     [Int32]$OpenAICompletionDeploymentSKUCapacity # The SKU capacity for the Azure OpenAI completion deployment
 )
 
-# Determine the .env file path based on the language
+# Determine the .env file path
 $envFilePath = "./.env"
 
 # Read the .env file
@@ -225,12 +225,12 @@ if ($updateEnvFile) {
     # This makes it easier to manage and update the variables related to each component.
 
     $group1 = $envVars.Keys[0..3]  # Variables related to Azure subscription and resource group
-    $group2 = $envVars.Keys[4..8]  # Variables related to Cosmos DB
-    $group3 = $envVars.Keys[9..15]  # Variables related to OpenAI account and endpoint
-    $group4 = $envVars.Keys[16..19]  # Variables related to OpenAI deployment
-    $group5 = $envVars.Keys[20..25]  # Variables related to OpenAI completion deployment
+    $group2 = $envVars.Keys[4..9]  # Variables related to Cosmos DB
+    $group3 = $envVars.Keys[10..16]  # Variables related to OpenAI account and endpoint
+    $group4 = $envVars.Keys[17..22]  # Variables related to OpenAI deployment
+    $group5 = $envVars.Keys[23..28]  # Variables related to OpenAI completion deployment
 
-    $groups = @($group1, $group2, $group3, $group4)
+    $groups = @($group1, $group2, $group3, $group4, $group5)
 
     $groups | ForEach-Object {
         $group = $_

@@ -1,4 +1,4 @@
-# Lab: Implement vector search with v-Core-based Azure Cosmos DB for MongoDB and Azure OpenAI
+# Lab: Create a v-Core-based Azure Cosmos DB for MongoDB account using the Azure portal
 
 ## Introduction
 
