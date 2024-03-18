@@ -46,7 +46,7 @@ Let's go ahead and learn how easy is to create your v-Core-based Azure Cosmos DB
         | Password | ***Enter a strong password***. |
         | Confirm password | ***Enter the same password***. Copy that password somewhere safe, we need it later. |
 
->>> [!NOTE]
+> [!NOTE]
 > When you select **Free tier** under the **Cluster tier** section, you'll notice that *Free tier* checkbox is now also selected under the *Basics* tab. While you could have selected that checkbox on the *Basics* tab, we wanted you to familiarize yourself with the *cluster tier* options.
 
 > [!NOTE]
