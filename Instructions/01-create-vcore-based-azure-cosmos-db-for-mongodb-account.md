@@ -47,7 +47,7 @@ Let's go ahead and learn how easy is to create your v-Core-based Azure Cosmos DB
         | Confirm password | ***Enter the same password***. Copy that password somewhere safe, we need it later. |
 
         > [!NOTE]
-        > When you select **Free tier** under the **Cluster tier** section, you'll notice that *Free tier* checkbox is now also selected under the *Basics* tab. While you could have selected that checkbox on the *Basics* tab, we wanted you to familiarize yourself with the *cluster tier* options. 
+        > When you select **Free tier** under the **Cluster tier** section, you'll notice that *Free tier* checkbox is now also selected under the *Basics* tab. While you could have selected that checkbox on the *Basics* tab, we wanted you to familiarize yourself with the *cluster tier* options.
 
         > [!NOTE]
         > Also note that you can only have one *Free tier* cluster per Azure account. If you already used your free account, just select the **M25 tier, 2 (Burstable) vCores** cluster tier to reduce cost since we don't need anything stronger for this lab.
@@ -63,7 +63,7 @@ Let's go ahead and learn how easy is to create your v-Core-based Azure Cosmos DB
         | Firewall rules | Select the **Allow public access from Azure services and resources within Azure to this cluster** checkbox. This will allow you to use the Azure portal Mongo Shell.  |
         | Firewall rules | Manually add all the IP ranges that you would like to grant access to your Cosmos DB account by selecting a *Rule Name*, a *Start IP address* and an *End IP address.* |
 
-        > [!NOTE]
+> [!NOTE]
 > On a production environment, you would likely select **Private Access** for your *conectivity method* and use a *virtual network* and a *subnet* provided by your Azure network administrator. You will also most likely set private endpoints for access to the v-Core-based Azure Cosmos DB for MongoDB account.
 
         > [!NOTE]
