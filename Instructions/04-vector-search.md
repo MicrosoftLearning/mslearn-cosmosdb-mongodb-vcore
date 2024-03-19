@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In this lab, we guide you through the process of implementing a vector search in a v-Core-based Azure Cosmos DB for MongoDB. We utilize Azure Blob Storage for storing our data and Azure OpenAI for generating document embeddings. The focus is on the ***products*** collection, where we perform vector searches based on product categories and names.
+In this lab, we guide you through the process of implementing a vector search in a v-Core-based Azure Cosmos DB for MongoDB. We utilize Azure Blob Storage for storing our data and Azure OpenAI for generating document embeddings. The focus is on the ***products*** collection, where you perform vector searches based on product categories and names.
 
 ### Objectives
 
@@ -77,7 +77,7 @@ Once the resources are created and your **.env** file is populated with the reso
 
 ## Implement a vector search
 
-Before we can perform vector searches, we need to set up our environment and implement the necessary functionality. This setup includes loading data into the database, generating embeddings for the documents, and creating a vector index.
+Before you can perform vector searches, you need to set up our environment and implement the necessary functionality. This setup includes loading data into the database, generating embeddings for the documents, and creating a vector index.
 
 ### Create the document embeddings
 
@@ -208,7 +208,7 @@ Just creating the embeddings isn't enough. You need to create a vector index to 
 
 #### Update the loadAndVectorize function
 
-Now we create the vector indexes for the collection based on our vector columns. In this function, you choose which vector columns and index names need to be created.
+Now you create the vector indexes for the collection based on our vector columns. In this function, you choose which vector columns and index names need to be created.
 
 - Navigate to **./Blobs/loadAndVectorize** (with a .js or .py extension for the file's respective language).
 - Towards the bottom of the **loadAndVectorizeLocalBlobDataToMongoDBCluster** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet.
@@ -278,7 +278,7 @@ This function has multiple purposes. It loops through all the local data files, 
 
 #### Update the createVectorIndexes function
 
-Now that we know what vector columns and vector index names we want to create, let's update the function that creates these indexes. There are two types of vector indexes that can be created, IVF (Inverted File index), and HNSW (Hierarchical Navigable Small World index). For this lab, we're creating IVF indexes.
+Now that you know what vector columns and vector index names you want to create, let's update the function that creates these indexes. There are two types of vector indexes that can be created, IVF (Inverted File index), and HNSW (Hierarchical Navigable Small World index). For this lab, you're creating IVF indexes.
 
 - Navigate to **./SearchComponents/indexes** (with a .js or .py extension for the file's respective language).
 - In the **createVectorIndexes** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet.
@@ -373,7 +373,7 @@ This function first drops the index if it already exists, then creates a new IVF
 
 ## Perform vector searches
 
-It's time to perform vector searches using the generated embeddings and vector indexes. We enhance the results with GPT-3.5.
+It's time to perform vector searches using the generated embeddings and vector indexes. You enhance the results with GPT-3.5.
 
 ### Update the runVectorSearch function
 
@@ -521,11 +521,11 @@ The most interesting part of this function is that it calls the same function th
 
 ## Integrate GPT-3.5 for enhanced search results
 
-As we note in a moment, vector search results can be powerful, but they might require extra coding to fully interpret and utilize the results. To address this issue, we can integrate GPT-3 to provide more detailed, human-readable insights from the vector search results.
+As You'll note in a moment, vector search results can be powerful, but they might require extra coding to fully interpret and utilize the results. To address this issue, you can integrate GPT-3 to provide more detailed, human-readable insights from the vector search results.
 
 ### Update the runGPTSearch function
 
-Similar to the runVectorSearch function, we prepare this function to use the products' collection only.
+Similar to the runVectorSearch function, you prepare this function to use the products' collection only.
 
 - Navigate to **./SearchComponents/searches** (with a .js or .py extension for the file's respective language).
 - In the **runGPTSearch** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet.

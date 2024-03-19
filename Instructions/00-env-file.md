@@ -12,13 +12,17 @@ The **.env** file contains key-value pairs, each defining a specific configurati
 |---------------|-------------|---------------|
 | **randomIdentifier** | A unique identifier for distinguishing resources. | **504305484** |
 | **location** | The deployment location for cloud resources. | **eastus** |
+| **changeSubscription** | If true, allows changing the Azure subscription. | **true** |
 | **subscriptionName** | The name of the cloud subscription under which resources are deployed. | **YourSubscriptionName** |
+| **skipCreatingResourceGroup** | If true, skips the creation of a new resource group. | **true** |
 | **resourceGroup** | The name of the resource group containing all related resources. | **example-rg** |
 
 ### Azure Cosmos DB account
 
 | Variable Name | Description | Example Value |
 |---------------|-------------|---------------|
+| **skipCreatingCosmosDBCluster** | If true, skips the creation of the Cosmos DB cluster. | **true** |
+| **skipCreatingCosmosDBPublicIPFirewallRule** | If true, skips creating a public IP firewall rule for Cosmos DB. | **true** |
 | **cosmosCluster** | The name of the Cosmos DB cluster. | **example-cosmos-cluster** |
 | **cosmosClusterLocation** | The location for the Cosmos DB cluster. | **eastus** |
 | **cosmosDbEndpoint** | The endpoint URL for the Cosmos DB cluster. | **https://example.documents.azure.com:443/** |
@@ -30,6 +34,7 @@ The **.env** file contains key-value pairs, each defining a specific configurati
 
 | Variable Name | Description | Example Value |
 |---------------|-------------|---------------|
+| **skipCreatingAzureOpenAIAccount** | If true, skips creating an Azure OpenAI account. | **true** |
 | **cognitiveServicesKind** | The kind of Cognitive Services account to create. Defaults to **OpenAI**. | **OpenAI** |
 | **OpenAIAccount** | The name of the Azure OpenAI account. | **example-openai-account** |
 | **OpenAIAccountLocation** | The location for the Azure OpenAI account. | **eastus** |
@@ -42,6 +47,7 @@ The **.env** file contains key-value pairs, each defining a specific configurati
 
 | Variable Name | Description | Example Value |
 |---------------|-------------|---------------|
+| **skipCreatingAzureOpenAIDeployment** | If true, skips creating an Azure OpenAI deployment. | **true** |
 | **OpenAIDeploymentName** | The name of the Azure OpenAI deployment. | **example-deployment** |
 | **OpenAIDeploymentModel** | The model name for the Azure OpenAI deployment. | **text-embedding-ada-002** |
 | **OpenAIDeploymentModelFormat** | The model format for the Cognitive Services deployment. Defaults to **OpenAI**. | **OpenAI** |
@@ -53,6 +59,7 @@ The **.env** file contains key-value pairs, each defining a specific configurati
 
 | Variable Name | Description | Example Value |
 |---------------|-------------|---------------|
+| **skipCreatingAzureOpenAICompletionDeployment** | If true, skips creating an Azure OpenAI completion deployment. | **true** |
 | **OpenAICompletionDeploymentName** | The name of the Azure OpenAI completion deployment. | **example-completion-deployment** |
 | **OpenAICompletionDeploymentSKU** | The SKU for the Azure OpenAI completion deployment. Defaults to **"Standard"**. | **"Standard"** |
 | **OpenAICompletionDeploymentModelFormat** | The model format for the Cognitive Services completion deployment. Defaults to **OpenAI**. | **OpenAI** |

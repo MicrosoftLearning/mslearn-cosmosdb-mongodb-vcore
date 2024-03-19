@@ -44,12 +44,12 @@ Let's go ahead and learn how easy is to create your v-Core-based Azure Cosmos DB
         | MongoDB version | **6.0** |
         | Admin username | **cosmosClusterAdmin** |
         | Password | ***Enter a strong password***. |
-        | Confirm password | ***Enter the same password***. Copy that password somewhere safe, we need it later. |
+        | Confirm password | ***Enter the same password***. Copy that password somewhere safe, you need it later. |
 
         > [!NOTE]
         > When you select **Free tier** under the **Cluster tier** section, you'll notice that *Free tier* checkbox is now also selected under the *Basics* tab. While you could have selected that checkbox on the *Basics* tab, we wanted you to familiarize yourself with the *cluster tier* options.
         >
-        > Also note that you can only have one *Free tier* cluster per Azure account. If you already used your free account, just select the **M25 tier, 2 (Burstable) vCores** cluster tier to reduce cost since we don't need anything stronger for this lab.
+        > Also note that you can only have one *Free tier* cluster per Azure account. If you already used your free account, just select the **M25 tier, 2 (Burstable) vCores** cluster tier to reduce cost since you don't need anything stronger for this lab.
         >
         > Another option you'll notice on the **Cluster tier** is the **High Availability** checkbox. On a production environment, while this option will incur additional cost, you should strongly consider if preventing possible downtime is worth that cost.
 
@@ -82,7 +82,7 @@ Time to connect to your v-Core-based Azure Cosmos DB for MongoDB account using t
 
 1. In the **Azure Cosmos DB** window, select your newly created v-Core-based Azure Cosmos DB for MongoDB account.
 
-Let's get familiar with a couple of options available to you in the *Azure Cosmos DB for MongoDB (vCore)* window. You notice that there are several options available to you in the menu, including **Overview**, **Quit start**, **Networking**, **Connection string**, among others. For this lab, we focus on those four options we listed.
+Let's get familiar with a couple of options available to you in the *Azure Cosmos DB for MongoDB (vCore)* window. You notice that there are several options available to you in the menu, including **Overview**, **Quit start**, **Networking**, **Connection string**, among others. For this lab, you focus on those four options you listed.
 
 1. **Overview**: the Overview option provides you with a quick overview of your v-Core-based Azure Cosmos DB for MongoDB account. The overview includes the account's name, status, subscription, resource group, and location. This overview also includes the MongoDB version, admin username, cluster tier, shard count, disk size, connectivity method, and high availability. One interesting option available is to **Reset password**.
 
@@ -90,7 +90,7 @@ Let's get familiar with a couple of options available to you in the *Azure Cosmo
 
     1. Unless you want to change the password, just select **X discard**. If you do change the password, make sure to update your records with the new password.
 
-1. **Quick start**: We'll skip this one for now and revisit it in the next section of the lab.
+1. **Quick start**: You'll skip this one for now and revisit it in the next section of the lab.
 
 1. **Networking**: This tab provides you with the options to configure the network settings for your v-Core-based Azure Cosmos DB for MongoDB account. This option includes the ability to add IP addresses to the firewall rules, private endpoint connections and allow public access from Azure services and resources within Azure to this cluster.
 
@@ -152,7 +152,7 @@ Now that you have your v-Core-based Azure Cosmos DB for MongoDB account created,
         exit
         ```
 
-We now have a fully configured v-Core-based Azure Cosmos DB for MongoDB account and we connected to it using the Azure portal's Mongo Shell. We're ready to start using it to store and retrieve data.
+You now have a fully configured v-Core-based Azure Cosmos DB for MongoDB account and you connected to it using the Azure portal's Mongo Shell. You're ready to start using it to store and retrieve data.
 
 ## Clean Up
 
