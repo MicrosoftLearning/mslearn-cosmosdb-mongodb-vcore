@@ -16,12 +16,12 @@ The script accepts several parameters to customize the deployment process. The f
 | **location** | string | No | "eastus" | The location for the deployment. Defaults to "eastus" if not specified. |
 | **subscriptionName** | string | No | Output of **(az account show --query name -o tsv)** | The name of the Azure subscription for the deployment. Defaults to the current Azure subscription name. |
 | **resourceGroup** | string | No | "msdocs-cosmosdb-rg-$randomIdentifier" | The name of the resource group. Generated using a random identifier if not specified. |
-| **changeSubscription** | bool | No | *false* | If true, allows changing the Azure subscription. |
 
 ### Skip resource creation
 
 | Parameter Name | Data Type | Mandatory | Default Value | Description |
 |----------------|-----------|-----------|---------------|-------------|
+| **changeSubscription** | bool | No | *false* | If true, allows changing the Azure subscription. |
 | **skipCreatingResourceGroup** | bool | No | *false* | If true, skips the creation of a new resource group. |
 | **skipCreatingCosmosDBCluster** | bool | No | *false* | If true, skips the creation of the Cosmos DB cluster. |
 | **skipCreatingCosmosDBPublicIPFirewallRule** | bool | No | *false* | If true, skips creating a public IP firewall rule for Cosmos DB. |
