@@ -1,6 +1,8 @@
-# Lab: Create a v-Core-based Azure Cosmos DB for MongoDB account using the Azure portal
-
-## Introduction
+---
+lab:
+    title: 'Create a v-Core-based Azure Cosmos DB for MongoDB account using the Azure portal'
+    module: 'Module 1 - Get Started with v-Core-based Azure Cosmos DB for MongoDB'
+---
 
 In this lab, we guide you through the process of creating a v-Core-based Azure Cosmos DB for MongoDB account using the Azure portal. We walk you through the steps of setting up the Cosmos DB account, configuring the necessary settings, and preparing it for use. The focus is on understanding the different configuration options and how they affect the behavior and performance of the Cosmos DB. By the end of this lab, you have a fully configured Cosmos DB for MongoDB ready for data storage and retrieval.
 

@@ -1,6 +1,8 @@
-# Lab: Migrate a MongoDB database to a v-Core-based Azure Cosmos DB for MongoDB account
-
-## Introduction
+---
+lab:
+    title: 'Migrate a MongoDB database to a v-Core-based Azure Cosmos DB for MongoDB account'
+    module: 'Module 2 - Migrate to v-Core-based Azure Cosmos DB for MongoDB'
+---
 
 Data migration is a critical step in the process of moving from an existing MongoDB database to a v-Core-based Azure Cosmos DB for MongoDB account. While there are several ways to migrate a MongoDB database to a v-Core-based Azure Cosmos DB for MongoDB account, this lab focuses on using the MongoDB native tools to migrate the database. The MongoDB native tools are the most common way to migrate a MongoDB database to another. Most MongoDB administrators and developers are familiar with these tools.
 
@@ -43,29 +45,39 @@ You can create these resources via the *Azure portal* or use the ***create-azure
 
 This file is both used to retrieve and store the necessary environment variables for both the PowerShell script and the vector search application APIs. It's the easiest way to prepopulate your resource information. The file is used to store the environment variables for your Azure Cosmos DB and Azure OpenAI account.
 
-If you already have a Resource Group or a v-Core-based Azure Cosmos DB for MongoDB account that you would like to use, just fill in those values in the .env file. By default, the *create-azure-resources.ps1* script uses this file to retrieve the necessary environment variables.  
+If you already have an existing Resource Group, a v-Core-based Azure Cosmos DB for MongoDB account, an Azure Storage Account or an Azure Log Analytics workspace that you would like to use, just fill in those values in the .env file and set the skip create option for that resource to **true**. By default, the *create-azure-resources.ps1* script uses this file to retrieve the necessary environment variables. Note that the *create-azure-resources.ps1* script will populate the environment variables with default values if not specified in the .env file.
 
 To learn more about the ***.env*** file and its parameters, review the [***.env*** file documentation](./00-env-file.md).
 
 ### Use the create-azure-resources.ps1 script
 
-This script creates the necessary Azure resources for this lab. It gives you the flexibility to create some or all of the resources required for this lab. You can either run the script as is or modify it to suit your needs.  
+This script creates the necessary Azure resources for this lab. It gives you the flexibility to create some or all of the resources required for this lab. You can either run the script as is or modify it to suit your needs. The resources created by the script include:
+
+- Resource Group
+- v-Core-based Azure Cosmos DB for MongoDB account
 
 The script has a rich set of parameters to help you customize the resources to be created. It also uses an ***.env*** file to retrieve and store the necessary environment variables for both the PowerShell script and the vector search application APIs.  
 
-To learn more about the PowerShell script and its parameters, reviewing the [***create-azure-resources.ps1*** documentation](./00-powershell-script.md).
+> [!NOTE]
+> While these parameters can be passed directly to the script, *we recommend you use the ***.env*** file to prepopulate your resource information instead of adding the parameters when executing the script. This will make it easier for you to manage your environment variables.*
 
-To create the necessary Azure resources for this lab, run the following command in the integrated terminal. If you aren't creating all resources, don't forget to use the *skip creating* parameters for the resources you don't want to create.
-
-```powershell
-az login
-./create-azure-resources.ps1
-```
+To learn more about the PowerShell script and its parameters, review the [***create-azure-resources.ps1*** documentation](./00-powershell-script.md).
 
 > [!NOTE]
 > Make sure the tenant, location and subscription you use allows for the creation of the necessary resources. Not all locations and subscriptions might allow or support the creation of all the required resources needed for this lab. If you encounter any issues, please reach out to your Azure Administrator.
 
-Copy and save the environment variables returned by the script in case you need them later. You can verify the resources created in the Azure portal. Finally, ensure that the **.env** file is populated with the resource information.
+To create the necessary Azure resources for this lab:
+
+1. Run the following command in the integrated terminal.
+
+    ```powershell
+    az login
+    ./create-azure-resources.ps1
+    ```
+
+1. Copy and save the environment variables returned by the script in case you need them later. You can verify the resources created in the Azure portal. 
+
+1. Make sure that the **.env** file is populated with the resource information.
 
 > [!NOTE]
 > The v-Core-based Azure Cosmos DB for MongoDB account will need a firewall rule to allow access from your current public IP address.  If your Azure Cosmos DB account was generated by the *create-azure-resources.ps1* script, it should have created the firewall rule for you.  Check the existing firewall rules under the ***Networking*** *Setting* section of the *Azure Cosmos DB Account*.  If you are not sure what your current public IP address is, you can use the following command to find out:

@@ -12,12 +12,22 @@ param (
     [bool]$skipCreatingResourceGroup = $false, # Skip creating the resource group
     [bool]$skipCreatingCosmosDBCluster = $false, # Skip creating the Cosmos DB cluster
     [bool]$skipCreatingCosmosDBPublicIPFirewallRule = $false, # Skip creating the Cosmos DB public IP firewall rule
+    [bool]$skipCreatingStorageAccount = $false, # Skip creating the storage account
+    [bool]$skipCreatingLogAnalyticsWorkspace = $false, # Skip creating the Log Analytics workspace
 
     [string]$cosmosCluster, # The name of the Cosmos DB cluster
     [string]$cosmosClusterLocation, # The location for the Cosmos DB cluster
     [string]$cosmosClusterAdmin, # The admin username for the Cosmos DB cluster
     [String]$cosmosClusterPassword, # The admin password for the Cosmos DB cluster
-    [string]$cosmosDatabase # The name of the Cosmos DB database
+    [string]$cosmosDatabase, # The name of the Cosmos DB database
+
+    [string]$storageAccountName, # The name of the storage account
+    [string]$storageAccountLocation, # The location for the storage account
+    [string]$storageAccountSKU, # The SKU for the storage account
+    [string]$storageAccountKind, # The kind for the storage account
+    
+    [string]$logAnalyticsWorkspaceName, # The name of the Log Analytics workspace
+    [string]$logAnalyticsWorkspaceLocation # The location for the Log Analytics workspace
 )
 
 # Determine the .env file path
@@ -41,12 +51,16 @@ if ($useEnvFile) {
     if ($envVars['skipCreatingResourceGroup'] -eq 'true') { $skipCreatingResourceGroup = $true }
     if ($envVars['skipCreatingCosmosDBCluster'] -eq 'true') { $skipCreatingCosmosDBCluster = $true }
     if ($envVars['skipCreatingCosmosDBPublicIPFirewallRule'] -eq 'true') { $skipCreatingCosmosDBPublicIPFirewallRule = $true }
+    if ($envVars['skipCreatingStorageAccount'] -eq 'true') { $skipCreatingStorageAccount = $true }
+    if ($envVars['skipCreatingLogAnalyticsWorkspace'] -eq 'true') { $skipCreatingLogAnalyticsWorkspace = $true }
 } 
 
 # Error variable to track if there are any creation errors
 $changeSubscriptionError = $null
 $CreatingResourceGroupError = $null
 $CreatingCosmosDBClusterError = $null
+$CreatingStorageAccountError = $null
+$CreatingLogAnalyticsWorkspaceError = $null
 
 # Use the values from the parameters if they exist, otherwise use the values from the .env file if they exist and $useEnvFile is true, otherwise calculate them
 $randomIdentifier = if ($randomIdentifier) { $randomIdentifier } elseif ($useEnvFile -and $envVars['randomIdentifier']) { $envVars['randomIdentifier'] } else { Get-Random }
@@ -56,7 +70,10 @@ $subscriptionName = if ($subscriptionName) { $subscriptionName } elseif ($useEnv
 
 if ($changeSubscription) {
     try {
-        az account set --subscription $subscriptionName --only-show-errors
+        $output = az account set --subscription $subscriptionName --only-show-errors
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
     }
     catch {
         $changeSubscriptionError = $_.Exception.Message
@@ -73,7 +90,10 @@ if (! $skipCreatingResourceGroup) {
     Write-Host
 
     try {
-        az group create --name $resourceGroup --location $location --only-show-errors
+        $output = az group create --name $resourceGroup --location $location --only-show-errors
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
     }
     catch {
         $CreatingResourceGroupError = $_.Exception.Message
@@ -93,7 +113,7 @@ $cosmosDatabase = if ($cosmosDatabase) {$cosmosDatabase} elseif ($useEnvFile -an
 if (! $skipCreatingCosmosDBPublicIPFirewallRule) {
     # Create a public IP firewall rule for the Cosmos DB account
     $publicIpRuleName = "msdocs-cosmosdb-fw_rule-$randomIdentifier"
-    $publicIp = if ($useEnvFile -and $envVars['publicIp']) { $envVars['publicIp'] }
+    $publicIp = (Invoke-RestMethod -Uri http://ipinfo.io/json).ip
 } 
 else { 
     $publicIpRuleName = "labMachineIPAccessRule"
@@ -107,7 +127,10 @@ if (! $skipCreatingCosmosDBCluster) {
     Write-Host
 
     try {
-        az deployment group create --resource-group $resourceGroup --template-file 'create-mongodb-vcore-cluster.bicep' --parameters "clusterName=`"$cosmosCluster`"" "location=`"$cosmosClusterLocation`"" "adminUsername=`"$cosmosClusterAdmin`"" "adminPassword=`"$cosmosClusterPassword`"" "publicIpRuleName=`"$publicIpRuleName`"" "publicIp=`"$publicIp`"" --only-show-errors
+        $output = az deployment group create --resource-group $resourceGroup --template-file 'create-mongodb-vcore-cluster.bicep' --parameters "clusterName=`"$cosmosCluster`"" "location=`"$cosmosClusterLocation`"" "adminUsername=`"$cosmosClusterAdmin`"" "adminPassword=`"$cosmosClusterPassword`"" "publicIpRuleName=`"$publicIpRuleName`"" "publicIp=`"$publicIp`"" --only-show-errors
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
     }
     catch {
         $CreatingCosmosDBClusterError = $_.Exception.Message
@@ -118,6 +141,49 @@ if (! $skipCreatingCosmosDBCluster) {
 # Get the endpoint for the Cosmos DB account
 $cosmosDbEndpoint = if ($useEnvFile -and $envVars['cosmosDbEndpoint']) { $envVars['cosmosDbEndpoint'] } else { "mongodb+srv://<user>:<password>@$cosmosCluster.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000" }
 
+# Create a storage account
+$storageAccountName = if ($storageAccountName) {$storageAccountName} elseif ($useEnvFile -and $envVars['storageAccountName']) { $envVars['storageAccountName'] } else { "msdocsmongosa$randomIdentifier" }
+$storageAccountLocation = if ($storageAccountLocation) {$storageAccountLocation} elseif ($useEnvFile -and $envVars['storageAccountLocation']) { $envVars['storageAccountLocation'] } else { $location } 
+$storageAccountSKU = if ($storageAccountSKU) {$storageAccountSKU} elseif ($useEnvFile -and $envVars['storageAccountSKU']) { $envVars['storageAccountSKU'] } else { "Standard_LRS" }
+$storageAccountKind = if ($storageAccountKind) {$storageAccountKind} elseif ($useEnvFile -and $envVars['storageAccountKind']) { $envVars['storageAccountKind'] } else { "StorageV2" }
+
+if (! $skipCreatingStorageAccount) {
+    Write-Host
+    Write-Host "Creating Azure storage account $storageAccountName in $storageAccountLocation..."
+    Write-Host
+
+    try {
+        $output = az storage account create --name $storageAccountName --resource-group $resourceGroup --location $storageAccountLocation --sku $storageAccountSKU --kind $storageAccountKind --only-show-errors 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
+    }
+    catch {
+        $CreatingStorageAccountError = $_.Exception.Message
+        Write-Host "Error creating the storage account $storageAccountName - $CreatingStorageAccountError"
+    }
+}
+
+# Create a Log Analytics workspace
+$logAnalyticsWorkspaceName = if ($logAnalyticsWorkspaceName) {$logAnalyticsWorkspaceName} elseif ($useEnvFile -and $envVars['logAnalyticsWorkspaceName']) { $envVars['logAnalyticsWorkspaceName'] } else { "msdocs-cosmosdb-la-$randomIdentifier" }
+$logAnalyticsWorkspaceLocation = if ($logAnalyticsWorkspaceLocation) {$logAnalyticsWorkspaceLocation} elseif ($useEnvFile -and $envVars['logAnalyticsWorkspaceLocation']) { $envVars['logAnalyticsWorkspaceLocation'] } else { $location }
+
+if (! $skipCreatingLogAnalyticsWorkspace) {
+    Write-Host
+    Write-Host "Creating Azure Log Analytics workspace $logAnalyticsWorkspaceName in $logAnalyticsWorkspaceLocation..."
+    Write-Host
+
+    try {
+        $output = az monitor log-analytics workspace create --resource-group $resourceGroup --workspace-name $logAnalyticsWorkspaceName --location $logAnalyticsWorkspaceLocation --only-show-errors
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
+    }
+    catch {
+        $CreatingLogAnalyticsWorkspaceError = $_.Exception.Message
+        Write-Host "Error creating the Log Analytics workspace $logAnalyticsWorkspaceName - $CreatingLogAnalyticsWorkspaceError"
+    }
+}
 
 # Write the .env file
 if ($updateEnvFile) {
@@ -137,6 +203,16 @@ if ($updateEnvFile) {
         "cosmosClusterAdmin" = if ($cosmosClusterAdmin) { "`"$cosmosClusterAdmin`"" } else { "" }
         "cosmosClusterPassword" = if ($cosmosClusterPassword) { "`"$cosmosClusterPassword`"" } else { "" }
         "cosmosDatabase" = if ($cosmosDatabase) { "`"$cosmosDatabase`"" } else { "`"cosmicworks`"" }
+
+        "skipCreatingStorageAccount" = if ($skipCreatingStorageAccount) { "true" } else { "" }
+        "storageAccountName" = if ($storageAccountName) { "`"$storageAccountName`"" } else { "" }
+        "storageAccountLocation" = if ($storageAccountLocation) { "`"$storageAccountLocation`"" } else { "" }
+        "storageAccountSKU" = if ($storageAccountSKU) { "`"$storageAccountSKU`"" } else { "" }
+        "storageAccountKind" = if ($storageAccountKind) { "`"$storageAccountKind`"" } else { "" }
+
+        "skipCreatingLogAnalyticsWorkspace" = if ($skipCreatingLogAnalyticsWorkspace) { "true" } else { "" }
+        "logAnalyticsWorkspaceName" = if ($logAnalyticsWorkspaceName) { "`"$logAnalyticsWorkspaceName`"" } else { "" }
+        "logAnalyticsWorkspaceLocation" = if ($logAnalyticsWorkspaceLocation) { "`"$logAnalyticsWorkspaceLocation`"" } else { "" }
     }
 
     # We group the environment variables to improve readability and organization.
@@ -145,16 +221,20 @@ if ($updateEnvFile) {
 
     $group1 = $envVars.Keys[0..5]  # Variables related to Azure subscription and resource group
     $group2 = $envVars.Keys[6..13]  # Variables related to Cosmos DB
-
-    $groups = @($group1, $group2)
-
-    $groups | ForEach-Object {
+    $group3 = $envVars.Keys[14..18]  # Variables related to Storage Account
+    $group4 = $envVars.Keys[19..21]  # Variables related to Log Analytics Workspace
+    
+    $groups = @($group1, $group2, $group3, $group4)
+    
+    $output = $groups | ForEach-Object {
         $group = $_
         $group | ForEach-Object {
             "$($_)=$($envVars[$_])"
-        } | Out-File -FilePath $envFilePath -Append -Encoding utf8
-        "" | Out-File -FilePath $envFilePath -Append -Encoding utf8  # Add a blank line for the component group separation
+        }
+        ""  # Add a blank line for the component group separation
     }
+    
+    $output | Out-File -FilePath $envFilePath -Encoding utf8
 }
 
 # Output the resources
@@ -163,19 +243,39 @@ Write-Host "*************** Resources ***************"
 Write-Host
 write-host "Random Identifier: $randomIdentifier"
 write-host 
+Write-Host "Change subscription status (skipped by default): " -NoNewline
+if (! $changeSubscription) { Write-Host "Skipped" -ForegroundColor Yellow } elseif (  $null -ne $changeSubscriptionError ){ Write-Host "Failed" -ForegroundColor Red } else { Write-Host "Success" -ForegroundColor Green }
+if ($null -ne $changeSubscriptionError) { Write-Host "Change subscription error: "  -NoNewline  } if ($null -ne $changeSubscriptionError) { Write-Host $changeSubscriptionError -ForegroundColor Red}
 Write-Host "Subscription name: $subscriptionName"
-Write-Host "Resource group creation status: " + if ($skipCreatingResourceGroup) { "Skipped" } elseif (  $null -ne $CreatingResourceGroupError ){ "Failed"  } else { "Success" }
-if ($null -ne $CreatingResourceGroupError) { Write-Host "Resource group creation error - $CreatingResourceGroupError" }
+Write-Host
+Write-Host "Resource group creation status: " -NoNewline
+if ($skipCreatingResourceGroup) { Write-Host "Skipped" -ForegroundColor Yellow } elseif (  $null -ne $CreatingResourceGroupError ){ Write-Host "Failed" -ForegroundColor Red } else { Write-Host "Success" -ForegroundColor Green }
+if ($null -ne $CreatingResourceGroupError) { Write-Host "Resource group creation error: "  -NoNewline  } if ($null -ne $CreatingResourceGroupError) { Write-Host $CreatingResourceGroupError -ForegroundColor Red}
 Write-Host "Resource group: $resourceGroup"
 Write-Host "Location: $location"
 Write-Host
-Write-Host "Cosmos Cluster creation status: " + if ($skipCreatingCosmosDBCluster) { "Skipped" } elseif (  $null -ne $CreatingCosmosDBClusterError ){ "Failed"  } else { "Success" }
-if ($null -ne $CreatingCosmosDBClusterError) { Write-Host "Cosmos Cluster creation error - $CreatingCosmosDBClusterError" }
+Write-Host "Cosmos DB creation status: " -NoNewline
+if ($skipCreatingCosmosDBCluster) { Write-Host "Skipped" -ForegroundColor Yellow } elseif (  $null -ne $CreatingCosmosDBClusterError ){ Write-Host "Failed" -ForegroundColor Red } else { Write-Host "Success" -ForegroundColor Green }
+if ($null -ne $CreatingCosmosDBClusterError) { Write-Host "Cosmos DB creation error: "  -NoNewline  } if ($null -ne $CreatingCosmosDBClusterError) { Write-Host $CreatingCosmosDBClusterError -ForegroundColor Red}
 Write-Host "Cosmos Cluster Name: $cosmosCluster"
 Write-Host "Cosmos Cluster Location: $cosmosClusterLocation"
 Write-Host "Cosmos Cluster Admin: $cosmosClusterAdmin"
 Write-Host "Cosmos Cluster Admin Password: $cosmosClusterPassword"
 Write-Host "Cosmos DB Endpoint: $cosmosDbEndpoint"
 Write-Host "Cosmos Database: $cosmosDatabase"
+Write-Host
+Write-Host "Storage Account creation status: " -NoNewline 
+if ($skipCreatingStorageAccount) { { Write-Host "Skipped" -ForegroundColor Yellow }  } elseif (  $null -ne $CreatingStorageAccountError ){ Write-Host "Failed" -ForegroundColor Red  } else { Write-Host "Success" -ForegroundColor Green }
+if ($null -ne $CreatingStorageAccountError) { Write-Host "Storage Account creation error: "  -NoNewline  } if ($null -ne $CreatingStorageAccountError) { Write-Host $CreatingStorageAccountError -ForegroundColor Red}
+Write-Host "Storage Account Name: $storageAccountName"
+Write-Host "Storage Account Location: $storageAccountLocation"
+Write-Host "Storage Account SKU: $storageAccountSKU"
+Write-Host "Storage Account Kind: $storageAccountKind"
+Write-Host
+Write-Host "Log Analytics Workspace creation status: " -NoNewline
+if ($skipCreatingLogAnalyticsWorkspace) { Write-Host "Skipped" -ForegroundColor Yellow } elseif (  $null -ne $CreatingLogAnalyticsWorkspaceError ){ Write-Host "Failed" -ForegroundColor Red } else { Write-Host "Success" -ForegroundColor Green }
+if ($null -ne $CreatingLogAnalyticsWorkspaceError) { Write-Host "Log Analytics Workspace creation error: "  -NoNewline  } if ($null -ne $CreatingLogAnalyticsWorkspaceError) { Write-Host $CreatingLogAnalyticsWorkspaceError -ForegroundColor Red}
+Write-Host "Log Analytics Workspace Name: $logAnalyticsWorkspaceName"
+Write-Host "Log Analytics Workspace Location: $logAnalyticsWorkspaceLocation"
 Write-Host
 Write-Host "*************** Resources ***************"
