@@ -4,14 +4,12 @@ lab:
     module: 'Module 3 - Manage v-Core-based Azure Cosmos DB for MongoDB'
 ---
 
-## Introduction
-
 In this lab, you will learn how to manage, scale, and monitor a v-Core-based Azure Cosmos DB for MongoDB account. You will use monitoring tools to track operations and scale your account to handle increased or decreased traffic. You will also learn how to enable diagnostic settings to collect logs and metrics from your Cosmos DB account. You will then run a simulated workload to generate some data for your logs and metrics. Finally, you will review the logs and metrics that are being generated.
 
 ### Objectives
 
-Scale the Azure Cosmos DB for MongoDB account to meet performance needs by adjusting cluster tier, storage capacity, and enabling high availability.
-Monitor the Azure Cosmos DB account using diagnostic settings to collect and analyze logs and metrics.
+- Scale the Azure Cosmos DB for MongoDB account to meet performance needs by adjusting cluster tier, storage capacity, and enabling high availability.
+- Monitor the Azure Cosmos DB account using diagnostic settings to collect and analyze logs and metrics.
 
 ### Build your own lab environment
 
