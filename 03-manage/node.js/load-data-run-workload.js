@@ -1,13 +1,11 @@
 // Import necessary modules
 const LoadData = require('./Blobs/loadData');
 const runRandomCRUD = require('./Workload/runRandomCRUD');
-const readline = require('readline');
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
 const dotenv = require('dotenv');
 const MongoClient = require('mongodb').MongoClient;
+
+const readlineSync = require('readline-sync');
+const { fork } = require('child_process');
 
 // Load environment variables
 dotenv.config({ path: '../.env' });
@@ -41,7 +39,7 @@ async function main() {
             console.log("\t1. Load local data into MongoDB and create vector index.");
             console.log("\t2. Run workload on Database.");
             console.log("\t0. End");
-            userInput = await new Promise(resolve => rl.question("Option: ", resolve));
+            userInput = readlineSync.keyIn("Option: ");
 
             // Handle user input
             if (userInput === "0") {
@@ -51,6 +49,8 @@ async function main() {
                 continue;
             }
 
+            console.log(`\nYou selected option ${userInput}.\n`);
+
             // Load data into MongoDB and create vector index if user selected option 1 or 2
             if (userInput === "1") {
                 await LoadData.loadLocalBlobDataToMongoDBCluster(client, data_folder, cosmos_db_mongodb_database, batch_size);
@@ -58,18 +58,29 @@ async function main() {
 
             // Run a vector search if user selected option 3
             if (userInput === "2") {
-                await runRandomCRUD.runCRUDOperation(client, cosmos_db_mongodb_database,rl);
+                const child = fork('./Workload/runRandomCRUD.js');
+
+                child.send({
+                    command: 'start',
+                    connectionString: cosmosdb_connection_string,  // Pass the connection string, not the client
+                    database: cosmos_db_mongodb_database
+                });
+
+                // Listen for key presses in the main process
+                readLineInput = readlineSync.keyIn('', {hideEchoBack: true, mask: '', limit: 'qesc'})
+                if (readLineInput) {
+                    // If 'q' or 'esc' is pressed, send a message to the child process to stop
+                    child.send({ command: 'stop' });
+                }
             }
 
             console.log("\nPress Enter to continue...");
-            await new Promise(resolve => rl.question("", resolve));
+            readlineSync.question("");
         }
     } catch (ex) {
         // Log any errors
         console.error(ex);
     } finally {
-        // Close readline interface and MongoDB client
-        rl.close();
         if (client) {
             await client.close();
         }

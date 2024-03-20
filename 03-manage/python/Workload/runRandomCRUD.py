@@ -3,7 +3,7 @@ import random
 import time
 import threading
 from faker import Faker
-from pynput import keyboard
+import keyboard
 
 fake = Faker() # Create a Faker instance for generating fake data
 
@@ -90,8 +90,8 @@ def runRandomCRUDOperation(client, cosmos_db_mongodb_database):
     for t in threads:
         t.join()
 
-    # Wait for a random time between 0.1 and 1.9 seconds
-    time.sleep(random.uniform(0.1, 1.9))
+    # Wait for a random time between 1 and 5 seconds
+    time.sleep(random.uniform(1, 5))
 
 # Function to perform a random CRUD operation on a collection
 def performRandomCRUDOnCollection(db, collection):
@@ -119,22 +119,18 @@ def performRandomCRUDOnCollection(db, collection):
 # Function to continuously run CRUD operations until the user presses the 'esc' key or 'q'
 def runCRUDOperation(client, cosmos_db_mongodb_database):
     print("Starting CRUD operations. Press 'q' or 'esc' to stop.")
-
     stop_event = threading.Event()
 
-    def on_press(key):
-        if key == keyboard.Key.esc or key.char == 'q':
-            stop_event.set() # Set the stop event
+    def on_press(e):
+        if e.name == 'q' or e.name == 'esc':
+            stop_event.set()  # Set the stop event
             return False  # Stop listener
 
     # Start the key press listener
-    listener = keyboard.Listener(on_press=on_press)
-    listener.start()
+    keyboard.on_press(on_press)
 
     # Continuously run CRUD operations until the stop event is set
     while not stop_event.is_set():
         runRandomCRUDOperation(client, cosmos_db_mongodb_database)
-
-    listener.join()  # Wait for the listener to stop
 
     print("CRUD operations stopped.")

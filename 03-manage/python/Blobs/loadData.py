@@ -3,10 +3,6 @@ import os
 import json
 import datetime
 from pymongo import UpdateOne
-import Collections.customers as Customers
-import Collections.products as Products
-import Collections.salesOrders as SalesOrders
-import SearchComponents.indexes as Indexes
 
 # Function to load local blob data to MongoDB cluster
 def loadLocalBlobDataToMongoDBCluster(client, data_folder,cosmos_db_mongodb_database,batch_size):

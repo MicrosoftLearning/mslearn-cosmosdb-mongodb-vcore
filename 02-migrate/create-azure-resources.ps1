@@ -17,7 +17,7 @@ param (
     [string]$cosmosClusterLocation, # The location for the Cosmos DB cluster
     [string]$cosmosClusterAdmin, # The admin username for the Cosmos DB cluster
     [String]$cosmosClusterPassword, # The admin password for the Cosmos DB cluster
-    [string]$cosmosDatabase # The name of the Cosmos DB database
+    [string]$cosmosdbDatabase # The name of the Cosmos DB database
 )
 
 # Determine the .env file path
@@ -94,7 +94,7 @@ $cosmosClusterLocation = if ($cosmosClusterLocation) {$cosmosClusterLocation} el
 $cosmosClusterAdmin = if ($cosmosClusterAdmin) {$cosmosClusterAdmin} elseif ($useEnvFile -and $envVars['cosmosClusterAdmin']) { $envVars['cosmosClusterAdmin'] } else { "clusteradmin$randomIdentifier" }
 $tempPW = -join ((48..57) + (65..90) + (97..122) + (33..33) + (36..38) + (40..47) + (58..64) + (91..95) + (123..126) | Get-Random -Count 16 | % {[char]$_})
 $cosmosClusterPassword = if ($cosmosClusterPassword) {$cosmosClusterPassword} elseif ($useEnvFile -and $envVars['cosmosClusterPassword']) { $envVars['cosmosClusterPassword'] } else { $tempPW  }
-$cosmosDatabase = if ($cosmosDatabase) {$cosmosDatabase} elseif ($useEnvFile -and $envVars['cosmosDatabase']) { $envVars['cosmosDatabase'] } else { "cosmicworks" }
+$cosmosdbDatabase = if ($cosmosdbDatabase) {$cosmosdbDatabase} elseif ($useEnvFile -and $envVars['cosmosdbDatabase']) { $envVars['cosmosdbDatabase'] } else { "cosmicworks" }
 
 if (! $skipCreatingCosmosDBPublicIPFirewallRule) {
     # Create a public IP firewall rule for the Cosmos DB account
@@ -144,7 +144,7 @@ if ($updateEnvFile) {
         "cosmosDbEndpoint" = if ($cosmosDbEndpoint) { "`"$cosmosDbEndpoint`"" } else { "" }
         "cosmosClusterAdmin" = if ($cosmosClusterAdmin) { "`"$cosmosClusterAdmin`"" } else { "" }
         "cosmosClusterPassword" = if ($cosmosClusterPassword) { "`"$cosmosClusterPassword`"" } else { "" }
-        "cosmosDatabase" = if ($cosmosDatabase) { "`"$cosmosDatabase`"" } else { "`"cosmicworks`"" }
+        "cosmosdbDatabase" = if ($cosmosdbDatabase) { "`"$cosmosdbDatabase`"" } else { "`"cosmicworks`"" }
     }
 
     # We group the environment variables to improve readability and organization.
@@ -192,6 +192,6 @@ Write-Host "Cosmos Cluster Location: $cosmosClusterLocation"
 Write-Host "Cosmos Cluster Admin: $cosmosClusterAdmin"
 Write-Host "Cosmos Cluster Admin Password: $cosmosClusterPassword"
 Write-Host "Cosmos DB Endpoint: $cosmosDbEndpoint"
-Write-Host "Cosmos Database: $cosmosDatabase"
+Write-Host "Cosmos Database: $cosmosdbDatabase"
 Write-Host
 Write-Host "*************** Resources ***************"

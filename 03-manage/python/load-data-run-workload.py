@@ -1,6 +1,6 @@
 # Import necessary modules and functions
-import Blobs.LoadData as LoadData
-import Workloads.runRandomCRUD as runRandomCRUD
+import Blobs.loadData as loadData
+import Workload.runRandomCRUD as runRandomCRUD
 
 import os
 import os.path
@@ -51,7 +51,7 @@ def main():
 
             # Load data into MongoDB and create vector index
             if user_input == "1":
-                LoadData.loadLocalBlobDataToMongoDBCluster(client, data_folder,cosmos_db_mongodb_database,batch_size)
+                loadData.loadLocalBlobDataToMongoDBCluster(client, data_folder,cosmos_db_mongodb_database,batch_size)
 
             # Run a vector search
             if user_input == "2":
