@@ -43,7 +43,7 @@ The script accepts several parameters to customize the deployment process. The f
 | **cosmosClusterLocation** | string | No | **location** | The location for the Cosmos DB cluster. |
 | **cosmosClusterAdmin** | string | No | "clusteradmin$randomIdentifier" | The admin username for the Cosmos DB cluster. Generated using a random identifier if not specified. |
 | **cosmosClusterPassword** | SecureString | No | Randomly generated 16-character password | The password for the Cosmos DB cluster. Generated if not specified. |
-| **cosmosDatabase** | string | No | "cosmicworks" | The name of the Cosmos DB database. Generated using a random identifier if not specified. |
+| **cosmosdbDatabase** | string | No | "cosmicworks" | The name of the Cosmos DB database. Generated using a random identifier if not specified. |
 
 ### Azure OpenAI account
 

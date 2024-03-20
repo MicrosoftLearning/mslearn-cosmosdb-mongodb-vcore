@@ -1,4 +1,15 @@
 const faker = require('faker');
+const MongoClient = require('mongodb').MongoClient;
+
+
+process.on('message', async (message) => {
+    if (message.command === 'start') {
+        const client = await MongoClient.connect(message.connectionString);
+        runCRUDOperation(client, message.database);
+    } else if (message.command === 'stop') {
+        process.exit();
+    }
+});
 
 // Function to create a random customer document and insert it into the 'customers' collection
 async function createRandomCustomer(db) {
@@ -80,8 +91,8 @@ async function runRandomCRUDOperation(client, cosmos_db_mongodb_database) {
         await performRandomCRUDOnCollection(db, collection);
     }
 
-    // Wait for a random time between 0.1 and 1.9 seconds
-    await new Promise(resolve => setTimeout(resolve, faker.datatype.float({ min: 100, max: 1900 })));
+    // Wait for a random time between 1 and 5 seconds
+    await new Promise(resolve => setTimeout(resolve, faker.datatype.float({ min: 1000, max: 5000 })));
 }
 
 // Function to perform a random CRUD operation on a collection
@@ -113,20 +124,11 @@ async function performRandomCRUDOnCollection(db, collection) {
 }
 
 // Function to continuously run CRUD operations until the user presses the 'esc' key or 'q'
-async function runCRUDOperation(client, cosmos_db_mongodb_database, rl) {
-    console.log("Starting CRUD operations. Press 'q' or 'esc' to stop.");
-
-    let running = true;
-
-    rl.on('line', (input) => {
-        if (input === 'q' || input === 'esc') {
-            running = false;
-            rl.close();
-        }
-    });
+async function runCRUDOperation(client, cosmos_db_mongodb_database) {
+    console.log("Starting CRUD operations. Press 'q' to stop.");
 
     // Continuously run CRUD operations until the stop event is set
-    while (running) {
+    while (true) {
         await runRandomCRUDOperation(client, cosmos_db_mongodb_database);
     }
 

@@ -5,7 +5,7 @@ const mongodb = require('mongodb');
 const { MongoClient, updateOne } = require('mongodb');
 
 // Function to load the local blob data to MongoDB cluster
-async function loadLocalBlobDataToMongoDBCluster(client, dataFolder, cosmosDbMongoDbDatabase, batchSize, embeddingsDeployment, AzureOpenAIClient, processCustomersVector, processProductsVector, processSalesOrdersVector) {
+async function loadLocalBlobDataToMongoDBCluster(client, dataFolder, cosmosDbMongoDbDatabase, batchSize) {
     // Read JSON documents from the data folder
     const localBlobsFiles = fs.readdirSync(dataFolder);
 
