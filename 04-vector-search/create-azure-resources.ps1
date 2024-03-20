@@ -81,7 +81,10 @@ $subscriptionName = if ($subscriptionName) { $subscriptionName } elseif ($useEnv
 
 if ($changeSubscription) {
     try {
-        az account set --subscription $subscriptionName --only-show-errors
+        $output = az account set --subscription $subscriptionName --only-show-errors
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
     }
     catch {
         $changeSubscriptionError = $_.Exception.Message
@@ -98,7 +101,10 @@ if (! $skipCreatingResourceGroup) {
     Write-Host
 
     try {
-        az group create --name $resourceGroup --location $location --only-show-errors
+        $output = az group create --name $resourceGroup --location $location --only-show-errors
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
     }
     catch {
         $CreatingResourceGroupError = $_.Exception.Message
@@ -115,24 +121,27 @@ $tempPW = -join ((48..57) + (65..90) + (97..122) + (33..33) + (36..38) + (40..47
 $cosmosClusterPassword = if ($cosmosClusterPassword) {$cosmosClusterPassword} elseif ($useEnvFile -and $envVars['cosmosClusterPassword']) { $envVars['cosmosClusterPassword'] } else { $tempPW  }
 $cosmosDatabase = if ($cosmosDatabase) {$cosmosDatabase} elseif ($useEnvFile -and $envVars['cosmosDatabase']) { $envVars['cosmosDatabase'] } else { "cosmicworks" }
 
+if (! $skipCreatingCosmosDBPublicIPFirewallRule) {
+    # Create a public IP firewall rule for the Cosmos DB account
+    $publicIpRuleName = "msdocs-cosmosdb-fw_rule-$randomIdentifier"
+    $publicIp = (Invoke-RestMethod -Uri http://ipinfo.io/json).ip
+} 
+else { 
+    $publicIpRuleName = "labMachineIPAccessRule"
+    $publicIp = "0.0.0.0"
+}
+    
 # Create a Cosmos DB for MongoDB vCore cluster
 if (! $skipCreatingCosmosDBCluster) {
     Write-Host
     Write-Host "Creating $cosmosCluster cluster, this could take 10+ minutes to create..."
     Write-Host
 
-    if (! $skipCreatingCosmosDBPublicIPFirewallRule) {
-        # Create a public IP firewall rule for the Cosmos DB account
-        $publicIpRuleName = "msdocs-cosmosdb-fw_rule-$randomIdentifier"
-        $publicIp = if ($useEnvFile -and $envVars['publicIp']) { $envVars['publicIp'] }
-    } 
-    else { 
-        $publicIpRuleName = "labMachineIPAccessRule"
-        $publicIp = "0.0.0.0"
-    }
-        
     try {
-        az deployment group create --resource-group $resourceGroup --template-file 'create-mongodb-vcore-cluster.bicep' --parameters "clusterName=`"$cosmosCluster`"" "location=`"$cosmosClusterLocation`"" "adminUsername=`"$cosmosClusterAdmin`"" "adminPassword=`"$cosmosClusterPassword`"" "publicIpRuleName=`"$publicIpRuleName`"" "publicIp=`"$publicIp`"" --only-show-errors
+        $output = az deployment group create --resource-group $resourceGroup --template-file 'create-mongodb-vcore-cluster.bicep' --parameters "clusterName=`"$cosmosCluster`"" "location=`"$cosmosClusterLocation`"" "adminUsername=`"$cosmosClusterAdmin`"" "adminPassword=`"$cosmosClusterPassword`"" "publicIpRuleName=`"$publicIpRuleName`"" "publicIp=`"$publicIp`"" --only-show-errors
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
     }
     catch {
         $CreatingCosmosDBClusterError = $_.Exception.Message
@@ -142,7 +151,6 @@ if (! $skipCreatingCosmosDBCluster) {
 
 # Get the endpoint for the Cosmos DB account
 $cosmosDbEndpoint = if ($useEnvFile -and $envVars['cosmosDbEndpoint']) { $envVars['cosmosDbEndpoint'] } else { "mongodb+srv://<user>:<password>@$cosmosCluster.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000" }
-
 
 # Create an Azure OpenAI resource
 $cognitiveServicesKind = if ($useEnvFile -and $envVars['cognitiveServicesKind']) { $envVars['cognitiveServicesKind'] } else { "OpenAI" }
@@ -157,7 +165,10 @@ if (! $skipCreatingAzureOpenAIAccount) {
     Write-Host
 
     try {
-        az cognitiveservices account create --name $OpenAIAccount --resource-group $resourceGroup --location $OpenAIAccountLocation --kind $cognitiveServicesKind --sku $OpenAIAccountSKU --custom-domain $OpenAIAccount --only-show-errors
+        $output = az cognitiveservices account create --name $OpenAIAccount --resource-group $resourceGroup --location $OpenAIAccountLocation --kind $cognitiveServicesKind --sku $OpenAIAccountSKU --custom-domain $OpenAIAccount --only-show-errors
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
     }
     catch {
         $CreatingAzureOpenAIAccountError = $_.Exception.Message
@@ -179,7 +190,10 @@ if (! $skipCreatingAzureOpenAIDeployment) {
     Write-Host
 
     try {
-        az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAIDeploymentName --model-name $OpenAIDeploymentModel --model-version $OpenAIDeploymentModelVersion --model-format $OpenAIDeploymentModelFormat --sku-capacity $OpenAIDeploymentSKUCapacity --sku-name $OpenAIDeploymentSKU --only-show-errors 
+        $output = az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAIDeploymentName --model-name $OpenAIDeploymentModel --model-version $OpenAIDeploymentModelVersion --model-format $OpenAIDeploymentModelFormat --sku-capacity $OpenAIDeploymentSKUCapacity --sku-name $OpenAIDeploymentSKU --only-show-errors 
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
     }
     catch {
         $CreatingAzureOpenAIDeploymentError = $_.Exception.Message
@@ -201,7 +215,10 @@ if (! $skipCreatingAzureOpenAICompletionDeployment) {
     Write-Host
 
     try {
-        az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAICompletionDeploymentName --model-name $OpenAICompletionDeploymentModel --model-version $OpenAICompletionDeploymentModelVersion --model-format $OpenAICompletionDeploymentModelFormat --sku-capacity $OpenAICompletionDeploymentSKUCapacity --sku-name $OpenAICompletionDeploymentSKU --only-show-errors 
+        $output = az cognitiveservices account deployment create --name $OpenAIAccount --resource-group $resourceGroup --deployment-name $OpenAICompletionDeploymentName --model-name $OpenAICompletionDeploymentModel --model-version $OpenAICompletionDeploymentModelVersion --model-format $OpenAICompletionDeploymentModelFormat --sku-capacity $OpenAICompletionDeploymentSKUCapacity --sku-name $OpenAICompletionDeploymentSKU --only-show-errors 
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
     }
     catch {
         $CreatingAzureOpenAICompletionDeploymentError = $_.Exception.Message
@@ -302,14 +319,15 @@ if ($updateEnvFile) {
 
     $groups = @($group1, $group2, $group3, $group4, $group5)
 
-    $groups | ForEach-Object {
+    $output = $groups | ForEach-Object {
         $group = $_
         $group | ForEach-Object {
             "$($_)=$($envVars[$_])"
-        } | Out-File -FilePath $envFilePath -Append -Encoding utf8
-        "" | Out-File -FilePath $envFilePath -Append -Encoding utf8  # Add a blank line for the component group separation
+        }
+        ""  # Add a blank line for the component group separation
     }
-}
+    
+    $output | Out-File -FilePath $envFilePath -Encoding utf8}
 
 # Output the resources
 Write-Host
@@ -317,14 +335,20 @@ Write-Host "*************** Resources ***************"
 Write-Host
 write-host "Random Identifier: $randomIdentifier"
 write-host 
+Write-Host "Change subscription status (skipped by default): " -NoNewline
+if (! $changeSubscription) { Write-Host "Skipped" -ForegroundColor Yellow } elseif (  $null -ne $changeSubscriptionError ){ Write-Host "Failed" -ForegroundColor Red } else { Write-Host "Success" -ForegroundColor Green }
+if ($null -ne $changeSubscriptionError) { Write-Host "Change subscription error: "  -NoNewline  } if ($null -ne $changeSubscriptionError) { Write-Host $changeSubscriptionError -ForegroundColor Red}
 Write-Host "Subscription name: $subscriptionName"
-Write-Host "esource group creation status: " + if ($skipCreatingResourceGroup) { "Skipped" } elseif (  $null -ne $CreatingResourceGroupError ){ "Failed"  } else { "Success" }
-if ($null -ne $CreatingResourceGroupError) { Write-Host "Resource group creation error - $CreatingResourceGroupError" }
+Write-Host
+Write-Host "Resource group creation status: " -NoNewline
+if ($skipCreatingResourceGroup) { Write-Host "Skipped" -ForegroundColor Yellow } elseif (  $null -ne $CreatingResourceGroupError ){ Write-Host "Failed" -ForegroundColor Red } else { Write-Host "Success" -ForegroundColor Green }
+if ($null -ne $CreatingResourceGroupError) { Write-Host "Resource group creation error: "  -NoNewline  } if ($null -ne $CreatingResourceGroupError) { Write-Host $CreatingResourceGroupError -ForegroundColor Red}
 Write-Host "Resource group: $resourceGroup"
 Write-Host "Location: $location"
 Write-Host
-Write-Host "Cosmos Cluster creation status: " + if ($skipCreatingCosmosDBCluster) { "Skipped" } elseif (  $null -ne $CreatingCosmosDBClusterError ){ "Failed"  } else { "Success" }
-if ($null -ne $CreatingCosmosDBClusterError) { Write-Host "Cosmos Cluster creation error - $CreatingCosmosDBClusterError" }
+Write-Host "Cosmos DB creation status: " -NoNewline
+if ($skipCreatingCosmosDBCluster) { Write-Host "Skipped" -ForegroundColor Yellow } elseif (  $null -ne $CreatingCosmosDBClusterError ){ Write-Host "Failed" -ForegroundColor Red } else { Write-Host "Success" -ForegroundColor Green }
+if ($null -ne $CreatingCosmosDBClusterError) { Write-Host "Cosmos DB creation error: "  -NoNewline  } if ($null -ne $CreatingCosmosDBClusterError) { Write-Host $CreatingCosmosDBClusterError -ForegroundColor Red}
 Write-Host "Cosmos Cluster Name: $cosmosCluster"
 Write-Host "Cosmos Cluster Location: $cosmosClusterLocation"
 Write-Host "Cosmos Cluster Admin: $cosmosClusterAdmin"
@@ -332,8 +356,9 @@ Write-Host "Cosmos Cluster Admin Password: $cosmosClusterPassword"
 Write-Host "Cosmos DB Endpoint: $cosmosDbEndpoint"
 Write-Host "Cosmos Database: $cosmosDatabase"
 Write-Host
-Write-Host "OpenAI account creation status: " + if ($skipCreatingAzureOpenAIAccount) { "Skipped" } elseif (  $null -ne $CreatingAzureOpenAIAccountError ){ "Failed"  } else { "Success" }
-if ($null -ne $CreatingAzureOpenAIAccountError) { Write-Host "OpenAI account creation error - $CreatingAzureOpenAIAccountError" }
+Write-Host "OpenAI account creation status: " -NoNewline
+if ($skipCreatingAzureOpenAIAccount) { Write-Host "Skipped" -ForegroundColor Yellow } elseif (  $null -ne $CreatingAzureOpenAIAccountError ){ Write-Host "Failed" -ForegroundColor Red } else { Write-Host "Success" -ForegroundColor Green }
+if ($null -ne $CreatingAzureOpenAIAccountError) { Write-Host "OpenAI account creation error: "  -NoNewline  } if ($null -ne $CreatingAzureOpenAIAccountError) { Write-Host $CreatingAzureOpenAIAccountError -ForegroundColor Red}
 Write-Host "Cognitive Services Kind: $cognitiveServicesKind"
 Write-Host "OpenAI account: $OpenAIAccount"
 Write-Host "OpenAI account Location: $OpenAIAccountLocation"
@@ -342,7 +367,8 @@ Write-Host "OpenAI Endpoint: $OpenAIEndpoint"
 Write-Host "OpenAI Key1: $OpenAIKeys1"
 Write-Host "OpenAI Key2: $OpenAIKeys2"
 write-host
-Write-Host "OpenAI deployment creation status: " + if ($skipCreatingAzureOpenAIDeployment) { "Skipped" } elseif (  $null -ne $CreatingAzureOpenAIDeploymentError ){ "Failed"  } else { "Success" }
+Write-Host "Open AI deployment creation status: " -NoNewline
+if ($skipCreatingAzureOpenAIDeployment) { Write-Host "Skipped" -ForegroundColor Yellow } elseif (  $null -ne $CreatingAzureOpenAIDeploymentError ){ Write-Host "Failed" -ForegroundColor Red } else { Write-Host "Success" -ForegroundColor Green }
 if ($null -ne $CreatingAzureOpenAIDeploymentError) { Write-Host "OpenAI deployment creation error - $CreatingAzureOpenAIDeploymentError" }
 Write-Host "OpenAI deployment name: $OpenAIDeploymentName"
 write-host "OpenAI deployment model: $OpenAIDeploymentModel"
@@ -351,7 +377,8 @@ write-host "OpenAI deployment model version: $OpenAIDeploymentModelVersion"
 Write-Host "OpenAI deployment SKU: $OpenAIDeploymentSKU"
 Write-Host "OpenAI deployment SKU Capacity: $OpenAIDeploymentSKUCapacity"
 write-host
-Write-Host "OpenAI completion deployment creation status: " + if ($skipCreatingAzureOpenAICompletionDeployment) { "Skipped" } elseif (  $null -ne $CreatingAzureOpenAICompletionDeploymentError ){ "Failed"  } else { "Success" }
+Write-Host "Open AI completion deployment creation status: " -NoNewline
+if ($skipCreatingAzureOpenAICompletionDeployment) { Write-Host "Skipped" -ForegroundColor Yellow } elseif (  $null -ne $CreatingAzureOpenAICompletionDeploymentError ){ Write-Host "Failed" -ForegroundColor Red } else { Write-Host "Success" -ForegroundColor Green }
 if ($null -ne $CreatingAzureOpenAICompletionDeploymentError) { Write-Host "OpenAI completion deployment creation error - $CreatingAzureOpenAICompletionDeploymentError" }
 Write-Host "OpenAI completion deployment name: $OpenAICompletionDeploymentName"
 write-host "OpenAI completion deployment model: $OpenAICompletionDeploymentModel"

@@ -31,7 +31,7 @@ resource cluster 'Microsoft.DocumentDB/mongoClusters@2023-03-01-preview' = {
         {
             kind: 'Shard'
             nodeCount: 1
-            sku: 'M40'
+            sku: 'M30'
             diskSizeGB: 128
             enableHa: false
         }

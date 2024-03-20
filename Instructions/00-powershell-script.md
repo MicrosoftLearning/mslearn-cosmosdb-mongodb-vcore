@@ -1,4 +1,8 @@
-# PowerShell script usage reference
+---
+lab:
+    title: 'PowerShell script usage reference'
+    module: 'Reference Guide'
+---
 
 This document provides a comprehensive reference for the ***create-azure-resources.ps1*** PowerShell script designed to automate the lab deployment and configuration of the Azure resources, specifically for the Azure Cosmos DB and Azure OpenAI services.
 
@@ -28,6 +32,8 @@ The script accepts several parameters to customize the deployment process. The f
 | **skipCreatingAzureOpenAIAccount** | bool | No | *false* | If true, skips creating an Azure OpenAI account. |
 | **skipCreatingAzureOpenAIDeployment** | bool | No | *false* | If true, skips creating an Azure OpenAI deployment. |
 | **skipCreatingAzureOpenAICompletionDeployment** | bool | No | *false* | If true, skips creating an Azure OpenAI completion deployment. |
+| **skipCreatingStorageAccount** | bool | No | *false* | If true, skips creating a storage account. |
+| **skipCreatingLogAnalyticsWorkspace** | bool | No | *false* | If true, skips creating a Log Analytics workspace. |
 
 ### Azure Cosmos DB account
 
@@ -66,6 +72,22 @@ The script accepts several parameters to customize the deployment process. The f
 | **OpenAICompletionDeploymentModelVersion** | string | No | "0301" | The model version for the Azure OpenAI completion deployment. Defaults to "0301" if not specified. |
 | **OpenAICompletionDeploymentSKU** | String | No | "Standard" | The SKU for the Azure OpenAI completion deployment. |
 | **OpenAICompletionDeploymentSKUCapacity** | Int32 | No | 100 | The SKU capacity for the Azure OpenAI completion deployment. |
+
+### Azure storage account
+
+| Parameter Name | Data Type | Mandatory | Default Value | Description |
+|----------------|-----------|-----------|---------------|-------------|
+| **storageAccountName** | string | No | "msdocsstorage$randomIdentifier" | The name of the storage account. Generated using a random identifier if not specified. |
+| **storageAccountLocation** | string | No | **location** | The location for the storage account. |
+| **storageAccountSKU** | string | No | "Standard_LRS" | The SKU for the storage account. |
+| **storageAccountKind** | string | No | "StorageV2" | The kind of storage account. |
+
+### Azure Log Analytics workspace
+
+| Parameter Name | Data Type | Mandatory | Default Value | Description |
+|----------------|-----------|-----------|---------------|-------------|
+| **logAnalyticsWorkspaceName** | string | No | "msdocs-log-analytics-workspace-$randomIdentifier" | The name of the Log Analytics workspace. Generated using a random identifier if not specified. |
+| **logAnalyticsWorkspaceLocation** | string | No | **location** | The location for the Log Analytics workspace. |
 
 ## Determinate variable value precedence
 

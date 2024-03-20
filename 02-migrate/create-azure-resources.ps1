@@ -56,7 +56,10 @@ $subscriptionName = if ($subscriptionName) { $subscriptionName } elseif ($useEnv
 
 if ($changeSubscription) {
     try {
-        az account set --subscription $subscriptionName --only-show-errors
+        $output = az account set --subscription $subscriptionName --only-show-errors
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
     }
     catch {
         $changeSubscriptionError = $_.Exception.Message
@@ -73,7 +76,10 @@ if (! $skipCreatingResourceGroup) {
     Write-Host
 
     try {
-        az group create --name $resourceGroup --location $location --only-show-errors
+        $output = az group create --name $resourceGroup --location $location --only-show-errors
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
     }
     catch {
         $CreatingResourceGroupError = $_.Exception.Message
@@ -93,7 +99,7 @@ $cosmosDatabase = if ($cosmosDatabase) {$cosmosDatabase} elseif ($useEnvFile -an
 if (! $skipCreatingCosmosDBPublicIPFirewallRule) {
     # Create a public IP firewall rule for the Cosmos DB account
     $publicIpRuleName = "msdocs-cosmosdb-fw_rule-$randomIdentifier"
-    $publicIp = if ($useEnvFile -and $envVars['publicIp']) { $envVars['publicIp'] }
+    $publicIp = (Invoke-RestMethod -Uri http://ipinfo.io/json).ip
 } 
 else { 
     $publicIpRuleName = "labMachineIPAccessRule"
@@ -107,7 +113,10 @@ if (! $skipCreatingCosmosDBCluster) {
     Write-Host
 
     try {
-        az deployment group create --resource-group $resourceGroup --template-file 'create-mongodb-vcore-cluster.bicep' --parameters "clusterName=`"$cosmosCluster`"" "location=`"$cosmosClusterLocation`"" "adminUsername=`"$cosmosClusterAdmin`"" "adminPassword=`"$cosmosClusterPassword`"" "publicIpRuleName=`"$publicIpRuleName`"" "publicIp=`"$publicIp`"" --only-show-errors
+        $output = az deployment group create --resource-group $resourceGroup --template-file 'create-mongodb-vcore-cluster.bicep' --parameters "clusterName=`"$cosmosCluster`"" "location=`"$cosmosClusterLocation`"" "adminUsername=`"$cosmosClusterAdmin`"" "adminPassword=`"$cosmosClusterPassword`"" "publicIpRuleName=`"$publicIpRuleName`"" "publicIp=`"$publicIp`"" --only-show-errors
+        if ($LASTEXITCODE -ne 0) {
+            throw $output
+        }
     }
     catch {
         $CreatingCosmosDBClusterError = $_.Exception.Message
@@ -117,7 +126,6 @@ if (! $skipCreatingCosmosDBCluster) {
 
 # Get the endpoint for the Cosmos DB account
 $cosmosDbEndpoint = if ($useEnvFile -and $envVars['cosmosDbEndpoint']) { $envVars['cosmosDbEndpoint'] } else { "mongodb+srv://<user>:<password>@$cosmosCluster.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000" }
-
 
 # Write the .env file
 if ($updateEnvFile) {
@@ -145,16 +153,18 @@ if ($updateEnvFile) {
 
     $group1 = $envVars.Keys[0..5]  # Variables related to Azure subscription and resource group
     $group2 = $envVars.Keys[6..13]  # Variables related to Cosmos DB
-
+    
     $groups = @($group1, $group2)
-
-    $groups | ForEach-Object {
+    
+    $output = $groups | ForEach-Object {
         $group = $_
         $group | ForEach-Object {
             "$($_)=$($envVars[$_])"
-        } | Out-File -FilePath $envFilePath -Append -Encoding utf8
-        "" | Out-File -FilePath $envFilePath -Append -Encoding utf8  # Add a blank line for the component group separation
+        }
+        ""  # Add a blank line for the component group separation
     }
+    
+    $output | Out-File -FilePath $envFilePath -Encoding utf8
 }
 
 # Output the resources
@@ -163,14 +173,20 @@ Write-Host "*************** Resources ***************"
 Write-Host
 write-host "Random Identifier: $randomIdentifier"
 write-host 
+Write-Host "Change subscription status (skipped by default): " -NoNewline
+if (! $changeSubscription) { Write-Host "Skipped" -ForegroundColor Yellow } elseif (  $null -ne $changeSubscriptionError ){ Write-Host "Failed" -ForegroundColor Red } else { Write-Host "Success" -ForegroundColor Green }
+if ($null -ne $changeSubscriptionError) { Write-Host "Change subscription error: "  -NoNewline  } if ($null -ne $changeSubscriptionError) { Write-Host $changeSubscriptionError -ForegroundColor Red}
 Write-Host "Subscription name: $subscriptionName"
-Write-Host "Resource group creation status: " + if ($skipCreatingResourceGroup) { "Skipped" } elseif (  $null -ne $CreatingResourceGroupError ){ "Failed"  } else { "Success" }
-if ($null -ne $CreatingResourceGroupError) { Write-Host "Resource group creation error - $CreatingResourceGroupError" }
+Write-Host
+Write-Host "Resource group creation status: " -NoNewline
+if ($skipCreatingResourceGroup) { Write-Host "Skipped" -ForegroundColor Yellow } elseif (  $null -ne $CreatingResourceGroupError ){ Write-Host "Failed" -ForegroundColor Red } else { Write-Host "Success" -ForegroundColor Green }
+if ($null -ne $CreatingResourceGroupError) { Write-Host "Resource group creation error: "  -NoNewline  } if ($null -ne $CreatingResourceGroupError) { Write-Host $CreatingResourceGroupError -ForegroundColor Red}
 Write-Host "Resource group: $resourceGroup"
 Write-Host "Location: $location"
 Write-Host
-Write-Host "Cosmos Cluster creation status: " + if ($skipCreatingCosmosDBCluster) { "Skipped" } elseif (  $null -ne $CreatingCosmosDBClusterError ){ "Failed"  } else { "Success" }
-if ($null -ne $CreatingCosmosDBClusterError) { Write-Host "Cosmos Cluster creation error - $CreatingCosmosDBClusterError" }
+Write-Host "Cosmos DB creation status: " -NoNewline
+if ($skipCreatingCosmosDBCluster) { Write-Host "Skipped" -ForegroundColor Yellow } elseif (  $null -ne $CreatingCosmosDBClusterError ){ Write-Host "Failed" -ForegroundColor Red } else { Write-Host "Success" -ForegroundColor Green }
+if ($null -ne $CreatingCosmosDBClusterError) { Write-Host "Cosmos DB creation error: "  -NoNewline  } if ($null -ne $CreatingCosmosDBClusterError) { Write-Host $CreatingCosmosDBClusterError -ForegroundColor Red}
 Write-Host "Cosmos Cluster Name: $cosmosCluster"
 Write-Host "Cosmos Cluster Location: $cosmosClusterLocation"
 Write-Host "Cosmos Cluster Admin: $cosmosClusterAdmin"

@@ -1,4 +1,8 @@
-# .env File Configuration Guide
+---
+lab:
+    title: '.env File Configuration Guide'
+    module: 'Reference Guide'
+---
 
 This guide outlines the structure and purpose of the **.env** file used for configuring your lab environment and applications. The **.env** file stores environment variables that are crucial for customizing the lab application's behavior, particularly for resource deployment and API interactions.
 
@@ -66,6 +70,24 @@ The **.env** file contains key-value pairs, each defining a specific configurati
 | **OpenAICompletionDeploymentSKUCapacity** | The SKU capacity for the Azure OpenAI completion deployment. Defaults to **100** | **100** |
 | **OpenAICompletionDeploymentModelVersion** | The model version for the Azure OpenAI completion deployment. | **0301** |
 | **OpenAICompletionDeploymentModel** | The model name for the Azure OpenAI completion deployment. | **gpt-3.5-turbo** |
+
+### Azure Storage account
+
+| Variable Name | Description | Example Value |
+|---------------|-------------|---------------|
+| **skipCreatingStorageAccount** | If true, skips creating an Azure Storage account. | **true** |
+| **storageAccountName** | The name of the Azure Storage account. | **examplestorageaccount** |
+| **storageAccountLocation** | The location for the Azure Storage account. | **eastus** |
+| **storageAccountSKU** | The SKU for the Azure Storage account. Defaults to **"Standard_LRS"**. | **"Standard_LRS"** |
+| **storageAccountKind** | The kind of Azure Storage account to create. Defaults to **"StorageV2"**. | **"StorageV2"** |
+
+### Log Analytics workspace
+
+| Variable Name | Description | Example Value |
+|---------------|-------------|---------------|
+| **skipCreatingLogAnalyticsWorkspace** | If true, skips creating a Log Analytics workspace. | **true** |
+| **logAnalyticsWorkspaceName** | The name of the Log Analytics workspace. | **example-log-analytics-workspace** |
+| **logAnalyticsWorkspaceLocation** | The location for the Log Analytics workspace. | **eastus** |
 
 ## How to Use
 
