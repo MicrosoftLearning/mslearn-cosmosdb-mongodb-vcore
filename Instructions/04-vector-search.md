@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Building an AI copilot using v-Core-based Azure Cosmos DB for MongoDB vector search and Azure OpenAI'
-    module: 'Module 4 - Use AI and vector search with v-Core-based Azure Cosmos DB for MongoDB'
+    module: 'Module 4 - Use Azure AI OpenAI and vector search to create AI copilots with v-Core-based Azure Cosmos DB for MongoDB'
 ---
 
 In this lab, we guide you through the process of implementing a vector search in a v-Core-based Azure Cosmos DB for MongoDB. We utilize Azure Blob Storage for storing our data and Azure OpenAI for generating document embeddings. The focus is on the ***products*** collection, where you perform vector searches based on product categories and names.
@@ -67,6 +67,8 @@ To learn more about the PowerShell script and its parameters, review the [***cre
 
 > [!NOTE]
 > Make sure the tenant, location and subscription you use allows for the creation of the necessary resources. Not all locations and subscriptions might allow or support the creation of all the required resources needed for this lab. If you encounter any issues, please reach out to your Azure Administrator.
+
+### Run the create-azure-resources.ps1 script to create the necessary Azure resources
 
 To create the necessary Azure resources for this lab:
 
