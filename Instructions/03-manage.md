@@ -66,6 +66,8 @@ To learn more about the PowerShell script and its parameters, review the [***cre
 > [!NOTE]
 > Make sure the tenant, location and subscription you use allows for the creation of the necessary resources. Not all locations and subscriptions might allow or support the creation of all the required resources needed for this lab. If you encounter any issues, please reach out to your Azure Administrator.
 
+### Run the create-azure-resources.ps1 script to create the necessary Azure resources
+
 To create the necessary Azure resources for this lab:
 
 1. Run the following command in the integrated terminal.
