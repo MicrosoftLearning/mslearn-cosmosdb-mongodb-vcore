@@ -1,6 +1,6 @@
 ---
 lab:
-    title: 'Implement vector search with v-Core-based Azure Cosmos DB for MongoDB and Azure OpenAI'
+    title: 'Building an AI copilot using v-Core-based Azure Cosmos DB for MongoDB vector search and Azure OpenAI'
     module: 'Module 4 - Use AI and vector search with v-Core-based Azure Cosmos DB for MongoDB'
 ---
 
@@ -452,7 +452,7 @@ Since you created a vector index only on the products' collection, let's prepare
 
 </details>
 
-This function prompts for a search query, generates embeddings of that prompt, and calls a function to search the vector index for similar documents. It then prints the results to the console including a similarity score.
+This function prompts for a search query and calls a function to generate embeddings of that prompt and search the vector index for similar documents. It then prints the results to the console including a similarity score.
 
 ### Update the vectorSearch function
 
@@ -531,7 +531,7 @@ Let's now update the function that performs the vector search itself.
 
 </details>
 
-The most interesting part of this function is that it calls the same function that was earlier used to generate the embeddings for the documents. It then uses the generated embeddings to perform a vector search on the collection and returns the results. Note how the function uses a MongoDB aggregation pipeline to perform the search.
+The most interesting part of this function is that it calls the same ***generateEmbeddings*** function that was earlier used to generate the embeddings for the documents to also create the embeddings of the user prompt. It then uses the generated embeddings to perform a vector search on the collection and returns the results. Note how the function uses a MongoDB aggregation pipeline to perform the search.
 
 ## Integrate GPT-3.5 for enhanced search results
 
