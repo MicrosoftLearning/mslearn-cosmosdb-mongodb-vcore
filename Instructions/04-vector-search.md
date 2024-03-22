@@ -21,15 +21,18 @@ These objectives showcase the practical use of the Retrieval-Augmented Generatio
 If you need to build your own lab environment, you need the following components and resource access.
 
 - **Visual Studio Code**: Ensure Visual Studio Code is installed on your machine.
-- **Azure Subscription**: Have access to an Azure Subscription for creating necessary resources.
+- **Azure Subscription**: Have access to an Azure Subscription for creating and using the necessary resources:
+  - **v-Core-based Azure Cosmos DB for MongoDB**: Access to create or use an existing a v-Core-based Azure Cosmos DB for MongoDB account.
+  - **Azure OpenAI Account**: Access to create or use an existing Azure OpenAI account.
+  - **Azure OpenAI Deployments**: Access to create deployments for embeddings and completions in your Azure OpenAI account.
 
 ## Clone the Repository
 
-- Open **Visual Studio Code**.
-- Press **CTRL+SHIFT+P** to open the command palette.
-- Run **Git: Clone** and clone the repository `https://github.com/MicrosoftLearning/mslearn-cosmosdb-mongodb-vcore.git`.
-- Navigate to the cloned repository directory.
-- Right-click on the **04-vector-search** folder and select **Open in integrated Terminal**.
+1. Open **Visual Studio Code**.
+1. Press **CTRL+SHIFT+P** to open the command palette.
+1. Run **Git: Clone** and clone the repository `https://github.com/MicrosoftLearning/mslearn-cosmosdb-mongodb-vcore.git`.
+1. Navigate to the cloned repository directory.
+1. Right-click on the **04-vector-search** folder and select **Open in integrated Terminal**.
 
 ## Create Azure Resources
 
@@ -52,7 +55,10 @@ To learn more about the ***.env*** file and its parameters, review the [***.env*
 
 ### Use the create-azure-resources.ps1 script
 
-This script creates the necessary Azure resources for this lab. It gives you the flexibility to create some or all of the resources required for this lab. You can either run the script as is or modify it to suit your needs. The resources created by the script include:
+> [!NOTE]
+> You don't need to run the *create-azure-resources.ps1* script and can skip to the next section if you already have the necessary Azure resources created.
+
+If you aren't using existing resources, or you aren't creating them through the Azure portal, this script creates the necessary Azure resources for this lab. It gives you the flexibility to create some or all of the resources required for this lab. You can either run the script as is or modify it to suit your needs. The resources created by the script include:
 
 - Resource Group
 - v-Core-based Azure Cosmos DB for MongoDB account
@@ -81,7 +87,7 @@ To create the necessary Azure resources for this lab:
     ./create-azure-resources.ps1
     ```
 
-1. Copy and save the environment variables returned by the script in case you need them later. You can verify the resources created in the Azure portal. 
+1. Copy and save the environment variables returned by the script in case you need them later. You can verify the resources created in the Azure portal.
 
 1. Make sure that the **.env** file is populated with the resource information.
 
@@ -105,8 +111,8 @@ In this lab, you focus on the **products** collection. You generate embeddings f
 
 Let's first choose the fields to generate embeddings for and then call Azure OpenAI to generate these embeddings.
 
-- Navigate to the file **./Collections/products** (with a .js or .py extension for the file's respective language).
-- On the **generateProductEmbedding** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet.
+- In VS Code, open the file **./[language]/Collections/products** (with a .js or .py extension for the file's respective language).
+- On the **generateProductEmbedding** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet, and **Save**.
 
 <details>
 <summary>Python</summary>
@@ -152,8 +158,8 @@ This function selects fields to generate embeddings for, calls Azure OpenAI to g
 
 Time to generate the embeddings for a string. In this case, for your products' name + category.
 
-- Navigate to **./SearchComponents/embeddings** (with a .js or .py extension for the file's respective language).
-- On the **generateEmbeddings** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet.
+- In VS Code, open the file **./[language]/SearchComponents/embeddings** (with a .js or .py extension for the file's respective language).
+- On the **generateEmbeddings** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet, and **Save**.
 
 <details>
 <summary>Python</summary>
@@ -224,14 +230,14 @@ The process of generating embeddings for the MongoDB documents using Azure OpenA
 
 ### Generate the vector index
 
-Just creating the embeddings isn't enough. You need to create a vector index to enable your vector searches.
+Just creating a vector column with the respective embeddings isn't enough. You need to create a vector index on that column to enable your vector searches.
 
 #### Update the loadAndVectorize function
 
 Now you create the vector indexes for the collection based on our vector columns. In this function, you choose which vector columns and index names need to be created.
 
-- Navigate to **./Blobs/loadAndVectorize** (with a .js or .py extension for the file's respective language).
-- Towards the bottom of the **loadAndVectorizeLocalBlobDataToMongoDBCluster** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet.
+- In VS Code, open the file **./[language]/Blobs/loadAndVectorize** (with a .js or .py extension for the file's respective language).
+- Towards the bottom of the **loadAndVectorizeLocalBlobDataToMongoDBCluster** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet, and **Save**.
 
 <details>
 <summary>Python</summary>
@@ -298,10 +304,10 @@ This function has multiple purposes. It loops through all the local data files, 
 
 #### Update the createVectorIndexes function
 
-Now that you know what vector columns and vector index names you want to create, let's update the function that creates these indexes. There are two types of vector indexes that can be created, IVF (Inverted File index), and HNSW (Hierarchical Navigable Small World index). For this lab, you're creating IVF indexes.
+Now that you know what vector columns and vector index names you want to create, let's update the function that creates the indexes themselves. There are two types of vector indexes that can be created, IVF (Inverted File index), and HNSW (Hierarchical Navigable Small World index). For this lab, you're creating IVF indexes.
 
-- Navigate to **./SearchComponents/indexes** (with a .js or .py extension for the file's respective language).
-- In the **createVectorIndexes** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet.
+- In VS Code, open the file **./[language]/SearchComponents/indexes** (with a .js or .py extension for the file's respective language).
+- In the **createVectorIndexes** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet, and **Save**.
 
 <details>
 <summary>Python</summary>
@@ -389,18 +395,18 @@ Now that you know what vector columns and vector index names you want to create,
 
 </details>
 
-This function first drops the index if it already exists, then creates a new IVF index in the collection based on the vector column and index name provided. It creates the index using the MongoDB command function.
+This function first drops the index if it already exists, then creates a new IVF index in the collection based on the vector column and index name provided. It creates the index using the MongoDB **command** function.
 
 ## Perform vector searches
 
-It's time to perform vector searches using the generated embeddings and vector indexes. You enhance the results with GPT-3.5.
+It's time to perform vector searches using the generated embeddings and vector indexes. Later, you enhance the vector search results with GPT-3.5.
 
 ### Update the runVectorSearch function
 
-Since you created a vector index only on the products' collection, let's prepare your vector search against that collection only.
+Since in this lab you only created a vector index on the **products'** collection, let's prepare your vector search specifically for that collection.
 
-- Navigate to **./SearchComponents/searches** (with a .js or .py extension for the file's respective language).
-- In the **runVectorSearch** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet.
+- In VS Code, open the file **./[language]/SearchComponents/searches** (with a .js or .py extension for the file's respective language).
+- In the **runVectorSearch** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet, and **Save**.
 
 <details>
 <summary>Python</summary>
@@ -458,14 +464,14 @@ Since you created a vector index only on the products' collection, let's prepare
 
 </details>
 
-This function prompts for a search query and calls a function to generate embeddings of that prompt and search the vector index for similar documents. It then prints the results to the console including a similarity score.
+This function prompts for a search query and calls a function to generate embeddings of that prompt and search the vector index for similar documents. It then displays the results to the console including a similarity score.
 
 ### Update the vectorSearch function
 
 Let's now update the function that performs the vector search itself.
 
-- Navigate to **./SearchComponents/vectorSearch** (with a .js or .py extension for the file's respective language).
-- In the **vectorSearch** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet.
+- In VS Code, open the file **./[language]/SearchComponents/vectorSearch** (with a .js or .py extension for the file's respective language).
+- In the **vectorSearch** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet, and **Save**.
 
 <details>
 <summary>Python</summary>
@@ -537,18 +543,18 @@ Let's now update the function that performs the vector search itself.
 
 </details>
 
-The most interesting part of this function is that it calls the same ***generateEmbeddings*** function that was earlier used to generate the embeddings for the documents to also create the embeddings of the user prompt. It then uses the generated embeddings to perform a vector search on the collection and returns the results. Note how the function uses a MongoDB aggregation pipeline to perform the search.
+The interesting part of this function is that to create the embeddings of the user prompt, it calls the same ***generateEmbeddings*** function that was earlier used to generate the embeddings for the document columns. This is because you generate embeddings for any string, what you do with the generated embedding is up to you (store it, search on it). It then uses the generated embeddings to perform a vector search on the collection and returns the results. Note how the function uses a MongoDB **aggregation** pipeline to perform the search.
 
 ## Integrate GPT-3.5 for enhanced search results
 
-As you note in a moment, vector search results can be powerful, but they might require extra coding to fully interpret and utilize the results. To address this issue, you can integrate GPT-3 to provide more detailed, human-readable insights from the vector search results.
+Vector search results can be powerful, but they might require extra coding to fully interpret and utilize the results. To address this issue, you can integrate GPT-3 to provide more detailed, human-readable insights from the vector search results.
 
 ### Update the runGPTSearch function
 
 Setting up this function, just like the ***runVectorSearch*** function, readies your AI copilot to draw on deeper insights for the **products'** collection.
 
-- Navigate to **./SearchComponents/searches** (with a .js or .py extension for the file's respective language).
-- In the **runGPTSearch** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet.
+- In VS Code, open the file **./[language]/SearchComponents/searches** (with a .js or .py extension for the file's respective language).
+- In the **runGPTSearch** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet, and **Save**.
 
 <details>
 <summary>Python</summary>
@@ -622,7 +628,7 @@ Setting up this function, just like the ***runVectorSearch*** function, readies 
 
 </details>
 
-Like the runVectorSearch function, this function asks you for your prompt to run against the vector index. However, after obtaining vector search results, this function further call a function to process those results with GPT-3.5 to generate more detailed, human-readable insights.
+Like the *runVectorSearch* function, this function asks you for your prompt to run against the vector index. However, after obtaining vector search results, this function further call a function to process those results with GPT-3.5 to generate more detailed, human-readable insights.
 
 ### Update the generateCompletion function
 
@@ -630,8 +636,8 @@ Using GPT-3.5 to enhance search results brings our RAG process full circle. It t
 
 Let's turn those vector search results into more comprehensive and understandable responses using GPT-3.5.
 
-- Navigate to **./SearchComponents/completion** (with a .js or .py extension for the file's respective language).
-- In the **generateCompletion** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet.
+- In VS Code, open the file **./[language]/SearchComponents/completion** (with a .js or .py extension for the file's respective language).
+- In the **generateCompletion** function, replace the line with the comment *Replace this line with the lab's code* with the provided code snippet, and **Save**.
 
 <details>
 <summary>Python</summary>
@@ -704,7 +710,7 @@ Let's turn those vector search results into more comprehensive and understandabl
 
 </details>
 
-This function has three sets of prompts. The first is a system prompt that sets the context for the AI. The second is the user's input. The third is the results from the vector search. It then calls the Azure OpenAI Chat Completions function to generate completions based on the prompts.
+This function has three sets of prompts. The first is a system prompt (***systemPrompt***) that sets the context for the AI, or in other words, who is the AI supposed to be, and what parameters/rules it should follow. The second is the user's input (**userInput***), which is the question or prompt we asked. The third is the an array of results from the vector search (**prompt**) on that same previous question or prompt we asked. It then calls the Azure OpenAI Chat Completions function to generate completions based on those prompts.
 
 Moving from conducting vector searches to improving results with GPT-3.5 chat highlights the RAG method, seamlessly integrating precise data search with AI-driven conversational insights.
 
