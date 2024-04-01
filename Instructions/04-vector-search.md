@@ -1,15 +1,15 @@
 ---
 lab:
-    title: 'Building an AI copilot using v-Core-based Azure Cosmos DB for MongoDB vector search and Azure OpenAI'
-    module: 'Module 4 - Use Azure AI OpenAI and vector search to create AI copilots with v-Core-based Azure Cosmos DB for MongoDB'
+    title: 'Building an AI copilot using vCore-based Azure Cosmos DB for MongoDB vector search and Azure OpenAI'
+    module: 'Module 4 - Use Azure AI OpenAI and vector search to create AI copilots with vCore-based Azure Cosmos DB for MongoDB'
 ---
 
-In this lab, you use Azure OpenAI to create embeddings for v-Core-based Azure Cosmos DB for MongoDB documents, establishing your AI copilot for advanced data exploration. You build a vector index from these embeddings, allowing you to create vector searches. The vector searches involves generating an embedding for user prompts, using those user prompt embeddings to find similar documents in the database through a vector search, and enhancing the search results deploying an Azure OpenAI GPT-3.5 chat. This process illustrates a Retrieval-Augmented Generation (RAG) approach, mixing AI with database technologies to refine search results and responses.
+In this lab, you use Azure OpenAI to create embeddings for vCore-based Azure Cosmos DB for MongoDB documents, establishing your AI copilot for advanced data exploration. You build a vector index from these embeddings, allowing you to create vector searches. The vector searches involves generating an embedding for user prompts, using those user prompt embeddings to find similar documents in the database through a vector search, and enhancing the search results deploying an Azure OpenAI GPT-3.5 chat. This process illustrates a Retrieval-Augmented Generation (RAG) approach, mixing AI with database technologies to refine search results and responses.
 
 ### Objectives
 
 - Load data from Azure Blob Storage to a local directory.
-- Import data into v-Core-based Azure Cosmos DB for MongoDB, generating embeddings for *category* and *name* fields of each product during the process.
+- Import data into vCore-based Azure Cosmos DB for MongoDB, generating embeddings for *category* and *name* fields of each product during the process.
 - Create a Vector index on the generated vector column.
 - Perform vector searches using prompts and display the closest matching products.
 - Use GPT-3.5 to enhance vector search results, enabling your AI copilot to provide more detailed insights.
@@ -22,7 +22,7 @@ If you need to build your own lab environment, you need the following components
 
 - **Visual Studio Code**: Ensure Visual Studio Code is installed on your machine.
 - **Azure Subscription**: Have access to an Azure Subscription for creating and using the necessary resources:
-  - **v-Core-based Azure Cosmos DB for MongoDB**: Access to create or use an existing a v-Core-based Azure Cosmos DB for MongoDB account.
+  - **vCore-based Azure Cosmos DB for MongoDB**: Access to create or use an existing a vCore-based Azure Cosmos DB for MongoDB account.
   - **Azure OpenAI Account**: Access to create or use an existing Azure OpenAI account.
   - **Azure OpenAI Deployments**: Access to create deployments for embeddings and completions in your Azure OpenAI account.
 
@@ -38,7 +38,7 @@ If you need to build your own lab environment, you need the following components
 
 To support your AI copilot, you need access to the following Azure resources for this lab:
 
-- v-Core-based Azure Cosmos DB for MongoDB account
+- vCore-based Azure Cosmos DB for MongoDB account
 - Azure OpenAI account, including deployments for embeddings and completions
 
 You can create these resources via the *Azure portal* or use the ***create-azure-resources.ps1*** PowerShell script with the ***.env** file. Don't use existing production resources for this lab or any lab.
@@ -47,9 +47,9 @@ You can create these resources via the *Azure portal* or use the ***create-azure
 
 *This file must either be populated manually, or by the create-azure-resources.ps1 script before you can run your application, since it contains the connection information to your Azure resources.*
 
-This file is both used to retrieve and store the necessary environment variables for both the PowerShell script and the vector search application APIs. It's the easiest way to prepopulate your resource information. The file is used to store the environment variables for your v-Core-based Azure Cosmos DB for MongoDB and Azure OpenAI account.
+This file is both used to retrieve and store the necessary environment variables for both the PowerShell script and the vector search application APIs. It's the easiest way to prepopulate your resource information. The file is used to store the environment variables for your vCore-based Azure Cosmos DB for MongoDB and Azure OpenAI account.
 
-If you already have an existing Resource Group, a v-Core-based Azure Cosmos DB for MongoDB account, or an Azure OpenAI account that you would like to use, just fill in those values in the .env file and set the skip create option for that resource to **true**. By default, the *create-azure-resources.ps1* script uses this file to retrieve the necessary environment variables. The *create-azure-resources.ps1* script populates the environment variables with default values if not specified in the .env file.
+If you already have an existing Resource Group, a vCore-based Azure Cosmos DB for MongoDB account, or an Azure OpenAI account that you would like to use, just fill in those values in the .env file and set the skip create option for that resource to **true**. By default, the *create-azure-resources.ps1* script uses this file to retrieve the necessary environment variables. The *create-azure-resources.ps1* script populates the environment variables with default values if not specified in the .env file.
 
 To learn more about the ***.env*** file and its parameters, review the [***.env*** file documentation](./00-env-file.md).
 
@@ -61,7 +61,7 @@ To learn more about the ***.env*** file and its parameters, review the [***.env*
 If you aren't using existing resources, or you aren't creating them through the Azure portal, this script creates the necessary Azure resources for this lab. It gives you the flexibility to create some or all of the resources required for this lab. You can either run the script as is or modify it to suit your needs. The resources created by the script include:
 
 - Resource Group
-- v-Core-based Azure Cosmos DB for MongoDB account
+- vCore-based Azure Cosmos DB for MongoDB account
 - Azure OpenAI account
 - Azure OpenAI deployments for embeddings
 - Azure OpenAI deployments for completions
@@ -92,7 +92,7 @@ To create the necessary Azure resources for this lab:
 1. Make sure that the **.env** file is populated with the resource information.
 
 > [!NOTE]
-> The v-Core-based Azure Cosmos DB for MongoDB account will need a firewall rule to allow access from your current public IP address.  If your v-Core-based Azure Cosmos DB for MongoDB account was generated by the *create-azure-resources.ps1* script, it should have created the firewall rule for you.  Check the existing firewall rules under the ***Networking*** *Setting* section of the *v-Core-based Azure Cosmos DB for MongoDB Account*.  If you are not sure what your current public IP address is, you can use the following command to find out:
+> The vCore-based Azure Cosmos DB for MongoDB account will need a firewall rule to allow access from your current public IP address.  If your vCore-based Azure Cosmos DB for MongoDB account was generated by the *create-azure-resources.ps1* script, it should have created the firewall rule for you.  Check the existing firewall rules under the ***Networking*** *Setting* section of the *vCore-based Azure Cosmos DB for MongoDB Account*.  If you are not sure what your current public IP address is, you can use the following command to find out:
 > ```powershell
 > Invoke-RestMethod -Uri 'http://ipinfo.io/ip' -Method Get
 > ```
@@ -722,7 +722,7 @@ After completing the setup and configuration steps, you're now ready to explore 
 > Make sure you have the necessary environment variables in your **.env** file before running the application.  
 
 > [!NOTE]
-> Make sure you have the v-Core-based Azure Cosmos DB for MongoDB account firewall rules set to allow access from your current public IP address.  
+> Make sure you have the vCore-based Azure Cosmos DB for MongoDB account firewall rules set to allow access from your current public IP address.  
 
 1. **Launch the Application**: Navigate to the root directory of your project in the integrated terminal within Visual Studio Code. To start the application, enter the following commands.
 
@@ -785,9 +785,9 @@ After completing the lab exercises, it's important to clean up any resources you
 
 1. **Azure Portal**: Sign in to the [Azure portal](https://portal.azure.com).
 
-1. **Delete Resource Group**: If you created a new resource group for this lab, navigate to *Resource groups*, find your group, and delete it. This action removes all the resources contained within it, including your Azure Cosmos DBv-Core-based Azure Cosmos DB for MongoDB account and any Azure OpenAI resources.
+1. **Delete Resource Group**: If you created a new resource group for this lab, navigate to *Resource groups*, find your group, and delete it. This action removes all the resources contained within it, including your Azure Cosmos DBvCore-based Azure Cosmos DB for MongoDB account and any Azure OpenAI resources.
 
-1. **Manually Delete Individual Resources**: If you added resources to an existing group, you need to delete each resource individually. Navigate to each resource created for this lab (for example, v-Core-based Azure Cosmos DB for MongoDB account, Azure OpenAI account) and delete them.
+1. **Manually Delete Individual Resources**: If you added resources to an existing group, you need to delete each resource individually. Navigate to each resource created for this lab (for example, vCore-based Azure Cosmos DB for MongoDB account, Azure OpenAI account) and delete them.
 
 1. **Verify Deletion**: Confirm all resources you no longer need were successfully removed and are no longer listed in your Azure portal.
 
@@ -797,6 +797,6 @@ This cleanup process helps maintain your Azure account organized and free from u
 
 # Conclusion
 
-In this lab, you employed Azure OpenAI to generate embeddings for v-Core-based Azure Cosmos DB for MongoDB documents and built a vector index for in-depth searches, effectively integrating these tools as your AI copilot. By transforming user prompts into embeddings to search for similar documents in the database, and then enhancing these search outcomes using GPT-3.5 chat from Azure OpenAI, you effectively demonstrated a Retrieval-Augmented Generation (RAG) approach. This step shows how integrating AI with database searches can refine the relevance and depth of query results.
+In this lab, you employed Azure OpenAI to generate embeddings for vCore-based Azure Cosmos DB for MongoDB documents and built a vector index for in-depth searches, effectively integrating these tools as your AI copilot. By transforming user prompts into embeddings to search for similar documents in the database, and then enhancing these search outcomes using GPT-3.5 chat from Azure OpenAI, you effectively demonstrated a Retrieval-Augmented Generation (RAG) approach. This step shows how integrating AI with database searches can refine the relevance and depth of query results.
 
 This lab not only guided you through the technical steps of implementing vector search and AI enhancements. The lab also illustrated the powerful capabilities of the Retrieval-Augmented Generation (RAG) approach in creating more dynamic, intelligent, and user-friendly data retrieval systems.
