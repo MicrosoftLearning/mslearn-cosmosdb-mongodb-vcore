@@ -4,7 +4,7 @@ permalink: index.html
 layout: home
 ---
 
-This repository contains the hands-on lab exercises for Microsoft course **Build an AI App with v-Core-based Azure Cosmos DB for MongoDB**. The exercises are designed to accompany the learning materials and enable you to practice using the technologies they describe.
+This repository contains the hands-on lab exercises for Microsoft course **Build an AI App with vCore-based Azure Cosmos DB for MongoDB**. The exercises are designed to accompany the learning materials and enable you to practice using the technologies they describe.
 
 > &#128221; To complete these exercises, you’ll require a Microsoft Azure subscription. You can sign up for a free trial at [https://azure.microsoft.com][azure].
 

@@ -1,20 +1,20 @@
 ---
 lab:
-    title: 'Migrate a MongoDB database to a v-Core-based Azure Cosmos DB for MongoDB account'
-    module: 'Module 2 - Migrate to v-Core-based Azure Cosmos DB for MongoDB'
+    title: 'Migrate a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account'
+    module: 'Module 2 - Migrate to vCore-based Azure Cosmos DB for MongoDB'
 ---
 
-Data migration is a critical step in the process of moving from an existing MongoDB database to a v-Core-based Azure Cosmos DB for MongoDB account. While there are several ways to migrate a MongoDB database to a v-Core-based Azure Cosmos DB for MongoDB account, this lab focuses on using the MongoDB native tools to migrate the database. The MongoDB native tools are the most common way to migrate a MongoDB database to another. Most MongoDB administrators and developers are familiar with these tools.
+Data migration is a critical step in the process of moving from an existing MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account. While there are several ways to migrate a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account, this lab focuses on using the MongoDB native tools to migrate the database. The MongoDB native tools are the most common way to migrate a MongoDB database to another. Most MongoDB administrators and developers are familiar with these tools.
 
 > [!NOTE]
 > While this lab uses the MongoDB community edition, similar migration steps can be used for other MongoDB editions.
 
 ### Objectives
 
-In this lab, you learn how to use the MongoDB native tools to migrate a MongoDB database to a v-Core-based Azure Cosmos DB for MongoDB account. You use the following tools:
+In this lab, you learn how to use the MongoDB native tools to migrate a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account. You use the following tools:
 
 - **mongodump**: This tool is used to dump the data from the local MongoDB server into a BSON (Binary JSON) file.
-- **mongorestore**: This tool is used to restore the dumped data into the v-Core-based Azure Cosmos DB for MongoDB server.
+- **mongorestore**: This tool is used to restore the dumped data into the vCore-based Azure Cosmos DB for MongoDB server.
 
 ### Build your own lab environment
 
@@ -35,7 +35,7 @@ If you need to build your own lab environment, you need the following components
 
 You need access to the following Azure resources for this lab:
 
-- v-Core-based Azure Cosmos DB for MongoDB account
+- vCore-based Azure Cosmos DB for MongoDB account
 
 You can create these resources via the *Azure portal* or use the ***create-azure-resources.ps1*** PowerShell script with the ***.env** file. Don't use existing production resources for this lab or any lab.
 
@@ -45,7 +45,7 @@ You can create these resources via the *Azure portal* or use the ***create-azure
 
 This file is both used to retrieve and store the necessary environment variables for both the PowerShell script and the vector search application APIs. It's the easiest way to prepopulate your resource information. The file is used to store the environment variables for your Azure Cosmos DB and Azure OpenAI account.
 
-If you already have an existing Resource Group, a v-Core-based Azure Cosmos DB for MongoDB account, an Azure Storage Account or an Azure Log Analytics workspace that you would like to use, just fill in those values in the **.env** file and set the skip create option for that resource to **true**. By default, the *create-azure-resources.ps1* script uses this file to retrieve the necessary environment variables. Note that the *create-azure-resources.ps1* script will populate the environment variables with default values if not specified in the .env file.
+If you already have an existing Resource Group, a vCore-based Azure Cosmos DB for MongoDB account, an Azure Storage Account or an Azure Log Analytics workspace that you would like to use, just fill in those values in the **.env** file and set the skip create option for that resource to **true**. By default, the *create-azure-resources.ps1* script uses this file to retrieve the necessary environment variables. Note that the *create-azure-resources.ps1* script will populate the environment variables with default values if not specified in the .env file.
 
 To learn more about the ***.env*** file and its parameters, review the [***.env*** file documentation](./00-env-file.md).
 
@@ -57,7 +57,7 @@ To learn more about the ***.env*** file and its parameters, review the [***.env*
 If you aren't using existing resources, or you aren't creating them through the Azure portal, this script creates the necessary Azure resources for this lab. It gives you the flexibility to create some or all of the resources required for this lab. You can either run the script as is or modify it to suit your needs. The resources created by the script include:
 
 - Resource Group
-- v-Core-based Azure Cosmos DB for MongoDB account
+- vCore-based Azure Cosmos DB for MongoDB account
 
 The script has a rich set of parameters to help you customize the resources to be created. It also uses an ***.env*** file to retrieve and store the necessary environment variables for both the PowerShell script and the vector search application APIs.  
 
@@ -85,7 +85,7 @@ To create the necessary Azure resources for this lab:
 1. Make sure that the **.env** file is populated with the resource information.
 
 > [!NOTE]
-> The v-Core-based Azure Cosmos DB for MongoDB account will need a firewall rule to allow access from your current public IP address.  If your Azure Cosmos DB account was generated by the *create-azure-resources.ps1* script, it should have created the firewall rule for you.  Check the existing firewall rules under the ***Networking*** *Setting* section of the *Azure Cosmos DB Account*.  If you are not sure what your current public IP address is, you can use the following command to find out:
+> The vCore-based Azure Cosmos DB for MongoDB account will need a firewall rule to allow access from your current public IP address.  If your Azure Cosmos DB account was generated by the *create-azure-resources.ps1* script, it should have created the firewall rule for you.  Check the existing firewall rules under the ***Networking*** *Setting* section of the *Azure Cosmos DB Account*.  If you are not sure what your current public IP address is, you can use the following command to find out:
 > ```powershell
 > Invoke-RestMethod -Uri 'http://ipinfo.io/ip' -Method Get
 > ```
@@ -172,11 +172,11 @@ We should now have a running MongoDB server on your local machine. Let's load so
 
     This command loads the sample data into the MongoDB server running on your local machine.
 
-We should now have a running MongoDB server with some data into it, it's time to migrate it to v-Core-based Azure Cosmos DB for MongoDB.
+We should now have a running MongoDB server with some data into it, it's time to migrate it to vCore-based Azure Cosmos DB for MongoDB.
 
-## Migrate to a v-Core-based Azure Cosmos DB for MongoDB account using MongoDB native tools (offline)
+## Migrate to a vCore-based Azure Cosmos DB for MongoDB account using MongoDB native tools (offline)
 
-To export the data from the local MongoDB server and import it into the v-Core-based Azure Cosmos DB for MongoDB account, you use the MongoDB **mongodump** and **mongorestore** native tools. In a production environment, if your database is large, you might need to search for other ways to migrate the database like through *Azure Data Migration Service*.
+To export the data from the local MongoDB server and import it into the vCore-based Azure Cosmos DB for MongoDB account, you use the MongoDB **mongodump** and **mongorestore** native tools. In a production environment, if your database is large, you might need to search for other ways to migrate the database like through *Azure Data Migration Service*.
 
 1. Dump the data from your local MongoDB server into a BSON file. Run the following command in the terminal:
 
@@ -186,16 +186,16 @@ To export the data from the local MongoDB server and import it into the v-Core-b
 
     This command creates a BSON file in the `../data/cosmicworks` folder. The **mongodump** command outputs the progress of the dump operation.
 
-1. Restore the dumped data into your v-Core-based Azure Cosmos DB for MongoDB server. Replace **<user>**, **<password>**, **yourMongoDBClusterName**, and **yourDatabaseName** with your actual username, password, Azure MongoDB cluster name, and database name:
+1. Restore the dumped data into your vCore-based Azure Cosmos DB for MongoDB server. Replace **<user>**, **<password>**, **yourMongoDBClusterName**, and **yourDatabaseName** with your actual username, password, Azure MongoDB cluster name, and database name:
 
     ```bash
     & mongorestore --uri "mongodb+srv://<user>:<password>@yourMongoDBClusterName.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000" --db cosmicworks1 ../data/cosmicworks/cosmicworks
     ```
 
-    This command restores the BSON file into your v-Core-based Azure Cosmos DB for MongoDB server. The **mongorestore** command  outputs the progress of the restore operation.
+    This command restores the BSON file into your vCore-based Azure Cosmos DB for MongoDB server. The **mongorestore** command  outputs the progress of the restore operation.
 
 > [!NOTE]
-> Don't forget to make sure the firewall rules for your v-Core-based Azure Cosmos DB for MongoDB account are set to allow access from your current public IP address. If your Azure Cosmos DB account was generated by the *create-azure-resources.ps1* script, it should have created the firewall rule for you. Check the existing firewall rules under the ***Networking*** *Setting* section of the *v-Core-based Azure Cosmos DB for MongoDB* account. If you are not sure what your current public IP address is, you can use the following command to find out:
+> Don't forget to make sure the firewall rules for your vCore-based Azure Cosmos DB for MongoDB account are set to allow access from your current public IP address. If your Azure Cosmos DB account was generated by the *create-azure-resources.ps1* script, it should have created the firewall rule for you. Check the existing firewall rules under the ***Networking*** *Setting* section of the *vCore-based Azure Cosmos DB for MongoDB* account. If you are not sure what your current public IP address is, you can use the following command to find out:
 > ```powershell
 > Invoke-RestMethod -Uri 'http://ipinfo.io/ip' -Method Get
 > ```
@@ -204,7 +204,7 @@ Let's verify the migration completed successfully.
 
 1. Open the MongoDB Compass application.
 
-1. Connect to your v-Core-based Azure Cosmos DB for MongoDB connection string.
+1. Connect to your vCore-based Azure Cosmos DB for MongoDB connection string.
 
 1. Select **Continue** on the warning screen.
 
@@ -213,9 +213,9 @@ Let's verify the migration completed successfully.
 1. Close the MongoDB Compass application.
 
 > [!NOTE]
-> Note that while you used the **mongodump** and **mongorestore** tools to migrate the data from your local MongoDB server to the v-Core-based Azure Cosmos DB for MongoDB account, we could have also use **mongoexport** and **mongoimport** tools to do the same.
+> Note that while you used the **mongodump** and **mongorestore** tools to migrate the data from your local MongoDB server to the vCore-based Azure Cosmos DB for MongoDB account, we could have also use **mongoexport** and **mongoimport** tools to do the same.
 
-You should now have a running v-Core-based Azure Cosmos DB for MongoDB server with the data from your local MongoDB server. You successfully migrated the data from your local MongoDB server to the v-Core-based Azure Cosmos DB for MongoDB account using the MongoDB native tools.
+You should now have a running vCore-based Azure Cosmos DB for MongoDB server with the data from your local MongoDB server. You successfully migrated the data from your local MongoDB server to the vCore-based Azure Cosmos DB for MongoDB account using the MongoDB native tools.
 
 ## Clean Up
 
@@ -235,4 +235,4 @@ This cleanup process helps maintain your Azure account organized and free from u
 
 ## Conclusion
 
-You successfully migrated a MongoDB database to a v-Core-based Azure Cosmos DB for MongoDB account using the MongoDB native tools. There are several other ways to migrate a MongoDB database to a v-Core-based Azure Cosmos DB for MongoDB account, including using Azure Data Studio for offline migrations and Azure Databricks for online/offline migrations. The method you choose depends on your specific requirements and constraints.
+You successfully migrated a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account using the MongoDB native tools. There are several other ways to migrate a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account, including using Azure Data Studio for offline migrations and Azure Databricks for online/offline migrations. The method you choose depends on your specific requirements and constraints.

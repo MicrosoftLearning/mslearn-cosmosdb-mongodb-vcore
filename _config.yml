@@ -1,4 +1,4 @@
-title: 'Build an AI copilot with v-Core-based Azure Cosmos DB for MongoDB and Azure OpenAI'
+title: 'Build an AI copilot with vCore-based Azure Cosmos DB for MongoDB and Azure OpenAI'
 remote_theme: MicrosoftLearning/Jekyll-Theme
 exclude:
   - readme.md
