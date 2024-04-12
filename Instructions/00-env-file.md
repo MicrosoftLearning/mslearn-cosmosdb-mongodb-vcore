@@ -91,7 +91,7 @@ The **.env** file contains key-value pairs, each defining a specific configurati
 
 ## How to Use
 
-1. This file is used for the *create-azure-resources.ps1* PowerShell script, and the Lab's Python and Node.js applications. The values in the .env file are used to configure the applications and scripts to interact with the Azure resources.
+1. This file is used for the *create-azure-resources.ps1* PowerShell script, and the lab's Python and Node.js applications. The values in the .env file are used to configure the applications and scripts to interact with the Azure resources.
 lab.
 1. If you're using the .env file to populate the *create-azure-resources.ps1* PowerShell script variables, you need to set the **-useEnvFile** parameter when running the script. By default the *create-azure-resources.ps1* PowerShell script also populates the **.env** file with those resources it creates.
 1. Fill in the variables with your specific values, making sure all values are inside double quotes. Leave values blank for those value pairs that a lab doesn't need. For example, if you aren't using the Azure OpenAI service for a lab, you can leave the **OpenAIAccount**, **OpenAIKey1**, and all other OpenAI variables blank.
