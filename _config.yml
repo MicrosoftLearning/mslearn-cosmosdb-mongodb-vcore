@@ -3,6 +3,8 @@ remote_theme: MicrosoftLearning/Jekyll-Theme
 exclude:
   - readme.md
   - .github/
+  - /Instructions/00-env-file.md
+  - /Instructions/00-powershell-script.md
 header_pages:
   - index.html
 author: Microsoft Learning
