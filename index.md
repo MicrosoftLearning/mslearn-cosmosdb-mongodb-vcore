@@ -10,7 +10,7 @@ This repository contains the hands-on lab exercises for Microsoft course **Build
 
 ## Labs
 
-{% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions'" %}
+{% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions'" and "page.url not contains '00-'"%}
 | Module | Lab |
 | --- | --- |
 {% for activity in labs  %}| {{ activity.lab.module }} | [{{ activity.lab.title }}]({{ site.github.url }}{{ activity.url }}) |
