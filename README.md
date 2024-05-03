@@ -193,3 +193,204 @@ This cleanup process helps maintain your Azure account organized and free from u
 # Conclusion
 
 You successfully migrated a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account using the MongoDB native tools. There are several other ways to migrate a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account, including using Azure Data Studio for offline migrations and Azure Databricks for online/offline migrations. The method you choose depends on your specific requirements and constraints.
+
+---------------------------------------------------------------------------------------------------------
+
+## ESPAÑOL
+
+## La migración de datos es un paso crítico en el proceso de pasar de una base de datos MongoDB existente a una cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual. Si bien hay varias formas de migrar una base de datos MongoDB a una cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual, esta práctica de laboratorio se centra en el uso de las herramientas nativas de MongoDB para migrar la base de datos. Las herramientas nativas de MongoDB son la forma más común de migrar una base de datos MongoDB a otra. La mayoría de los administradores y desarrolladores de MongoDB están familiarizados con estas herramientas.
+
+# Si bien esta práctica de laboratorio utiliza la edición comunitaria de MongoDB, se pueden utilizar pasos de migración similares para otras ediciones de MongoDB.
+
+# Objetivos
+
+En este laboratorio, aprenderá a usar las herramientas nativas de MongoDB para migrar una base de datos de MongoDB a una cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual. Utiliza las siguientes herramientas:
+
+* mongodump: esta herramienta se utiliza para volcar los datos del servidor MongoDB local en un archivo BSON (JSON binario).
+* mongorestore: esta herramienta se utiliza para restaurar los datos volcados en el servidor Azure Cosmos DB para MongoDB basado en núcleo virtual.
+
+# Construya su propio entorno de laboratorio
+
+Si necesita crear su propio entorno de laboratorio, necesita los siguientes componentes y acceso a recursos.
+
+* Visual Studio Code: asegúrese de que Visual Studio Code esté instalado en su máquina.
+* Suscripción de Azure: tenga acceso a una suscripción de Azure para crear los recursos necesarios.
+
+# Clonar el repositorio
+
+* Abra el código de Visual Studio.
+* Presione CTRL+MAYÚS+P para abrir la paleta de comandos.
+* Ejecute Git: clonar y clonar el repositorio https://github.com/MicrosoftLearning/mslearn-cosmosdb-mongodb-vcore.git.
+* Navegue hasta el directorio del repositorio clonado.
+* Haga clic derecho en la carpeta 02-migrate y seleccione Abrir en Terminal integrada.
+# Crear recursos de Azure
+
+Necesita acceso a los siguientes recursos de Azure para este laboratorio:
+* Cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual
+
+Puede crear estos recursos a través de Azure Portal o usar el script de PowerShell create-azure-resources.ps1 con el archivo *.env. No utilice recursos de producción existentes para este laboratorio ni para ningún laboratorio.
+
+# Usa el archivo .env
+
+Este archivo debe completarse manualmente o mediante el script create-azure-resources.ps1 antes de poder ejecutar su aplicación, ya que contiene la información de conexión a sus recursos de Azure.
+
+Este archivo se utiliza para recuperar y almacenar las variables de entorno necesarias tanto para el script de PowerShell como para las API de la aplicación de búsqueda vectorial. Es la forma más sencilla de completar previamente la información de sus recursos. El archivo se usa para almacenar las variables de entorno de su cuenta de Azure Cosmos DB y Azure OpenAI.
+
+Si ya tiene un grupo de recursos existente, una cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual, una cuenta de Azure Storage o un área de trabajo de Azure Log Analytics que le gustaría usar, simplemente complete esos valores en el archivo .env y configure el omita la opción de creación para ese recurso en verdadero. De forma predeterminada, el script create-azure-resources.ps1 usa este archivo para recuperar las variables de entorno necesarias. Tenga en cuenta que el script create-azure-resources.ps1 completará las variables de entorno con valores predeterminados si no se especifican en el archivo .env.
+
+Para obtener más información sobre el archivo .env y sus parámetros, revise la documentación del archivo .env.
+
+# Utilice el script create-azure-resources.ps1
+
+"No es necesario ejecutar el script create-azure-resources.ps1 y puede pasar a la siguiente sección si ya tiene creados los recursos de Azure necesarios".
+
+Si no usa recursos existentes o no los crea a través de Azure Portal, este script crea los recursos de Azure necesarios para esta práctica de laboratorio. Le brinda la flexibilidad de crear algunos o todos los recursos necesarios para este laboratorio. Puede ejecutar el script tal cual o modificarlo para adaptarlo a sus necesidades. Los recursos creados por el script incluyen:
+
+* Grupo de recursos
+* Cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual
+
+El script tiene un amplio conjunto de parámetros para ayudarlo a personalizar los recursos que se crearán. También utiliza un archivo .env para recuperar y almacenar las variables de entorno necesarias tanto para el script de PowerShell como para las API de la aplicación de búsqueda vectorial.
+
+" Si bien estos parámetros se pueden pasar directamente al script, le recomendamos que utilice el archivo .env para completar previamente la información de sus recursos en lugar de agregar los parámetros al ejecutar el script. Esto le facilitará la administración de las variables de entorno. "
+
+Para obtener más información sobre el script de PowerShell y sus parámetros, revise la documentación create-azure-resources.ps1.
+
+" Asegúrese de que el inquilino, la ubicación y la suscripción que utiliza permitan la creación de los recursos necesarios. Es posible que no todas las ubicaciones y suscripciones permitan o admitan la creación de todos los recursos necesarios para esta práctica de laboratorio. Si tiene algún problema, comuníquese con a su administrador de Azure ".
+
+# Ejecute el script create-azure-resources.ps1 para crear los recursos de Azure necesarios
+
+Para crear los recursos de Azure necesarios para esta práctica de laboratorio:
+
+1. Ejecute el siguiente comando en la terminal integrada.
+
+potencia Shell
+inicio de sesión az
+./create-azure-resources.ps1
+
+2. Copie y guarde las variables de entorno devueltas por el script en caso de que las necesite más adelante. Puede verificar los recursos creados en Azure Portal.
+
+3. Asegúrese de que el archivo .env contenga la información del recurso.
+
+" La cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual necesitará una regla de firewall para permitir el acceso desde su dirección IP pública actual. Si su cuenta de Azure Cosmos DB fue generada por el script create-azure-resources.ps1, debería haber creado el regla de firewall por usted. Verifique las reglas de firewall existentes en la sección Configuración de red de la cuenta de Azure Cosmos DB. Si no está seguro de cuál es su dirección IP pública actual, puede usar el siguiente comando para averiguarlo: "
+potencia Shell
+Invocar-RestMethod -Uri 'http://ipinfo.io/ip' -Method Obtener
+Una vez que se crean los recursos y su archivo .env se completa con la información del recurso, puede continuar con el siguiente paso.
+
+# Instale y cargue datos en la edición comunitaria de MongoDB en su máquina local
+A menos que tenga instalado un servidor MongoDB que no sea de producción con acceso a Internet, instalemos la edición comunitaria de MongoDB en su máquina local. Para obtener más información sobre cómo realizar esta instalación, revise las instrucciones en la documentación oficial de MongoDB.
+
+# Instalar la edición comunitaria MongoDB
+Instalemos la edición comunitaria de MongoDB en su máquina local.
+
+1. Abra su navegador y vaya a la página de descarga del servidor comunitario MongoDB desde el sitio web oficial de MongoDB.
+
+3. Seleccione el botón Seleccionar paquete y seleccione la configuración adecuada para su entorno. Por ejemplo, si usa Windows, seleccione la plataforma Windows x64 y el paquete msi.
+
+| Versión | 6.0.14 | | Plataforma | Su sistema operativo/plataforma actual | | Paquete | Su tipo de paquete de instalación actual |
+
+3. Seleccione el botón Descargar para descargar el instalador.
+
+4. Una vez descargado el instalador, ejecútelo y siga las instrucciones de instalación para una instalación completa.
+
+* Elija todas las opciones predeterminadas.
+* El nombre del servicio debe ser MongoDB.
+* Seleccione Instalar MongoDB Compass.
+
+Esta instalación debería tardar unos minutos en completarse.
+
+5. Una vez que se complete la instalación, seleccione el botón Finalizar para cerrar el instalador si es necesario.
+
+# Instalar las herramientas de base de datos MongoDB
+Necesitamos algunas herramientas que nos ayuden con el proceso de migración. Instalemos las herramientas de base de datos MongoDB en su máquina local.
+
+1. Abra su navegador y vaya a la página de descarga de herramientas de base de datos de línea de comandos de MongoDB desde el sitio web oficial de MongoDB.
+
+2. Seleccione la configuración adecuada para su entorno. Por ejemplo, si usa Windows, seleccione la plataforma Windows x86_64 y el paquete msi.
+| Versión | 100.9.4 o la última versión | | Plataforma | Su sistema operativo/plataforma actual | | Paquete | Su tipo de paquete de instalación actual |
+
+3. Seleccione el botón Descargar para descargar el instalador.
+
+4. Una vez descargado el instalador, ejecútelo y siga las instrucciones de instalación para una instalación completa. Elija todas las opciones predeterminadas.
+
+5. Una vez que se complete la instalación, seleccione el botón Finalizar para cerrar el instalador si es necesario.
+
+# Es hora de verificar la instalación.
+
+1. Cierre Visual Studio Code y vuelva a abrirlo para asegurarse de que las variables de entorno estén cargadas.
+
+2. Haga clic derecho en la carpeta 02-migrate y seleccione Abrir en Terminal integrada.
+
+3. En las ventanas de la terminal, ejecute el siguiente comando para verificar la instalación:
+Si el servidor está en funcionamiento, responderá aproximadamente cada segundo; si está inactivo, eventualmente expirará después de aproximadamente un minuto.
+Si el servidor no funciona, siga las instrucciones de la documentación oficial de MongoDB para iniciar el servidor.
+
+" Si bien la instalación de MongoDB y sus herramientas debería haber actualizado su variable de entorno PATH, si no se encuentra el comando, especifique la ruta al llamar al comando mongostat. Por ejemplo, si instaló las herramientas en la ubicación predeterminada en el entorno de Windows, puede ejecutar el siguiente comando para verificar la instalación (reemplace la ruta con la ruta real donde se instalaron las herramientas y use esa ruta en los otros comandos de herramientas de MongoDB en esta práctica de laboratorio): "
+intento
+& "C:\Archivos de programa\MongoDB\Tools\100\bin\mongostat"
+Ahora deberíamos tener un servidor MongoDB en ejecución en su máquina local. Carguemos algunos datos en él.
+
+# Cargar datos en la edición comunitaria de MongoDB
+1. Abra una nueva terminal y navegue hasta la carpeta de instalación de Herramientas MongoDB.
+
+2. Ejecute el siguiente comando para cargar los datos de muestra en el servidor MongoDB:
+
+" bash
+& mongoimport --host localhost --port 27017 --db cosmicworks --collection customers --jsonArray --file ../data/cosmicworks/customers.json
+& mongoimport --host localhost --port 27017 --db cosmicworks --collection products --jsonArray --file ../data/cosmicworks/products.json
+& mongoimport --host localhost --port 27017 --db cosmicworks --collection salesOrders --jsonArray --file ../data/cosmicworks/salesOrders.json "
+
+Este comando carga los datos de muestra en el servidor MongoDB que se ejecuta en su máquina local.
+
+Ahora deberíamos tener un servidor MongoDB en ejecución con algunos datos; es hora de migrarlo a Azure Cosmos DB basado en núcleo virtual para MongoDB.
+
+# Migrar a una cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual mediante herramientas nativas de MongoDB (sin conexión)
+
+Para exportar los datos desde el servidor MongoDB local e importarlos a la cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual, use las herramientas nativas MongoDB mongodump y mongorestore. En un entorno de producción, si su base de datos es grande, es posible que deba buscar otras formas de migrar la base de datos, como a través del Servicio de migración de datos de Azure.
+
+1. Vuelque los datos de su servidor MongoDB local en un archivo BSON. Ejecute el siguiente comando en la terminal:
+
+bash
+& mongodump --host localhost --puerto 27017 --db cosmicworks --out ../data/cosmicworks
+Este comando crea un archivo BSON en la carpeta ../data/cosmicworks. El comando mongodump genera el progreso de la operación de volcado.
+
+2. Restaure los datos volcados en su servidor Azure Cosmos DB para MongoDB basado en núcleo virtual. Reemplace,, yourMongoDBClusterName y yourDatabaseName con su nombre de usuario, contraseña, nombre del clúster de Azure MongoDB y nombre de la base de datos reales:
+
+bash
+& mongorestore --uri "mongodb+srv://<user>:<password>@yourMongoDBClusterName.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000" --db cosmicworks1 ../data/cosmicworks/cosmicworks
+This command restores the BSON file into your vCore-based Azure Cosmos DB for MongoDB server. The mongorestore command outputs the progress of the restore operation.
+
+" No olvide asegurarse de que las reglas de firewall para su cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual estén configuradas para permitir el acceso desde su dirección IP pública actual. Si su cuenta de Azure Cosmos DB fue generada por create-azure-resources. ps1, debería haber creado la regla de firewall por usted. Verifique las reglas de firewall existentes en la sección Configuración de red de la cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual. Si no está seguro de cuál es su dirección IP pública actual, puede hacerlo. Utilice el siguiente comando para averiguarlo: "
+potencia Shell
+Invocar-RestMethod -Uri 'http://ipinfo.io/ip' -Method Obtener
+
+# Verifiquemos que la migración se completó exitosamente.
+
+1. Abra la aplicación MongoDB Compass.
+2. Conéctese a su cadena de conexión de Azure Cosmos DB para MongoDB basada en núcleo virtual.
+3. Seleccione Continuar en la pantalla de advertencia.
+4. Debería ver su base de datos, colecciones y documentos en el panel de navegación izquierdo.
+5. Cierre la aplicación MongoDB Compass.
+
+" Tenga en cuenta que, si bien usó las herramientas mongodump y mongorestore para migrar los datos desde su servidor MongoDB local a la cuenta de Azure Cosmos DB para MongoDB basada en vCore, también podríamos haber usado las herramientas mongoexport y mongoimport para hacer lo mismo. "
+
+Ahora debería tener un servidor Azure Cosmos DB para MongoDB basado en núcleo virtual en ejecución con los datos de su servidor MongoDB local. Migró correctamente los datos desde su servidor MongoDB local a la cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual mediante las herramientas nativas de MongoDB.
+
+# Limpiar
+Después de completar los ejercicios de laboratorio, es importante limpiar todos los recursos que haya creado para evitar incurrir en costos innecesarios. Así es cómo:
+
+1. Portal de Azure: inicie sesión en el portal de Azure.
+
+2. Eliminar grupo de recursos: si creó un nuevo grupo de recursos para esta práctica de laboratorio, navegue hasta Grupos de recursos, busque su grupo y elimínelo. Esta acción elimina todos los recursos que contiene, incluida la instancia de Azure Cosmos DB y cualquier recurso de Azure OpenAI.
+
+3. Eliminar manualmente recursos individuales: si agregó recursos a un grupo existente, deberá eliminar cada recurso individualmente. Navegue hasta cada recurso creado para este laboratorio (por ejemplo, Azure Cosmos DB para MongoDB, cuenta de Azure OpenAI) y elimínelos.
+
+4. Verifique la eliminación: confirme que todos los recursos que ya no necesita se eliminaron correctamente y ya no aparecen en su Azure Portal.
+
+5. Revise la facturación: consulte la sección de facturación de Azure para asegurarse de que no se produzcan cargos inesperados y verifique que todos los recursos no deseados se hayan eliminado correctamente.
+
+Este proceso de limpieza ayuda a mantener su cuenta de Azure organizada y libre de cargos innecesarios, lo que garantiza que solo pague por los recursos que utiliza activamente.
+
+# Conclusión
+
+Migró correctamente una base de datos MongoDB a una cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual mediante las herramientas nativas de MongoDB. Hay varias otras formas de migrar una base de datos MongoDB a una cuenta de Azure Cosmos DB para MongoDB basada en núcleo virtual, incluido el uso de Azure Data Studio para migraciones sin conexión y Azure Databricks para migraciones en línea/sin conexión. El método que elija depende de sus requisitos y limitaciones específicos.
+
