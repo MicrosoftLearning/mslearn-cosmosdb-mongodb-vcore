@@ -29,7 +29,7 @@ The **.env** file contains key-value pairs, each defining a specific configurati
 | **skipCreatingCosmosDBPublicIPFirewallRule** | If true, skips creating a public IP firewall rule for Cosmos DB. | **true** |
 | **cosmosCluster** | The name of the Cosmos DB cluster. | **example-cosmos-cluster** |
 | **cosmosClusterLocation** | The location for the Cosmos DB cluster. | **eastus** |
-| **cosmosDbEndpoint** | The endpoint URL for the Cosmos DB cluster. | **https://example.documents.azure.com:443/** |
+| **cosmosDbEndpoint** | The endpoint URL for the Cosmos DB cluster. | **mongodb+srv://<user>:<password>@example.mongocluster.cosmos.azure.com/** |
 | **cosmosClusterAdmin** | The admin username for the Cosmos DB cluster. | **adminUser** |
 | **cosmosClusterPassword** | The password for the Cosmos DB cluster. | **SecurePassword!** |
 | **cosmosdbDatabase** | The name of the Cosmos DB database. Defaults to **cosmicworks**. | **cosmicworks** |
