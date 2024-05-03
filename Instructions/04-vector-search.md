@@ -733,6 +733,9 @@ After completing the setup and configuration steps, you're now ready to explore 
     cd ./python
     pip install -v "pymongo==4.6.2"
     pip install -v "openai==1.13.3"
+    pip install tenacity
+    pip install azure-storage-blob
+    pip install python-dotenv
     py load-and-vectorize-data.py
     ```
     </details>
