@@ -731,9 +731,10 @@ After completing the setup and configuration steps, you're now ready to explore 
     
     ```powershell
     cd ./python
-    pip install -v "pymongo==4.6.2"
-    pip install -v "openai==1.13.3"
-    pip install -v "tenacity==9.0.0"
+    py -m pip install -v "pymongo==4.6.2"
+    py -m pip install -v "openai==1.13.3" 
+    py -m pip install -v "tenacity==9.0.0"
+    py -m pip install -v "azure-storage-blob==12.23.1"
     py load-and-vectorize-data.py
     ```
     </details>
