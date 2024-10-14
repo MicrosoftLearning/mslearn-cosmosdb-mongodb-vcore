@@ -702,7 +702,7 @@ Let's turn those vector search results into more comprehensive and understandabl
 
     // Call the Azure OpenAI Completion Client's getChatCompletions function with the completion deployment and messages
     // Await the response and store it in the response variable
-    const response = await AzureOpenAICompletionClient.chat.completions({ messages: messages, model: completionDeployment,messages });
+    const response = await AzureOpenAICompletionClient.chat.completions({ messages: messages, model: completionDeployment });
     
     // Return the response
     return response;
