@@ -9,7 +9,8 @@ const rl = readline.createInterface({
 });
 const dotenv = require('dotenv');
 const MongoClient = require('mongodb').MongoClient;
-const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
+const { AzureOpenAI } = require("openai");
+const apiVersion = "2024-07-01-preview";
 
 // Load environment variables
 dotenv.config({ path: '../.env' });
@@ -39,10 +40,7 @@ async function main() {
         const completion_deployment = process.env.OpenAICompletionDeploymentName;
 
         // Initialize Azure OpenAI client
-        const AzureOpenAIClient = new OpenAIClient(
-            ai_endpoint,
-            new AzureKeyCredential(ai_key)
-        );
+        const azureOpenAIClient = new AzureOpenAI({endpoint: ai_endpoint, apiKey: ai_key, apiVersion: apiVersion});
 
         // Replace placeholders in the connection string with actual values
         cosmosdb_connection_string = cosmosdb_connection_string.replace("<user>", encodeURIComponent(cosmos_mongo_user));
