@@ -745,7 +745,7 @@ After completing the setup and configuration steps, you're now ready to explore 
     ```powershell
     cd ./node.js
     npm install
-    npm install @azure/openai
+    npm install openai
     npm start
     ```
 
