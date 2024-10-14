@@ -197,7 +197,7 @@ Time to generate the embeddings for a string. In this case, for your products' n
         try {
             // Call the Azure OpenAI Client's getEmbeddings function with the embeddings deployment and text
             // Await the response and store it in the response variable
-            const response = await AzureOpenAIClient.getEmbeddings(embeddingsDeployment, text);
+            const response = await AzureOpenAIClient.embeddings.create({ input: text, model: embeddingsDeployment });
 
             // Extract the embeddings from the response data
             const embeddings = response.data[0].embedding;
@@ -702,7 +702,7 @@ Let's turn those vector search results into more comprehensive and understandabl
 
     // Call the Azure OpenAI Completion Client's getChatCompletions function with the completion deployment and messages
     // Await the response and store it in the response variable
-    const response = await AzureOpenAICompletionClient.getChatCompletions(completionDeployment,messages);
+    const response = await AzureOpenAICompletionClient.chat.completions({ messages: messages, model: completionDeployment,messages });
     
     // Return the response
     return response;
