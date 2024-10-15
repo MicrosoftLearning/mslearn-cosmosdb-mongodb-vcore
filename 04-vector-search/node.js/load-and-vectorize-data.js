@@ -40,7 +40,7 @@ async function main() {
         const completion_deployment = process.env.OpenAICompletionDeploymentName;
 
         // Initialize Azure OpenAI client
-        const azureOpenAIClient = new AzureOpenAI({endpoint: ai_endpoint, apiKey: ai_key, apiVersion: apiVersion});
+        const AzureOpenAIClient = new AzureOpenAI({endpoint: ai_endpoint, apiKey: ai_key, apiVersion: apiVersion});
 
         // Replace placeholders in the connection string with actual values
         cosmosdb_connection_string = cosmosdb_connection_string.replace("<user>", encodeURIComponent(cosmos_mongo_user));
