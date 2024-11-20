@@ -235,4 +235,4 @@ This cleanup process helps maintain your Azure account organized and free from u
 
 ## Conclusion
 
-You successfully migrated a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account using the MongoDB native tools. There are several other ways to migrate a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account, including using Azure Data Studio for offline migrations and Azure Databricks for online/offline migrations. The method you choose depends on your specific requirements and constraints.
+You successfully migrated a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account using the MongoDB native tools. There are several other ways to migrate a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account, including using Azure Data Studio and Azure Databricks for online/offline migrations. The method you choose depends on your specific requirements and constraints.
