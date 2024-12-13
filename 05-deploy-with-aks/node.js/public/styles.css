@@ -1,0 +1,312 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+    color: #085262;
+}
+
+header {
+    color: #085262;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .logo {
+    font-size: 24px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: #085262;
+    text-decoration: none;
+}
+
+/* Add this CSS for the banner image */
+.banner {
+    width: 100%;
+    overflow: hidden; /* Ensure the image doesn't overflow */
+}
+
+.banner img {
+    width: 100%; /* Make the image responsive */
+    height: auto; /* Maintain aspect ratio */
+}
+
+h2 {
+    text-align: center;
+    margin-top: 20px;
+    font-weight: normal;
+}
+
+
+.bike-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.bike-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s;
+    position: relative;
+    margin: 10px;
+}
+
+.bike-image {
+    position: relative;
+    margin-bottom: -7px;
+}
+
+.bike-image img {
+    width: 100%;
+    height: auto;
+}
+
+.bike-title {
+    font-size: 22px;
+    position: absolute;
+    top: 7%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    text-align: center;
+    width: 101%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); 
+}
+
+.bike-card:hover {
+    transform: scale(1.05);
+}
+
+.bike-card h2 {
+    margin: 10px 0;
+}
+
+.bike-card p {
+    font-size: 20px;
+    color: #085262;
+}
+
+.bike-card button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.bike-card button:hover {
+    background-color: #218838;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #333;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Chat container to hold the entire chat UI */
+.chat-container {
+    background-color: #f0f0f0;
+
+    position: fixed; /* Fixed position to always show on the page */
+    bottom: 20px; /* Distance from the bottom */
+    right: 20px; /* Distance from the right */
+    width: 600px; /* Width of the chat window */
+    border: 1px solid #ccc; /* Border for the chat window */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    transition: height 0.3s, width 0.3s; /* Smooth transition */
+    z-index: 1000; /* Ensure chat is on top */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 500px;
+}
+
+.chat-header {
+    background-color: #007bff; /* Header color */
+    color: #fff; /* Text color */
+    padding: 10px; /* Padding for header */
+    display: flex; /* Flex for header elements */
+    justify-content: space-between; /* Space between elements */
+    align-items: center; /* Center items vertically */
+}
+
+.chat-controls {
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 16px;
+    margin: 0px 3px;
+    cursor: pointer;
+}
+
+/* Chat box to hold the messages */
+.chat-box {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+/* Message structure for both user and assistant */
+.message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    width: fit-content;
+    max-width: 80%;
+    min-width: 200px;
+    clear: both;
+}
+
+/* User message styling */
+.message.user {
+    background-color: #e0f7ff;
+    align-self: flex-end;
+}
+
+.message.user .header {
+    background-color: #007bff; /* Blue header */
+    color: white;
+    padding: 8px;
+    border-radius: 5px 5px 0 0;
+}
+
+.message.user .text {
+    padding: 10px;
+    background-color: white;
+    border-radius: 0 0 5px 5px;
+}
+
+/* Assistant message styling */
+.message.assistant {
+    background-color: #e8ffe7;
+    align-self: flex-start;
+}
+
+.message.assistant .header {
+    background-color: #28a745; /* Green header */
+    color: white;
+    padding: 8px;
+    border-radius: 5px 5px 0 0;
+}
+
+.message.assistant .text {
+    padding: 10px;
+    background-color: white;
+    border-radius: 0 0 5px 5px;
+}
+
+/* Input box styling */
+.input-box {
+    display: flex;
+    padding: 10px;
+    background-color: white;
+    border-top: 1px solid #ccc;
+}
+
+.input-box input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-right: 10px;
+    outline-color: #007bff;
+}
+
+.input-box button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.input-box button:hover {
+    background-color: #0056b3;
+}
+
+.options-wrapper { 
+    margin-left: 40px;
+}
+
+.option-item { 
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+    border: none;
+    display: block;
+    font-size: 1rem;
+    width: 100%;
+    text-align: left;
+}
+
+.selected-option { 
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+    border: none;
+    display: block;
+    font-size: 1rem;
+    width: 100%;
+    text-align: left;
+}
+
+.option-item:hover {
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+}
+
+.option-item:last-child {
+    margin-bottom: 0; /* Remove bottom margin for the last option */
+}
+
+.full-height {
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    top: 0; /* Position at the top */
+    right: 0; /* Position at the right */
+    bottom: 0; /* Position at the bottom */
+    left: 0; /* Position at the left */
+    border-radius: 0; /* No border radius for full-screen */
+    box-shadow: none; /* Remove shadow in full-screen */
+}
+
+.collapsed-height {
+    height: 50px;
+}

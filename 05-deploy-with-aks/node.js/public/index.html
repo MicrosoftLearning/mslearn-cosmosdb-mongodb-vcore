@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Vector Search</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="options.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logo">Contoso Bike Shop</div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="banner">
+        <img src="images/bike-header.png" alt="Bike Banner" />
+    </div>
+
+    <main>
+        <h2>Start Your Adventure</h2>
+        <div class="bike-grid">
+            <div class="bike-card">
+                <div class="bike-image">
+                    <img src="images/bike1.png" alt="Bike 1">
+                    <div class="bike-title">Touring-1000</div>
+                </div>
+            </div>
+
+            <div class="bike-card">
+                <div class="bike-image">
+                    <img src="images/bike2.png" alt="Bike 2">
+                    <div class="bike-title">Touring-3000</div>
+                </div>
+            </div>
+
+            <div class="bike-card"> 
+                <div class="bike-image">
+                    <img src="images/bike3.png" alt="Bike 3">
+                    <div class="bike-title">Road-350</div>
+                </div>
+            </div>
+            
+            <div class="bike-card">
+                <div class="bike-image">
+                    <img src="images/bike4.png" alt="Bike 4">
+                    <div class="bike-title">Road-220</div>
+                </div>
+            </div>
+            
+            <div class="bike-card">
+                <div class="bike-image">
+                    <img src="images/bike5.png" alt="Bike 5">
+                    <div class="bike-title">Road-450</div>
+                </div>
+            </div>
+            
+            <div class="bike-card">
+                <div class="bike-image">
+                    <img src="images/bike6.png" alt="Bike 6">
+                    <div class="bike-title">Touring-1200</div>
+                </div>  
+            </div>
+                        
+            <div class="bike-card">
+                <div class="bike-image">
+                    <img src="images/bike8.png" alt="Bike 8">
+                    <div class="bike-title">Touring-2000</div>
+                </div>
+            </div>
+            
+            <div class="bike-card">
+                <div class="bike-image">
+                    <img src="images/bike9.png" alt="Bike 9">
+                    <div class="bike-title">Road-650</div>
+                </div>
+            </div>            
+        </div>
+    </main>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <h3>Virtual Assistant</h3>
+            <div>
+                <button class="chat-controls fullheight-btn">
+                    <i id="expand-icon" class="bi bi-arrow-up-left-square"></i>
+                </button>
+                <button class="chat-controls minimize-btn">
+                    <i id="minimize-icon" class="bi bi-dash-square"></i>
+                </button>
+            </div>
+        </div>
+        <div class="chat-box">
+            <custom-options></custom-options>
+        </div>
+        <div class="input-box">
+            <input type="text" placeholder="Type your message here..." id="userInput">
+            <button id="sendBtn">Send</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Contoso Bike Shop. All rights reserved.</p>
+    </footer>
+</body>
+</html>
