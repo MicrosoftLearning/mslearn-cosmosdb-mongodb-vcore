@@ -18,7 +18,7 @@ In this lab, we guide you through the process of creating a vCore-based Azure Co
 
 Let's go ahead and learn how easy is to create your vCore-based Azure Cosmos DB for MongoDB account using the Azure portal. To create this account, follow these steps:
 
-1. Sign in to the [Azure portal](https://portal.azure.com/).
+1. Sign in to the +++https://portal.azure.com+++.
 
 1. In the left-hand menu, select on the **Create a resource** option.
 
