@@ -155,7 +155,7 @@ Now that you have your vCore-based Azure Cosmos DB for MongoDB account created, 
             ```
 
         1. exit the Mongo Shell:
-
+           <br>
            ```bash
            exit
            ```
