@@ -149,10 +149,10 @@ Now that you have your vCore-based Azure Cosmos DB for MongoDB account created, 
             db.sampleCollection.find()
             ```
 
-    1. exit the Mongo Shell:
-        ```bash
-        exit
-        ```
+        1. exit the Mongo Shell:
+            ```bash
+            exit
+            ```
 
 You now have a fully configured vCore-based Azure Cosmos DB for MongoDB account and you connected to it using the Azure portal's Mongo Shell. You're ready to start using it to store and retrieve data.
 
@@ -170,7 +170,7 @@ After completing the lab exercises, it's important to clean up any resources you
 
 1. **Review Billing**: Check your Azure billing section to ensure no unexpected charges are incurred, verifying that all unwanted resources were successfully deleted.
 
-This cleanup process helps maintain your Azure account organized and free from unnecessary charges, ensuring you only pay for resources you actively use.
+>[!alert] This cleanup process helps maintain your Azure account organized and free from unnecessary charges, ensuring you only pay for resources you actively use.
 
 ## Conclusion
 
