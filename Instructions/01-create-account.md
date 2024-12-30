@@ -53,7 +53,7 @@ Let's go ahead and learn how easy is to create your vCore-based Azure Cosmos DB 
         | Password | ***Enter a strong password***. |
         | Confirm password | ***Enter the same password***. Copy that password somewhere safe, you need it later. |
 
-        > [!NOTE]
+        >[!note]
         > When you select **Free tier** under the **Cluster tier** section, you'll notice that *Free tier* checkbox is now also selected under the *Basics* tab. While you could have selected that checkbox on the *Basics* tab, we wanted you to familiarize yourself with the *cluster tier* options.
         >
         > Also note that you can only have one *Free tier* cluster per Azure account. If you already used your free account, just select the **M25 tier, 2 (Burstable) vCores** cluster tier to reduce cost since you don't need anything stronger for this lab.
@@ -113,7 +113,7 @@ Now that you have your vCore-based Azure Cosmos DB for MongoDB account created, 
 
 1. In the **Azure Cosmos DB for MongoDB (vCore)** window, select **Quick start**.
 
-    > [!NOTE]
+    >[!note]
     > If you see the warning ***The Network settings for this account are preventing access from Data Explorer. Please allow access from Azure Portal to proceed.***, you will need to go back to the **Networking** tab and allow public access from Azure services and resources within Azure to this cluster.
 
 1. In the **Quick start** window, select **Launch quick start**. This option creates a sample database for you to test on. In a production environment, you would most likely not use the **Launch quick start** option, since you would be creating your own databases and collections.
