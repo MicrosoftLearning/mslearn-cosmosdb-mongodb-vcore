@@ -27,7 +27,7 @@ If you need to build your own lab environment, you need the following components
 
 - Open **Visual Studio Code**.
 - Press **CTRL+SHIFT+P** to open the command palette.
-- Run **Git: Clone** and clone the repository +++https://github.com/MicrosoftLearning/mslearn-cosmosdb-mongodb-vcore.git+++.
+- Run +++**Git: Clone**+++ and clone the repository +++https://github.com/MicrosoftLearning/mslearn-cosmosdb-mongodb-vcore.git+++.
 - Navigate to the cloned repository directory.
 - Right-click on the **02-migrate** folder and select **Open in integrated Terminal**.
 
