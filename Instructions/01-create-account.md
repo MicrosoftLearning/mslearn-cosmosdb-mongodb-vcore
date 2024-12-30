@@ -153,11 +153,13 @@ Now that you have your vCore-based Azure Cosmos DB for MongoDB account created, 
             ```bash
             db.sampleCollection.find()
             ```
-
+            
         1. exit the Mongo Shell:
             ```bash
             exit
             ```
+
+        
 
 You now have a fully configured vCore-based Azure Cosmos DB for MongoDB account and you connected to it using the Azure portal's Mongo Shell. You're ready to start using it to store and retrieve data.
 
