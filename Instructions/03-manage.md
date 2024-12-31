@@ -108,7 +108,10 @@ As your application performance needs changes, you might need to scale your vCor
 
 1. Open a browser, go to +++**https://portal.azure.com**+++ and sign in with the following credentials:
 
-   
+    | Item | Value |
+    |:---------|:---------|
+    | Username   | +++**@lab.CloudPortalCredential(User1).Username**+++   |
+    | Password   | +++**@lab.CloudPortalCredential(User1).Password**+++   |
 
 1. Navigate to your vCore-based Azure Cosmos DB for MongoDB account.
 
@@ -139,7 +142,7 @@ Monitoring your vCore-based Azure Cosmos DB for MongoDB account is important to 
 
 One you have your Log Analytics workspace and Azure storage account, it's time to enable diagnostic settings for your vCore-based Azure Cosmos DB for MongoDB account. When you enable diagnostics, allows you to collect logs and metrics from your Cosmos DB account and store them in the Log Analytics workspace. To do enable diagnostics, let's follow these steps:
 
-1. Sign in to the [Azure portal](https://portal.azure.com).
+1. Sign in to the Azure portal.
 
 1. Navigate to your vCore-based Azure Cosmos DB for MongoDB account.
 
@@ -151,7 +154,7 @@ One you have your Log Analytics workspace and Azure storage account, it's time t
 
     | Setting | Value |
     | --- | --- |
-    | **Diagnostic setting name** | ***cosmosdb-mongodb-diag-settings*** |
+    | **Diagnostic setting name** | +++***cosmosdb-mongodb-diag-settings***+++ |
     | *Logs* - **Category groups** | Select **audit** and **allLogs** |
     | *Logs* - **Categories** | Select **vCoreMongoRequest** if not already selected. |
     | **Metrics** | Select **AllMetrics** |
@@ -208,7 +211,7 @@ You come back a little later to stop the workload. In the meantime, let's review
 
 ### Review the logs
 
-1. Sign in to the [Azure portal](https://portal.azure.com).
+1. Sign in to the Azure portal.
 
 1. Navigate to your vCore-based Azure Cosmos DB for MongoDB account.
 
@@ -261,12 +264,12 @@ You can also create alerts to notify you when certain conditions are met. For ex
     1. **Condition** tab:
         1. Enter the following settings: 
             - **Signal name**: Select **Custom log search**.
-            - *Logs pane*: Enter **VCoreMongoRequest** as your query, run the query, and select **Continue Editing Alert**.
+            - *Logs pane*: Enter +++**VCoreMongoRequest**+++ as your query, run the query, and select **Continue Editing Alert**.
             - **Measure**: Select **Table rows**.
             - **Aggregation type**: Select **Count**.
             - **Aggregation granularity**: Select **5 Minutes**.
             - **Operator**: Select **Greater than**.
-            - **Threshold**: Enter **500** as the threshold.
+            - **Threshold**: Enter +++**500**+++ as the threshold.
             - **Frequency of evaluation**: Select **Every 5 minutes**.
 
             The alert calculates how much it costs you monthly to run this alert.
@@ -279,8 +282,8 @@ You can also create alerts to notify you when certain conditions are met. For ex
         1. Select the **Use quick actions** radio button.
 
         1. Fill in the **Use quick actions** pane.
-            - **Action group name**: **Notify DBAs**.
-            - **Display name**: **High number of transactions detected**.
+            - **Action group name**: +++**Notify DBAs**+++.
+            - **Display name**: +++**High number of transactions detected**+++.
             - **Email**: Selected and enter your email address.
 
         1. Select the **Review + create** button.
@@ -288,8 +291,8 @@ You can also create alerts to notify you when certain conditions are met. For ex
             1. Select the **Use quick actions** radio button.
 
             1. Fill in the **Use quick actions** pane.
-                - **Action group name**: **Notify DBAs**.
-                - **Display name**: **High number of transactions detected**.
+                - **Action group name**: +++**Notify DBAs**+++.
+                - **Display name**: +++**High number of transactions detected**+++.
                 - **Email**: Selected and enter your email address.
 
         1. Select the **Next: Details >** button.
@@ -297,8 +300,8 @@ You can also create alerts to notify you when certain conditions are met. For ex
     1. **Details** tab:
         1. Enter the following settings:
             - **Severity**: **2 - Warning**
-            - **Alert rule name**: **High number of transactions**
-            - **Description**: **Alert when the number of transactions exceeds 500 every 5 minutes.**
+            - **Alert rule name**: +++**High number of transactions**+++
+            - **Description**: +++**Alert when the number of transactions exceeds 500 every 5 minutes.**+++
 
         1. Select the **Review + create** button.
 
@@ -322,7 +325,7 @@ Monitoring and creating alerts for your vCore-based Azure Cosmos DB for MongoDB 
 
 After completing the lab exercises, it's important to clean up any resources you created to avoid incurring unnecessary costs. Here's how:
 
-1. **Azure Portal**: Sign in to the [Azure portal](https://portal.azure.com).
+1. **Azure Portal**: Sign in to the Azure portal.
 
 1. **Delete Resource Group**: If you created a new resource group for this lab, navigate to *Resource groups*, find your group, and delete it. This action removes all the resources contained within it, including your Azure Cosmos DB instance and any Azure OpenAI resources.
 
