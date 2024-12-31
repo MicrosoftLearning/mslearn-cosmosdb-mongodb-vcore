@@ -154,10 +154,10 @@ Now that you have your vCore-based Azure Cosmos DB for MongoDB account created, 
             db.sampleCollection.find()
             ```
             
-        1. exit the Mongo Shell:
-            ```bash
-            exit
-            ```
+    1. exit the Mongo Shell:
+        ```bash
+        exit
+        ```
 
         
 
