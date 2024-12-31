@@ -106,7 +106,9 @@ Once the resources are created and your **.env** file is populated with the reso
 
 As your application performance needs changes, you might need to scale your vCore-based Azure Cosmos DB for MongoDB account to handle increased or decreased traffic. You can scale your account by changing the cluster tier (number of vCores and RAM), the storage capacity, and enabling high availability. To do scale your account, let's follow these steps:
 
-1. Sign in to the [Azure portal](https://portal.azure.com).
+1. Open a browser, go to +++**https://portal.azure.com**+++ and sign in with the following credentials:
+
+   
 
 1. Navigate to your vCore-based Azure Cosmos DB for MongoDB account.
 
