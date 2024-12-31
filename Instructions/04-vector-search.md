@@ -80,10 +80,20 @@ To learn more about the PowerShell script and its parameters, review the [***cre
 
 To create the necessary Azure resources for this lab:
 
-1. Run the following command in the integrated terminal.
+1. Run the following command in the integrated terminal. Sign in with the provided credentials.
 
     ```powershell
     az login
+    ```
+
+    | Item | Value |
+    |:---------|:---------|
+    | Username   | +++**@lab.CloudPortalCredential(User1).Username**+++   |
+    | Password   | +++**@lab.CloudPortalCredential(User1).Password**+++   |
+
+1. Run the following command in the integrated terminal to provision the resources.
+
+    ```powershell
     ./create-azure-resources.ps1
     ```
 
@@ -785,7 +795,7 @@ Even running the same query multiple times can yield different results, demonstr
 
 After completing the lab exercises, it's important to clean up any resources you created to avoid incurring unnecessary costs. Here's how:
 
-1. **Azure Portal**: Sign in to the [Azure portal](https://portal.azure.com).
+1. **Azure Portal**: Sign in to the Azure portal.
 
 1. **Delete Resource Group**: If you created a new resource group for this lab, navigate to *Resource groups*, find your group, and delete it. This action removes all the resources contained within it, including your Azure Cosmos DBvCore-based Azure Cosmos DB for MongoDB account and any Azure OpenAI resources.
 
