@@ -77,7 +77,6 @@ To create the necessary Azure resources for this lab:
 
     ```powershell
     az login
-    ./create-azure-resources.ps1
     ```
 
     | Item | Value |
