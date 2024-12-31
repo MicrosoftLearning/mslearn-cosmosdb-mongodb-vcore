@@ -73,10 +73,20 @@ To learn more about the PowerShell script and its parameters, review the [***cre
 
 To create the necessary Azure resources for this lab:
 
-1. Run the following command in the integrated terminal.
+1. Run the following command in the integrated terminal. Sign in with the provided credentials.
 
     ```powershell
     az login
+    ```
+
+    | Item | Value |
+    |:---------|:---------|
+    | Username   | +++**@lab.CloudPortalCredential(User1).Username**+++   |
+    | Password   | +++**@lab.CloudPortalCredential(User1).Password**+++   |
+
+1. Run the following command in the integrated terminal to provision the resources.
+
+    ```powershell
     ./create-azure-resources.ps1
     ```
 
