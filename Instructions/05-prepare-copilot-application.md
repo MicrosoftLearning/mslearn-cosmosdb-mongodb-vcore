@@ -47,10 +47,20 @@ Before you begin developing and deploying your application, you need to set up y
 
     In the terminal, run the following command inside the project directory: +++**npm install**+++
 
-1. Create Azure resources by running the following commands in the terminal:
+1. Run the following command in the integrated terminal. Sign in with the provided credentials.
 
-    ```bash
+    ```powershell
     az login
+    ```
+
+    | Item | Value |
+    |:---------|:---------|
+    | Username   | +++**@lab.CloudPortalCredential(User1).Username**+++   |
+    | Password   | +++**@lab.CloudPortalCredential(User1).Password**+++   |
+
+1. Run the following command in the integrated terminal to provision the resources.
+
+    ```powershell
     ./create-azure-resources.ps1
     ```
 
