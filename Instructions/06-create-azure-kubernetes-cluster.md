@@ -4,7 +4,7 @@ lab:
     module: 'Module 5 - Deploy your AI Copilot with Azure Kubernetes '
 ---
 
-> [!NOTE]
+>[!note]
 > This lab is in Node.js only!
 
 In this exercise, you create an Azure Kubernetes Service (AKS) cluster and deploy an image to the Azure Container Registry (ACR). Afterwards, you can access your app through an external IP address.
@@ -76,7 +76,7 @@ Before you can create an AKS cluster, you must make sure the Microsoft.Compute r
 
     Be sure to replace the values of the resource group, cluster name, and Azure Resource Container (ACR). Use the name of the ACR that you created in the previous steps.
 
-    > [!NOTE]
+    >[!note]
     > If you run into issues creating resources in a particular region, you can change the region by using the `location` paramter. For example, `--location westus3`
 
     If you run into issues with the available Virtual Machine (VM) sizes, you can specify the VM size using the `node-vm-size` parameter. For example, `--node-vm-size standard_d15_v2`
