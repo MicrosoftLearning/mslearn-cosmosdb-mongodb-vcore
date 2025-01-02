@@ -1,7 +1,7 @@
 ---
 lab:
     title: 'Create an Azure Kubernetes Service cluster'
-    module: 'Module 5 - Deploy your AI Copilot with Azure Kubernetes '
+    module: 'Module 6 - Deploy your AI Copilot with Azure Kubernetes '
 ---
 
 >[!note]
