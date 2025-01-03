@@ -4,7 +4,7 @@ lab:
     module: 'Module 5 - Deploy your AI Copilot with Azure Kubernetes '
 ---
 
-> [!NOTE]
+>[!note]
 > This lab is in Node.js only!
 
 Previously in this learning path, you implemented AI vector search functionality within your MongoDB project. Now this project is extended to include a web application interface. In this exercise, you’ll add code to expose key functions and create endpoints, enabling external interactions with the application. You’ll also create a Dockerfile to containerize your app, then run the Docker image locally to verify everything is working as expected. By the end of this exercise, you create a web application ready for deployment, complete with accessible endpoints, and containerized for easy distribution.
@@ -16,28 +16,28 @@ Previously in this learning path, you implemented AI vector search functionality
 
 Before you begin developing and deploying your application, you need to set up your local coding environment if you haven't already. Follow the steps to ensure you have the necessary tools installed and configured.
 
-> [!NOTE]
+>[!note]
 > If you've already cloned the repository and created the Azure resources, then you only need to copy and paste the **.env** file from **04-vector-search/.env** to **05-deploy-with-aks/node.js**. Then right-click on the **05-deploy-with-aks** folder and select **Open in integrated Terminal** and run `npm install`. Now you're ready to begin!
 
-1. Open Visual Studio Code
+1. Open Visual Studio Code.
 
-1. Install Node.js
+1. Install Node.js.
 
-    Node.js is required to run and manage JavaScript dependencies for the application you're deploying. You can [download the latest version of Node here](https://nodejs.org/en/download/prebuilt-installer). You can verify the installation by opening the terminal in Visual Studio Code and running the command `node -v`
+    >[!note] Node.js is required to run and manage JavaScript dependencies for the application you're deploying. You can [download the latest version of Node here](https://nodejs.org/en/download/prebuilt-installer). You can verify the installation by opening the terminal in Visual Studio Code and running the command `node -v`.
 
 1. Install the Azure CLI 
 
-    You can [install the Azure CLI by following the instructions on this page](/cli/azure/install-azure-cli-windows?tabs=azure-cli#install-or-update). You can verify the installation by opening the terminal in Visual Studio Code and running the command `az -v`
+    You can [install the Azure CLI by following the instructions on this page](/cli/azure/install-azure-cli-windows?tabs=azure-cli#install-or-update). You can verify the installation by opening the terminal in Visual Studio Code and running the command `az -v`.
 
 1. Install [Docker for Windows](https://docs.docker.com/desktop/install/windows-install/)
 
 1. Install the **Docker** extension for Visual Studio Code.
 
-    You can find the extension by navigating to **View** > **Extensions** and enter "Docker" in the search bar.
+    You can find the extension by navigating to **View** > **Extensions** and enter +++**Docker**+++ in the search bar.
 
 1. Clone the following repository in Visual Studio Code:
 
-    `https://github.com/MicrosoftLearning/mslearn-cosmosdb-mongodb-vcore`
+    +++**https://github.com/MicrosoftLearning/mslearn-cosmosdb-mongodb-vcore**+++
 
     Once the repository is cloned, navigate to the project directory **05-deploy-with-aks**.
 
@@ -45,12 +45,22 @@ Before you begin developing and deploying your application, you need to set up y
 
 1. Install project dependencies
 
-    In the terminal, run the following command inside the project directory: `npm install`
+    In the terminal, run the following command inside the project directory: +++**npm install**+++
 
-1. Create Azure resources by running the following commands in the terminal:
+1. Run the following command in the integrated terminal. Sign in with the provided credentials.
 
-    ```bash
+    ```powershell
     az login
+    ```
+
+    | Item | Value |
+    |:---------|:---------|
+    | Username   | +++**@lab.CloudPortalCredential(User1).Username**+++   |
+    | Password   | +++**@lab.CloudPortalCredential(User1).Password**+++   |
+
+1. Run the following command in the integrated terminal to provision the resources.
+
+    ```powershell
     ./create-azure-resources.ps1
     ```
 

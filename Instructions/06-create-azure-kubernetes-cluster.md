@@ -1,10 +1,10 @@
 ---
 lab:
     title: 'Create an Azure Kubernetes Service cluster'
-    module: 'Module 5 - Deploy your AI Copilot with Azure Kubernetes '
+    module: 'Module 6 - Deploy your AI Copilot with Azure Kubernetes '
 ---
 
-> [!NOTE]
+>[!note]
 > This lab is in Node.js only!
 
 In this exercise, you create an Azure Kubernetes Service (AKS) cluster and deploy an image to the Azure Container Registry (ACR). Afterwards, you can access your app through an external IP address.
@@ -47,9 +47,9 @@ Before you can create an AKS cluster, you must make sure the Microsoft.Compute r
 
 1. In the left hand menu, select **Resource providers** under **Settings**.
 
-1. In the name filter, enter "Microsoft.Compute".
+1. In the name filter, enter +++Microsoft.Compute+++.
 
-1. If the status is "NotRegistered", select the provider and select **Register**.
+1. If the status is **NotRegistered**, select the provider and select **Register**.
 
     Now you're ready to create your AKS cluster.
 
@@ -76,10 +76,10 @@ Before you can create an AKS cluster, you must make sure the Microsoft.Compute r
 
     Be sure to replace the values of the resource group, cluster name, and Azure Resource Container (ACR). Use the name of the ACR that you created in the previous steps.
 
-    > [!NOTE]
-    > If you run into issues creating resources in a particular region, you can change the region by using the `location` paramter. For example, `--location westus3`
+    >[!note]
+    > If you run into issues creating resources in a particular region, you can change the region by using the **location** parameter. For example, **--location westus3**
 
-    If you run into issues with the available Virtual Machine (VM) sizes, you can specify the VM size using the `node-vm-size` parameter. For example, `--node-vm-size standard_d15_v2`
+    If you run into issues with the available Virtual Machine (VM) sizes, you can specify the VM size using the **node-vm-size** parameter. For example, **--node-vm-size standard_d15_v2**
 
 ## Deploy an image to the cluster
 
@@ -89,7 +89,7 @@ Before you can create an AKS cluster, you must make sure the Microsoft.Compute r
     az aks get-credentials --resource-group myResourceGroup --name myAKSClusterName
     ```
 
-    This command retrieves the cluster credentials and configures kubectl to communicate with your AKS cluster. You should see some output similar to `Merged "vector-search-aks" as current context in C:\Users\user\.kube\config`
+    This command retrieves the cluster credentials and configures kubectl to communicate with your AKS cluster. You should see some output similar to **Merged "vector-search-aks" as current context in C:\Users\user\.kube\config**.
 
 1. Verify your cluster's connectivity and status using the following command:
 
@@ -108,9 +108,9 @@ Before you can create an AKS cluster, you must make sure the Microsoft.Compute r
    
     `az acr build --image vector-search-app:1.0.0 --registry vectorsearchcontainer --file Dockerfile`.
 
-    This command builds a Docker image named `vector-search-app` with the tag `1.0.0` from the specified Dockerfile in the current directory and then pushes the image to the ACR.
+    This command builds a Docker image named **vector-search-app** with the tag **1.0.0** from the specified Dockerfile in the current directory and then pushes the image to the ACR.
 
-1. Create a file `deployment.yaml` with the following content:
+1. Create a file **deployment.yaml** with the following content:
 
     ```
     apiVersion: apps/v1
@@ -148,7 +148,7 @@ Before you can create an AKS cluster, you must make sure the Microsoft.Compute r
         targetPort: 3000
     ```
 
-    `Deployment.yaml` is a configuration file used in Kubernetes to define and manage an application’s deployment. It specifies details like the number of application instances (replicas), container image, and environment settings. This file helps Kubernetes automate the creation, scaling, and management of containerized applications.
+    **Deployment.yaml** is a configuration file used in Kubernetes to define and manage an application’s deployment. It specifies details like the number of application instances (replicas), container image, and environment settings. This file helps Kubernetes automate the creation, scaling, and management of containerized applications.
 
 1. Apply the yaml file using `kubectl apply -f deployment.yaml`
 

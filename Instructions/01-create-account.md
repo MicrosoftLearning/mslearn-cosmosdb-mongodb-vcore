@@ -18,7 +18,12 @@ In this lab, we guide you through the process of creating a vCore-based Azure Co
 
 Let's go ahead and learn how easy is to create your vCore-based Azure Cosmos DB for MongoDB account using the Azure portal. To create this account, follow these steps:
 
-1. Sign in to the [Azure portal](https://portal.azure.com/).
+1. Open a browser, go to +++https://portal.azure.com+++ and sign in with the following credentials:
+
+    | Item | Value |
+    |:---------|:---------|
+    | Username   | +++**@lab.CloudPortalCredential(User1).Username**+++   |
+    | Password   | +++**@lab.CloudPortalCredential(User1).Password**+++   |
 
 1. In the left-hand menu, select on the **Create a resource** option.
 
@@ -44,11 +49,11 @@ Let's go ahead and learn how easy is to create your vCore-based Azure Cosmos DB 
         | Location | Select a geographic location. Depending on your subscriptions, some regions might not allow you to create the cluster. Contact your Azure Administrator if you have any issues. |
         | Cluster tier | Select **Configure**. Familiarize yourself with all the settings on the **Scale** window. Select **Free tier** and **Save**.|
         | MongoDB version | **6.0** |
-        | Admin username | **cosmosClusterAdmin** |
+        | Admin username | +++**cosmosClusterAdmin**+++ |
         | Password | ***Enter a strong password***. |
         | Confirm password | ***Enter the same password***. Copy that password somewhere safe, you need it later. |
 
-        > [!NOTE]
+        >[!note]
         > When you select **Free tier** under the **Cluster tier** section, you'll notice that *Free tier* checkbox is now also selected under the *Basics* tab. While you could have selected that checkbox on the *Basics* tab, we wanted you to familiarize yourself with the *cluster tier* options.
         >
         > Also note that you can only have one *Free tier* cluster per Azure account. If you already used your free account, just select the **M25 tier, 2 (Burstable) vCores** cluster tier to reduce cost since you don't need anything stronger for this lab.
@@ -63,7 +68,7 @@ Let's go ahead and learn how easy is to create your vCore-based Azure Cosmos DB 
         | Firewall rules | Select the **Allow public access from Azure services and resources within Azure to this cluster** checkbox. This will allow you to use the Azure portal Mongo Shell.  |
         | Firewall rules | Manually add all the IP ranges that you would like to grant access to your Cosmos DB account by selecting a *Rule Name*, a *Start IP address* and an *End IP address.* |
 
-        > [!NOTE]
+        >[!note]
         > On a production environment, you would likely select **Private Access** for your *conectivity method* and use a *virtual network* and a *subnet* provided by your Azure network administrator. You will also most likely set private endpoints for access to the vCore-based Azure Cosmos DB for MongoDB account.
         >
         > Under the **Firewall rules** section is where you can add specific IP addresses that are allowed to access the Cosmos DB account. This is useful for restricting access to only specific IP addresses, such as your organization's IP addresses. You will notice there are two options: **+ Add current client IP address (your current public IP address)** and **+ Add 0.0.0.0 - 255.255.255.255**. The first option will add your current IP address to the list of allowed IP addresses, which could be benign if your public IP from your client never changes. The second option will allow you to add the range of ***ALL*** IP addresses in the internet. Be very careful of ever selecting that second option, since it opens your cluster to the whole internet.
@@ -72,13 +77,13 @@ Let's go ahead and learn how easy is to create your vCore-based Azure Cosmos DB 
 
 1. In the **Review + create** tab, review your account settings, and then select the **Create** button.
 
-It takes 5+ minutes for the vCore-based Azure Cosmos DB for MongoDB account to be created. Once the account is created, you can use the Azure portal to access your account.
+>[!alert] It takes 5+ minutes for the vCore-based Azure Cosmos DB for MongoDB account to be created. Once the account is created, you can use the Azure portal to access your account.
 
 ## Connect to your vCore-based Azure Cosmos DB for MongoDB account using the Azure portal
 
 Time to connect to your vCore-based Azure Cosmos DB for MongoDB account using the Azure portal. To do connect to the account, follow these steps:
 
-1. If you aren't signed in, sign in to the [Azure portal](https://portal.azure.com).
+1. If you aren't signed in, sign in to the Azure portal.
 
 1. In the search bar at the top of the portal, type **Azure Cosmos DB** and select it from the search results.
 
@@ -108,7 +113,7 @@ Now that you have your vCore-based Azure Cosmos DB for MongoDB account created, 
 
 1. In the **Azure Cosmos DB for MongoDB (vCore)** window, select **Quick start**.
 
-    > [!NOTE]
+    >[!note]
     > If you see the warning ***The Network settings for this account are preventing access from Data Explorer. Please allow access from Azure Portal to proceed.***, you will need to go back to the **Networking** tab and allow public access from Azure services and resources within Azure to this cluster.
 
 1. In the **Quick start** window, select **Launch quick start**. This option creates a sample database for you to test on. In a production environment, you would most likely not use the **Launch quick start** option, since you would be creating your own databases and collections.
@@ -148,11 +153,13 @@ Now that you have your vCore-based Azure Cosmos DB for MongoDB account created, 
             ```bash
             db.sampleCollection.find()
             ```
+            
+        1. exit the Mongo Shell:
+           ```
+           exit
+           ```
 
-    1. exit the Mongo Shell:
-        ```bash
-        exit
-        ```
+        
 
 You now have a fully configured vCore-based Azure Cosmos DB for MongoDB account and you connected to it using the Azure portal's Mongo Shell. You're ready to start using it to store and retrieve data.
 
@@ -160,7 +167,7 @@ You now have a fully configured vCore-based Azure Cosmos DB for MongoDB account 
 
 After completing the lab exercises, it's important to clean up any resources you created to avoid incurring unnecessary costs. Here's how:
 
-1. **Azure Portal**: Sign in to the [Azure portal](https://portal.azure.com).
+1. **Azure Portal**: Sign in to the Azure portal.
 
 1. **Delete Resource Group**: If you created a new resource group for this lab, navigate to *Resource groups*, find your group, and delete it. This action removes all the resources contained within it, including your Azure Cosmos DB instance.
 
@@ -170,7 +177,7 @@ After completing the lab exercises, it's important to clean up any resources you
 
 1. **Review Billing**: Check your Azure billing section to ensure no unexpected charges are incurred, verifying that all unwanted resources were successfully deleted.
 
-This cleanup process helps maintain your Azure account organized and free from unnecessary charges, ensuring you only pay for resources you actively use.
+>[!alert] This cleanup process helps maintain your Azure account organized and free from unnecessary charges, ensuring you only pay for resources you actively use.
 
 ## Conclusion
 
