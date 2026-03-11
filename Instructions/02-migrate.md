@@ -1,7 +1,20 @@
 ---
 lab:
-    title: 'Migrate a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account'
-    module: 'Module 2 - Migrate to vCore-based Azure Cosmos DB for MongoDB'
+  title: Migrate a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account
+  module: Module 2 - Migrate to vCore-based Azure Cosmos DB for MongoDB
+  description: Data migration is a critical step in the process of moving from an
+    existing MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account.
+    While there are several ways to migrate a MongoDB database to a vCore-based Azure
+    Cosmos DB for MongoDB account, this lab focuses on using the MongoDB native tools
+    to migrate the database. The MongoDB native tools are the most common way to migrate
+    a MongoDB database to another. Most MongoDB administrators and developers are
+    familiar with these tools.
+  duration: 100 minutes
+  level: 300
+  islab: true
+  primarytopics:
+  - Azure
+  - Azure Cosmos DB
 ---
 
 Data migration is a critical step in the process of moving from an existing MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account. While there are several ways to migrate a MongoDB database to a vCore-based Azure Cosmos DB for MongoDB account, this lab focuses on using the MongoDB native tools to migrate the database. The MongoDB native tools are the most common way to migrate a MongoDB database to another. Most MongoDB administrators and developers are familiar with these tools.
