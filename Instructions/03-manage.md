@@ -1,7 +1,21 @@
 ---
 lab:
-    title: 'Manage a vCore-based Azure Cosmos DB for MongoDB account'
-    module: 'Module 3 - Manage vCore-based Azure Cosmos DB for MongoDB'
+  title: Manage a vCore-based Azure Cosmos DB for MongoDB account
+  module: Module 3 - Manage vCore-based Azure Cosmos DB for MongoDB
+  description: In this lab, you learn how to manage, scale, monitor, and generate
+    alerts on a vCore-based Azure Cosmos DB for MongoDB account. You use monitoring
+    tools to track operations and scale your account to handle increased or decreased
+    traffic. You learn how to enable diagnostic settings to collect logs and metrics
+    from your Cosmos DB account. You learn how to create alerts to notify you when
+    certain conditions are met. You run a simulated workload to generate some data
+    for your logs and metrics. Finally, you review the logs and metrics that are being
+    generated.
+  duration: 20 minutes
+  level: 400
+  islab: true
+  primarytopics:
+  - Azure
+  - Azure Cosmos DB
 ---
 
 In this lab, you learn how to manage, scale, monitor, and generate alerts on a vCore-based Azure Cosmos DB for MongoDB account. You use monitoring tools to track operations and scale your account to handle increased or decreased traffic. You learn how to enable diagnostic settings to collect logs and metrics from your Cosmos DB account. You learn how to create alerts to notify you when certain conditions are met. You run a simulated workload to generate some data for your logs and metrics. Finally, you review the logs and metrics that are being generated.
