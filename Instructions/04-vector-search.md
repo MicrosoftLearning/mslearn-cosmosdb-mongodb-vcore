@@ -1,7 +1,24 @@
 ---
 lab:
-    title: 'Building an AI copilot using vCore-based Azure Cosmos DB for MongoDB vector search and Azure OpenAI'
-    module: 'Module 4 - Use Azure AI OpenAI and vector search to create AI copilots with vCore-based Azure Cosmos DB for MongoDB'
+  title: Building an AI copilot using vCore-based Azure Cosmos DB for MongoDB vector
+    search and Azure OpenAI
+  module: Module 4 - Use Azure AI OpenAI and vector search to create AI copilots with
+    vCore-based Azure Cosmos DB for MongoDB
+  description: In this lab, you use Azure OpenAI to create embeddings for vCore-based
+    Azure Cosmos DB for MongoDB documents, establishing your AI copilot for advanced
+    data exploration. You build a vector index from these embeddings, allowing you
+    to create vector searches. The vector searches involves generating an embedding
+    for user prompts, using those user prompt embeddings to find similar documents
+    in the database through a vector search, and enhancing the search results deploying
+    an Azure OpenAI GPT-3.5 chat. This process illustrates a Retrieval-Augmented Generation
+    (RAG) approach, mixing AI with database technologies to refine search results
+    and responses.
+  duration: 94 minutes
+  level: 400
+  islab: true
+  primarytopics:
+  - Azure
+  - Azure Cosmos DB
 ---
 
 In this lab, you use Azure OpenAI to create embeddings for vCore-based Azure Cosmos DB for MongoDB documents, establishing your AI copilot for advanced data exploration. You build a vector index from these embeddings, allowing you to create vector searches. The vector searches involves generating an embedding for user prompts, using those user prompt embeddings to find similar documents in the database through a vector search, and enhancing the search results deploying an Azure OpenAI GPT-3.5 chat. This process illustrates a Retrieval-Augmented Generation (RAG) approach, mixing AI with database technologies to refine search results and responses.
