@@ -1,7 +1,17 @@
 ---
 lab:
-    title: 'Create an Azure Kubernetes Service cluster'
-    module: 'Module 6 - Deploy your AI Copilot with Azure Kubernetes '
+  title: Create an Azure Kubernetes Service cluster
+  module: 'Module 6 - Deploy your AI Copilot with Azure Kubernetes '
+  description: In this exercise, you create an Azure Kubernetes Service (AKS) cluster
+    and deploy an image to the Azure Container Registry (ACR). Afterwards, you can
+    access your app through an external IP address.
+  duration: 54 minutes
+  level: 400
+  islab: true
+  primarytopics:
+  - Azure
+  - Azure Container Registry
+  - Azure Kubernetes Service (AKS)
 ---
 
 >[!note]
