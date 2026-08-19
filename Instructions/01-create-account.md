@@ -1,8 +1,8 @@
 ---
 lab:
-  title: Create a vCore-based Azure Cosmos DB for MongoDB account using the Azure portal
-  module: Module 1 - Get Started with vCore-based Azure Cosmos DB for MongoDB
-  description: In this lab, we guide you through the process of creating a vCore-based Azure Cosmos DB for MongoDB account using the Azure portal. We walk you through the steps of setting up the Cosmos DB account, configuring the necessary settings, and preparing it for use. The focus is on understanding the different configuration options and how they affect the behavior and performance of the Cosmos DB. By the end of this lab, you have a fully configured Cosmos DB for MongoDB ready for data storage and retrieval.
+  title: Create an Azure DocumentDB (with MongoDB compatibility) account using the Azure portal
+  module: Module 1 - Get Started with Azure DocumentDB (with MongoDB compatibility)
+  description: In this lab, we guide you through the process of creating an Azure DocumentDB (with MongoDB compatibility) account using the Azure portal. We walk you through the steps of setting up the Cosmos DB account, configuring the necessary settings, and preparing it for use. The focus is on understanding the different configuration options and how they affect the behavior and performance of the Cosmos DB. By the end of this lab, you have a fully configured Cosmos DB for MongoDB ready for data storage and retrieval.
   duration: 108 minutes
   level: 300
   islab: true
@@ -12,19 +12,19 @@ lab:
     - Azure Portal
 ---
 
-In this lab, we guide you through the process of creating a vCore-based Azure Cosmos DB for MongoDB account using the Azure portal. We walk you through the steps of setting up the Cosmos DB account, configuring the necessary settings, and preparing it for use. The focus is on understanding the different configuration options and how they affect the behavior and performance of the Cosmos DB. By the end of this lab, you have a fully configured Cosmos DB for MongoDB ready for data storage and retrieval.
+In this lab, we guide you through the process of creating an Azure DocumentDB (with MongoDB compatibility) account using the Azure portal. We walk you through the steps of setting up the Cosmos DB account, configuring the necessary settings, and preparing it for use. The focus is on understanding the different configuration options and how they affect the behavior and performance of the Cosmos DB. By the end of this lab, you have a fully configured Cosmos DB for MongoDB ready for data storage and retrieval.
 
 ### Objectives
 
 - Understand the process of creating a new resource in Azure portal.
-- Learn how to set up a vCore-based Azure Cosmos DB for MongoDB account.
+- Learn how to set up an Azure DocumentDB (with MongoDB compatibility) account.
 - Familiarize with the different configuration options available during the setup.
 - Understand the process of reviewing and finalizing the setup of the Cosmos DB account.
 - Learn how to connect to the newly created Cosmos DB account using the Azure portal's Mongo Shell.
 
-## Create your vCore-based Azure Cosmos DB for MongoDB account
+## Create your Azure DocumentDB (with MongoDB compatibility) account
 
-Let's go ahead and learn how easy is to create your vCore-based Azure Cosmos DB for MongoDB account using the Azure portal. To create this account, follow these steps:
+Let's go ahead and learn how easy is to create your Azure DocumentDB (with MongoDB compatibility) account using the Azure portal. To create this account, follow these steps:
 
 1. Open a browser, go to +++https://portal.azure.com+++ and sign in with the following credentials:
 
@@ -43,7 +43,7 @@ Let's go ahead and learn how easy is to create your vCore-based Azure Cosmos DB 
 
 1. In the **Create Azure Cosmos DB Account** window, select **Azure Cosmos DB for MongoDB**, and select the **Create** button.
 
-1. In the **Create Azure Cosmos DB Account - Choose Architecture** window, select **vCore cluster (Recommended)** and select the **Create** button.
+1. In the **Create Azure Cosmos DB Account - Choose Architecture** window, select **Azure DocumentDB (Recommended)** and select the **Create** button.
 
 1. In the **Create Azure Cosmos DB for MongoDB cluster** window, fill in the details (leave other's blank):
 
@@ -77,7 +77,7 @@ Let's go ahead and learn how easy is to create your vCore-based Azure Cosmos DB 
         | Firewall rules | Manually add all the IP ranges that you would like to grant access to your Cosmos DB account by selecting a *Rule Name*, a *Start IP address* and an *End IP address.* |
 
         >[!note]
-        > On a production environment, you would likely select **Private Access** for your *conectivity method* and use a *virtual network* and a *subnet* provided by your Azure network administrator. You will also most likely set private endpoints for access to the vCore-based Azure Cosmos DB for MongoDB account.
+        > On a production environment, you would likely select **Private Access** for your *conectivity method* and use a *virtual network* and a *subnet* provided by your Azure network administrator. You will also most likely set private endpoints for access to the Azure DocumentDB (with MongoDB compatibility) account.
         >
         > Under the **Firewall rules** section is where you can add specific IP addresses that are allowed to access the Cosmos DB account. This is useful for restricting access to only specific IP addresses, such as your organization's IP addresses. You will notice there are two options: **+ Add current client IP address (your current public IP address)** and **+ Add 0.0.0.0 - 255.255.255.255**. The first option will add your current IP address to the list of allowed IP addresses, which could be benign if your public IP from your client never changes. The second option will allow you to add the range of ***ALL*** IP addresses in the internet. Be very careful of ever selecting that second option, since it opens your cluster to the whole internet.
 
@@ -85,21 +85,21 @@ Let's go ahead and learn how easy is to create your vCore-based Azure Cosmos DB 
 
 1. In the **Review + create** tab, review your account settings, and then select the **Create** button.
 
->[!alert] It takes 5+ minutes for the vCore-based Azure Cosmos DB for MongoDB account to be created. Once the account is created, you can use the Azure portal to access your account.
+>[!alert] It takes 5+ minutes for the Azure DocumentDB (with MongoDB compatibility) account to be created. Once the account is created, you can use the Azure portal to access your account.
 
-## Connect to your vCore-based Azure Cosmos DB for MongoDB account using the Azure portal
+## Connect to your Azure DocumentDB (with MongoDB compatibility) account using the Azure portal
 
-Time to connect to your vCore-based Azure Cosmos DB for MongoDB account using the Azure portal. To do connect to the account, follow these steps:
+Time to connect to your Azure DocumentDB (with MongoDB compatibility) account using the Azure portal. To do connect to the account, follow these steps:
 
 1. If you aren't signed in, sign in to the Azure portal.
 
 1. In the search bar at the top of the portal, type **Azure Cosmos DB** and select it from the search results.
 
-1. In the **Azure Cosmos DB** window, select your newly created vCore-based Azure Cosmos DB for MongoDB account.
+1. In the **Azure Cosmos DB** window, select your newly created Azure DocumentDB account.
 
-Let's get familiar with a couple of options available to you in the *Azure Cosmos DB for MongoDB (vCore)* window. You notice that there are several options available to you in the menu, including **Overview**, **Quit start**, **Networking**, **Connection string**, among others. For this lab, you focus on those four options you listed.
+Let's get familiar with a couple of options available to you in the *Azure DocumentDB (with MongoDB compatibility)* window. You notice that there are several options available to you in the menu, including **Overview**, **Quit start**, **Networking**, **Connection string**, among others. For this lab, you focus on those four options you listed.
 
-1. **Overview**: the Overview option provides you with a quick overview of your vCore-based Azure Cosmos DB for MongoDB account. The overview includes the account's name, status, subscription, resource group, and location. This overview also includes the MongoDB version, admin username, cluster tier, shard count, disk size, connectivity method, and high availability. One interesting option available is to **Reset password**.
+1. **Overview**: the Overview option provides you with a quick overview of your Azure DocumentDB (with MongoDB compatibility) account. The overview includes the account's name, status, subscription, resource group, and location. This overview also includes the MongoDB version, admin username, cluster tier, shard count, disk size, connectivity method, and high availability. One interesting option available is to **Reset password**.
 
     1. **Reset password**: On the top of the overview page, select **Reset password**. You're prompted to enter a new password and to confirm it. This option is useful if you ever need to change the password for the admin user.
 
@@ -107,26 +107,26 @@ Let's get familiar with a couple of options available to you in the *Azure Cosmo
 
 1. **Quick start**: You'll skip this one for now and revisit it in the next section of the lab.
 
-1. **Networking**: This tab provides you with the options to configure the network settings for your vCore-based Azure Cosmos DB for MongoDB account. This option includes the ability to add IP addresses to the firewall rules, private endpoint connections and allow public access from Azure services and resources within Azure to this cluster.
+1. **Networking**: This tab provides you with the options to configure the network settings for your Azure DocumentDB (with MongoDB compatibility) account. This option includes the ability to add IP addresses to the firewall rules, private endpoint connections and allow public access from Azure services and resources within Azure to this cluster.
 
 1. **Connection string**: This option should list the connection string your application needs to connect to this cluster. Remember that just knowing the connection string isn't enough to connect to the cluster. Remember that you also need to ensure that the IP address from where you're connecting is allowed in the firewall rules.
 
-    1. **Connection String**: Select on the **Copy** button to copy the connection string to your clipboard. You use this connection string to connect to your vCore-based Azure Cosmos DB for MongoDB account.
+    1. **Connection String**: Select on the **Copy** button to copy the connection string to your clipboard. You use this connection string to connect to your Azure DocumentDB (with MongoDB compatibility) account.
 
     1. Copy the connection string to your application's configuration file or to a secure location for later use in your application.
 
-### Connect to your vCore-based Azure Cosmos DB for MongoDB account using the Azure portal's Mongo Shell
+### Connect to your Azure DocumentDB (with MongoDB compatibility) account using the Azure portal's Mongo Shell
 
-Now that you have your vCore-based Azure Cosmos DB for MongoDB account created, let's connect to it using the Azure portal's Mongo Shell. To connect, follow these steps:
+Now that you have your Azure DocumentDB (with MongoDB compatibility) account created, let's connect to it using the Azure portal's Mongo Shell. To connect, follow these steps:
 
-1. In the **Azure Cosmos DB for MongoDB (vCore)** window, select **Quick start**.
+1. In the **Azure DocumentDB (with MongoDB compatibility)** window, select **Quick start**.
 
     >[!note]
     > If you see the warning ***The Network settings for this account are preventing access from Data Explorer. Please allow access from Azure Portal to proceed.***, you will need to go back to the **Networking** tab and allow public access from Azure services and resources within Azure to this cluster.
 
 1. In the **Quick start** window, select **Launch quick start**. This option creates a sample database for you to test on. In a production environment, you would most likely not use the **Launch quick start** option, since you would be creating your own databases and collections.
 
-    1. Enter the password for the admin user you created when you created the vCore-based Azure Cosmos DB for MongoDB account in the Mongo Shell window. Select **Next**.
+    1. Enter the password for the admin user you created when you created the Azure DocumentDB (with MongoDB compatibility) account in the Mongo Shell window. Select **Next**.
 
     1. Select the **Create new database and collection** button. On the Mongo Shell screen, you notice that the MongoDB commands to create the new database and collection were run. Select **Next**.
 
@@ -138,7 +138,7 @@ Now that you have your vCore-based Azure Cosmos DB for MongoDB account created, 
 
 1. In the **Quick start** window, select **Mongo Shell**.
 
-    1. Enter the password for the admin user you created when you created the vCore-based Azure Cosmos DB for MongoDB account in the Mongo Shell window.
+    1. Enter the password for the admin user you created when you created the Azure DocumentDB (with MongoDB compatibility) account in the Mongo Shell window.
 
     1. To test the connection, let's run some MongoDB commands. Run the following commands:
 
@@ -169,7 +169,7 @@ Now that you have your vCore-based Azure Cosmos DB for MongoDB account created, 
 
         
 
-You now have a fully configured vCore-based Azure Cosmos DB for MongoDB account and you connected to it using the Azure portal's Mongo Shell. You're ready to start using it to store and retrieve data.
+You now have a fully configured Azure DocumentDB (with MongoDB compatibility) account and you connected to it using the Azure portal's Mongo Shell. You're ready to start using it to store and retrieve data.
 
 ## Clean Up
 
@@ -179,9 +179,9 @@ After completing the lab exercises, it's important to clean up any resources you
 
 1. **Delete Resource Group**: If you created a new resource group for this lab, navigate to *Resource groups*, find your group, and delete it. This action removes all the resources contained within it, including your Azure Cosmos DB instance.
 
-1. **Manually Delete Individual Resources**: If you added resources to an existing resource group, you need to delete each resource individually. Navigate to the vCore-based Azure Cosmos DB for MongoDB account and delete it.
+1. **Manually Delete Individual Resources**: If you added resources to an existing resource group, you need to delete each resource individually. Navigate to the Azure DocumentDB (with MongoDB compatibility) account and delete it.
 
-1. **Verify Deletion**: Confirm that the vCore-based Azure Cosmos DB for MongoDB account resource you no longer need was successfully removed and is no longer listed in your Azure portal.
+1. **Verify Deletion**: Confirm that the Azure DocumentDB (with MongoDB compatibility) account resource you no longer need was successfully removed and is no longer listed in your Azure portal.
 
 1. **Review Billing**: Check your Azure billing section to ensure no unexpected charges are incurred, verifying that all unwanted resources were successfully deleted.
 
@@ -189,4 +189,4 @@ After completing the lab exercises, it's important to clean up any resources you
 
 ## Conclusion
 
-This lab guided you through how to set up a vCore-based Azure Cosmos DB for MongoDB account using the Azure portal. The lab showed you how to connect to the newly created vCore-based Azure Cosmos DB for MongoDB account using the Azure portal's Mongo Shell. You learned how to configure the network settings for your vCore-based Azure Cosmos DB for MongoDB account and how to retrieve the connection string for your application. You also learned how to reset the password for the admin user. You should now have a good understanding of the different configuration options available when setting up a vCore-based Azure Cosmos DB for MongoDB account and how to connect to it using the Azure portal's Mongo Shell. In the next module, you'll learn how to migrate existing MongoDB databases to your vCore-based Azure Cosmos DB for MongoDB account.
+This lab guided you through how to set up a Azure DocumentDB (with MongoDB compatibility) account using the Azure portal. The lab showed you how to connect to the newly created Azure DocumentDB (with MongoDB compatibility) account using the Azure portal's Mongo Shell. You learned how to configure the network settings for your Azure DocumentDB (with MongoDB compatibility) account and how to retrieve the connection string for your application. You also learned how to reset the password for the admin user. You should now have a good understanding of the different configuration options available when setting up a Azure DocumentDB (with MongoDB compatibility) account and how to connect to it using the Azure portal's Mongo Shell. In the next module, you'll learn how to migrate existing MongoDB databases to your vCore-based Azure Cosmos DB for MongoDB account.

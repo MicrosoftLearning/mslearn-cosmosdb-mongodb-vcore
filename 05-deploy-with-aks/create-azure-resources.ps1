@@ -131,7 +131,7 @@ else {
     $publicIp = "0.0.0.0"
 }
     
-# Create a Cosmos DB for MongoDB vCore cluster
+# Create an Azure DocumentDB (with MongoDB compatibility) cluster
 if (! $skipCreatingCosmosDBCluster) {
     Write-Host
     Write-Host "Creating $cosmosCluster cluster, this could take 10+ minutes to create..."

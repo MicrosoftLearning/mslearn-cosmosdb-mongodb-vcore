@@ -1,8 +1,8 @@
 ---
 lab:
-  title: Manage a vCore-based Azure Cosmos DB for MongoDB account
-  module: Module 3 - Manage vCore-based Azure Cosmos DB for MongoDB
-  description: In this lab, you learned to manage, scale, monitor, and generate alerts on a vCore-based Azure Cosmos DB for MongoDB account. You used monitoring tools to track operations and generate alerts. You also learned how to scale your account to handle increased or decreased traffic. You can now apply these skills to your own applications and databases.
+  title: Manage an Azure DocumentDB (with MongoDB compatibility) account
+  module: Module 3 - Manage Azure DocumentDB (with MongoDB compatibility)
+  description: In this lab, you learned to manage, scale, monitor, and generate alerts on an Azure DocumentDB (with MongoDB compatibility) account. You used monitoring tools to track operations and generate alerts. You also learned how to scale your account to handle increased or decreased traffic. You can now apply these skills to your own applications and databases.
   duration: 20 minutes
   level: 400
   islab: true
@@ -11,7 +11,7 @@ lab:
     - Azure Cosmos DB
 ---
 
-In this lab, you learn how to manage, scale, monitor, and generate alerts on a vCore-based Azure Cosmos DB for MongoDB account. You use monitoring tools to track operations and scale your account to handle increased or decreased traffic. You learn how to enable diagnostic settings to collect logs and metrics from your Cosmos DB account. You learn how to create alerts to notify you when certain conditions are met. You run a simulated workload to generate some data for your logs and metrics. Finally, you review the logs and metrics that are being generated.
+In this lab, you learn how to manage, scale, monitor, and generate alerts on an Azure DocumentDB (with MongoDB compatibility) account. You use monitoring tools to track operations and scale your account to handle increased or decreased traffic. You learn how to enable diagnostic settings to collect logs and metrics from your Cosmos DB account. You learn how to create alerts to notify you when certain conditions are met. You run a simulated workload to generate some data for your logs and metrics. Finally, you review the logs and metrics that are being generated.
 
 ### Objectives
 
@@ -38,7 +38,7 @@ If you need to build your own lab environment, you need the following components
 
 You need access to the following Azure resources for this lab:
 
-- vCore-based Azure Cosmos DB for MongoDB account
+- Azure DocumentDB (with MongoDB compatibility) account
 - Azure storage account
 - Log Analytics workspace
 
@@ -50,7 +50,7 @@ You can create these resources via the *Azure portal* or use the ***create-azure
 
 This file is both used to retrieve and store the necessary environment variables for both the PowerShell script and the vector search application APIs. It's the easiest way to prepopulate your resource information. The file is used to store the environment variables for your Azure Cosmos DB and Azure OpenAI account.
 
-If you already have an existing Resource Group or a vCore-based Azure Cosmos DB for MongoDB account that you would like to use, just fill in those values in the **.env** file and set the skip create option for that resource to **true**. By default, the *create-azure-resources.ps1* script uses this file to retrieve the necessary environment variables. The *create-azure-resources.ps1* script populates the environment variables with default values if not specified in the **.env** file.
+If you already have an existing Resource Group or an Azure DocumentDB (with MongoDB compatibility) account that you would like to use, just fill in those values in the **.env** file and set the skip create option for that resource to **true**. By default, the *create-azure-resources.ps1* script uses this file to retrieve the necessary environment variables. The *create-azure-resources.ps1* script populates the environment variables with default values if not specified in the **.env** file.
 
 To learn more about the ***.env*** file and its parameters, review the [***.env*** file documentation](./00-env-file.md).
 
@@ -62,7 +62,7 @@ To learn more about the ***.env*** file and its parameters, review the [***.env*
 If you aren't using existing resources, or you aren't creating them through the Azure portal, this script creates the necessary Azure resources for this lab. It gives you the flexibility to create some or all of the resources required for this lab. You can either run the script as is or modify it to suit your needs. The resources created by the script include:
 
 - Resource Group
-- vCore-based Azure Cosmos DB for MongoDB account
+- Azure DocumentDB (with MongoDB compatibility) account
 - Azure storage account
 - Log Analytics workspace
 
@@ -102,16 +102,16 @@ To create the necessary Azure resources for this lab:
 1. Make sure that the **.env** file is populated with the resource information.
 
 >[!note]
-> The vCore-based Azure Cosmos DB for MongoDB account will need a firewall rule to allow access from your current public IP address.  If your Azure Cosmos DB account was generated by the *create-azure-resources.ps1* script, it should have created the firewall rule for you.  Check the existing firewall rules under the ***Networking*** *Setting* section of the *Azure Cosmos DB Account*.  If you are not sure what your current public IP address is, you can use the following command to find out:
+> The Azure DocumentDB (with MongoDB compatibility) account will need a firewall rule to allow access from your current public IP address.  If your Azure Cosmos DB account was generated by the *create-azure-resources.ps1* script, it should have created the firewall rule for you.  Check the existing firewall rules under the ***Networking*** *Setting* section of the *Azure Cosmos DB Account*.  If you are not sure what your current public IP address is, you can use the following command to find out:
 > ```powershell
 > Invoke-RestMethod -Uri 'http://ipinfo.io/ip' -Method Get
 > ```
 
 Once the resources are created and your **.env** file is populated with the resource information, you can proceed to the next step.
 
-## Scale a vCore-based Azure Cosmos DB for MongoDB account
+## Scale a Azure DocumentDB (with MongoDB compatibility) account
 
-As your application performance needs changes, you might need to scale your vCore-based Azure Cosmos DB for MongoDB account to handle increased or decreased traffic. You can scale your account by changing the cluster tier (number of vCores and RAM), the storage capacity, and enabling high availability. To do scale your account, let's follow these steps:
+As your application performance needs changes, you might need to scale your Azure DocumentDB (with MongoDB compatibility) account to handle increased or decreased traffic. You can scale your account by changing the cluster tier (number of vCores and RAM), the storage capacity, and enabling high availability. To do scale your account, let's follow these steps:
 
 1. Open a browser, go to +++**https://portal.azure.com**+++ and sign in with the following credentials:
 
@@ -120,7 +120,7 @@ As your application performance needs changes, you might need to scale your vCor
     | Username   | +++**@lab.CloudPortalCredential(User1).Username**+++   |
     | Password   | +++**@lab.CloudPortalCredential(User1).Password**+++   |
 
-1. Navigate to your vCore-based Azure Cosmos DB for MongoDB account.
+1. Navigate to your Azure DocumentDB (with MongoDB compatibility) account.
 
 1. In the left-hand menu, select **Scale** under the *Settings* section.
 
@@ -134,24 +134,24 @@ As your application performance needs changes, you might need to scale your vCor
 
 1. Once you made your changes, select **Save** to apply the changes.
 
-Scaling your account will take a few minutes to complete, but go ahead and continue to the next section of the lab while these changes are performed in the background. Once the changes are applied, your vCore-based Azure Cosmos DB for MongoDB account is scaled to the new settings. The good news is that your application won't go down during this process.
+Scaling your account will take a few minutes to complete, but go ahead and continue to the next section of the lab while these changes are performed in the background. Once the changes are applied, your Azure DocumentDB (with MongoDB compatibility) account is scaled to the new settings. The good news is that your application won't go down during this process.
 
 It's important to note that you can only scale up or down the cluster tier and storage capacity. You can't change the number of vCores and RAM independently. Additionally, keeping track on the cost of these changes is important when scaling up or down.
 
-## Monitor a vCore-based Azure Cosmos DB for MongoDB account
+## Monitor a Azure DocumentDB (with MongoDB compatibility) account
 
-Monitoring your vCore-based Azure Cosmos DB for MongoDB account is important to ensure that your application is running smoothly and to identify any potential issues. Azure provides various tools to help you monitor your Azure Cosmos DB account, including Azure Monitor, metrics, and logs. In this section, you focus on using the vCore-based Azure Cosmos DB for MongoDB account logs to monitor the account.
+Monitoring your Azure DocumentDB (with MongoDB compatibility) account is important to ensure that your application is running smoothly and to identify any potential issues. Azure provides various tools to help you monitor your Azure Cosmos DB account, including Azure Monitor, metrics, and logs. In this section, you focus on using the Azure DocumentDB (with MongoDB compatibility) account logs to monitor the account.
 
 >[!note]
-> The *create-azure-resources.ps1* script should have created a Log Analytics workspace and Azure storage account for you, otherwise work with your Azure Administrator to create these resources.  You will use these resources to monitor your vCore-based Azure Cosmos DB for MongoDB account.
+> The *create-azure-resources.ps1* script should have created a Log Analytics workspace and Azure storage account for you, otherwise work with your Azure Administrator to create these resources.  You will use these resources to monitor your Azure DocumentDB (with MongoDB compatibility) account.
 
 ### Enable diagnostic settings
 
-One you have your Log Analytics workspace and Azure storage account, it's time to enable diagnostic settings for your vCore-based Azure Cosmos DB for MongoDB account. When you enable diagnostics, allows you to collect logs and metrics from your Cosmos DB account and store them in the Log Analytics workspace. To do enable diagnostics, let's follow these steps:
+One you have your Log Analytics workspace and Azure storage account, it's time to enable diagnostic settings for your Azure DocumentDB (with MongoDB compatibility) account. When you enable diagnostics, allows you to collect logs and metrics from your Cosmos DB account and store them in the Log Analytics workspace. To do enable diagnostics, let's follow these steps:
 
 1. Sign in to the Azure portal.
 
-1. Navigate to your vCore-based Azure Cosmos DB for MongoDB account.
+1. Navigate to your Azure DocumentDB (with MongoDB compatibility) account.
 
 1. In the left-hand menu, select **Diagnostic settings** under the *Monitoring* section.
 
@@ -163,24 +163,24 @@ One you have your Log Analytics workspace and Azure storage account, it's time t
     | --- | --- |
     | **Diagnostic setting name** | +++***cosmosdb-mongodb-diag-settings***+++ |
     | *Logs* - **Category groups** | Select **audit** and **allLogs** |
-    | *Logs* - **Categories** | Select **vCoreMongoRequest** if not already selected. |
+    | *Logs* - **Categories** | Select **Azure DocumentDB** if not already selected. |
     | **Metrics** | Select **AllMetrics** |
     | **Destination details** | Select **Send to Log Analytics** and select the Log Analytics workspace you created earlier. Select the **Resource specific** *destination table* |
     | **Destination details** | Select **Archive to storage account** and select the Azure storage account you created earlier. |
 
 1. Select **Save** to apply the changes.
 
-Your vCore-based Azure Cosmos DB for MongoDB account is now configured to send logs and metrics to the Log Analytics workspace and the Azure storage account. To see it in action, let's run some queries against your Cosmos DB account.
+Your Azure DocumentDB (with MongoDB compatibility) account is now configured to send logs and metrics to the Log Analytics workspace and the Azure storage account. To see it in action, let's run some queries against your Cosmos DB account.
 
 ### Run a simulated workload
 
-To generate some data for your logs and metrics, let's run some queries against your vCore-based Azure Cosmos DB for MongoDB account.
+To generate some data for your logs and metrics, let's run some queries against your Azure DocumentDB (with MongoDB compatibility) account.
 
 >[!note]
 > Make sure you have the necessary Cosmos DB environment variables in your **.env** file before running the workload application.  
 
 >[!note]
-> Make sure you have the vCore-based Azure Cosmos DB for MongoDB account firewall rules set to allow access from your current public IP address.  
+> Make sure you have the Azure DocumentDB (with MongoDB compatibility) account firewall rules set to allow access from your current public IP address.  
 
 1. Right-click on the **03-manage** folder and select **Open in integrated Terminal**.
 
@@ -220,19 +220,19 @@ You come back a little later to stop the workload. In the meantime, let's review
 
 1. Sign in to the Azure portal.
 
-1. Navigate to your vCore-based Azure Cosmos DB for MongoDB account.
+1. Navigate to your Azure DocumentDB (with MongoDB compatibility) account.
 
 1. In the left-hand menu, Under *Monitoring*, select the **Logs** section.
 
-1. In the *Logs* pane, by default, a set of queries already prepared for you're displayed. You can run these queries to view the logs generated by your vCore-based Azure Cosmos DB for MongoDB account or ***X*** out of the queries and run your own. for now, *let's ***X*** out of the **Queries** dialog*.
+1. In the *Logs* pane, by default, a set of queries already prepared for you're displayed. You can run these queries to view the logs generated by your Azure DocumentDB (with MongoDB compatibility) account or ***X*** out of the queries and run your own. for now, *let's ***X*** out of the **Queries** dialog*.
 
 1. Let's get familiar with the **Query** pane.
 
-    1. If you select the Table tab, you can see the different tables that are available to query. In this case, you should see a table called **VCoreMongoRequests** under the *Azure Cosmos DB for MongoDB (vCore)* section. This table contains the logs generated by your vCore-based Azure Cosmos DB for MongoDB account.
+    1. If you select the Table tab, you can see the different tables that are available to query. In this case, you should see a table called **VCoreMongoRequest** under the *Azure DocumentDB (with MongoDB compatibility)* section. This table contains the logs generated by your Azure DocumentDB (with MongoDB compatibility) account.
     1. Under the **Queries** tab, you see some sample queries that you can run to view the logs. You can also write your own queries here.
     1. On the right-hand side, you're able to write and edit your queries. You can select to **Run**, **Save, and define a **Time range** for your queries. Let's go ahead and write and run some queries.
 
-1. In the *Logs* pane, you can run a query to view the logs generated by your vCore-based Azure Cosmos DB for MongoDB account. These queries are written in KQL (Kusto Query Language). You can use the **Run** button to run the query and view the results.
+1. In the *Logs* pane, you can run a query to view the logs generated by your Azure DocumentDB (with MongoDB compatibility) account. These queries are written in KQL (Kusto Query Language). You can use the **Run** button to run the query and view the results.
 
     1. Let's try the following query to view the number of requests made per minute to your Cosmos DB account over the last 24 hours. Change the local time zone formula to match your local time zone if necessary:
 
@@ -254,7 +254,7 @@ You come back a little later to stop the workload. In the meantime, let's review
 
 KQL is a powerful query language allows you to create complex queries to get better insight on your logs. To learn more about running KQL queries, review the [Kusto Query Language (KQL) documentation](https://docs.microsoft.com/en-us/azure/data-explorer/kusto/query/).
 
-There are several ways to monitor your vCore-based Azure Cosmos DB for MongoDB account, we scratched the surface. You can also use Azure Monitor to create alerts, view metrics, and more. Learn more about [Azure Monitor](https://docs.microsoft.com/en-us/azure/azure-monitor/).
+There are several ways to monitor your Azure DocumentDB (with MongoDB compatibility) account, we scratched the surface. You can also use Azure Monitor to create alerts, view metrics, and more. Learn more about [Azure Monitor](https://docs.microsoft.com/en-us/azure/azure-monitor/).
 
 ### Create an alert rule
 
@@ -266,7 +266,7 @@ You can also create alerts to notify you when certain conditions are met. For ex
 
 1. On the *Created rule* pane, use the following settings:
 
-    1. **Scope** tab: Select your vCore-based Azure Cosmos DB for MongoDB account.
+    1. **Scope** tab: Select your Azure DocumentDB (with MongoDB compatibility) account.
 
     1. **Condition** tab:
         1. Enter the following settings: 
@@ -326,7 +326,7 @@ Now that you reviewed the logs and created an alert, let's stop the simulated wo
 
 1. Return to the workload application and choose **option 0** to exit the application.
 
-Monitoring and creating alerts for your vCore-based Azure Cosmos DB for MongoDB account is important to ensure that your application is running smoothly and to identify any potential issues. Monitoring and alerting are integral parts of managing your vCore-based Azure Cosmos DB for MongoDB account.
+Monitoring and creating alerts for your Azure DocumentDB (with MongoDB compatibility) account is important to ensure that your application is running smoothly and to identify any potential issues. Monitoring and alerting are integral parts of managing your Azure DocumentDB (with MongoDB compatibility) account.
 
 ## Clean Up
 
@@ -346,4 +346,4 @@ This cleanup process helps maintain your Azure account organized and free from u
 
 # Conclusion
 
-In this lab, you learned to manage, scale, monitor, and generate alerts on a vCore-based Azure Cosmos DB for MongoDB account. You used monitoring tools to track operations and generate alerts. You also learned how to scale your account to handle increased or decreased traffic. You can now apply these skills to your own applications and databases.
+In this lab, you learned to manage, scale, monitor, and generate alerts on an Azure DocumentDB (with MongoDB compatibility) account. You used monitoring tools to track operations and generate alerts. You also learned how to scale your account to handle increased or decreased traffic. You can now apply these skills to your own applications and databases.

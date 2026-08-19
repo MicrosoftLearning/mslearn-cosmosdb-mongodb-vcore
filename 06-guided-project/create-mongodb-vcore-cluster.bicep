@@ -1,5 +1,5 @@
 
-@description('Azure Cosmos DB MongoDB vCore cluster name')
+@description('Azure DocumentDB (with MongoDB compatibility) cluster name')
 @maxLength(40)
 param clusterName string = '' //= 'msdocs-${uniqueString(resourceGroup().id)}'
 
